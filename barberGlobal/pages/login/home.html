@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Atelier</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.material-symbols-outlined{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" 0,"opsz" 24}
+.ms-filled{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;color:#e5e2e1;overflow-x:hidden}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(233,193,118,.18);border-radius:2px}
+.pole-stripe{width:6px;height:100%;background:repeating-linear-gradient(180deg,#e9c176 0,#e9c176 12px,#1a1a1a 12px,#1a1a1a 24px,#c0392b 24px,#c0392b 36px,#1a1a1a 36px,#1a1a1a 48px);animation:poleScroll 2.5s linear infinite;border-radius:3px;}
+@keyframes poleScroll{from{background-position:0 0}to{background-position:0 48px}}
+.spin{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+#loader{position:fixed;inset:0;background:#080604;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;transition:opacity .5s}
+#loader.hide{opacity:0;pointer-events:none}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 20px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;border-radius:2px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+#toast.err{background:#93000a;color:#ffb4ab}
+
+/* ── POPUP CÓDIGO DE ACCESO ── */
+#popup-codigo{position:fixed;inset:0;background:rgba(5,3,1,.9);z-index:8000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s}
+#popup-codigo.on{opacity:1;pointer-events:all}
+#popup-codigo-sheet{background:#0d0b08;border:1px solid rgba(79,69,53,.38);border-bottom:none;width:100%;max-width:480px;padding:24px 20px 38px;transform:translateY(60px);transition:transform .32s}
+#popup-codigo.on #popup-codigo-sheet{transform:translateY(0)}
+.codigo-box{background:#161412;border:1px solid rgba(233,193,118,.24);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin:12px 0 14px}
+.codigo-val{font-family:'Noto Serif',serif;font-size:24px;color:#e9c176;letter-spacing:.3em}
+.btn-copiar{background:transparent;border:1px solid rgba(233,193,118,.28);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .18s;flex-shrink:0}
+.btn-copiar:hover{border-color:rgba(233,193,118,.55);color:#e9c176}
+
+/* ── HERO ── */
+.hero-placeholder{width:100%;aspect-ratio:4/3;background:#0e0c08;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;border-bottom:1px solid rgba(79,69,53,.18);position:relative}
+#hero-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:none}
+
+/* ── INFO ── */
+.info-card{background:#0e0c08;border-bottom:1px solid rgba(79,69,53,.16);padding:16px 18px}
+.avatar-ring{width:54px;height:54px;border-radius:50%;border:2px solid rgba(233,193,118,.38);overflow:hidden;background:#1c1b1b;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.badge{font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;font-weight:600}
+.badge-open{color:#4ade80;border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.07)}
+.badge-closed{color:#9c8f7b;border-color:rgba(79,69,53,.25);background:rgba(79,69,53,.06)}
+
+/* ── MAPA ── */
+#mapa-wrap{width:100%;height:180px;background:#0e0c08;position:relative;border-top:1px solid rgba(79,69,53,.16);border-bottom:1px solid rgba(79,69,53,.16);overflow:hidden}
+#mapa-iframe{width:100%;height:100%;border:0;display:none}
+.mapa-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.pin-anim{animation:pinBounce 1.4s ease-in-out infinite}
+@keyframes pinBounce{0%,100%{transform:translateY(0) rotate(-45deg)}50%{transform:translateY(-7px) rotate(-45deg)}}
+.sec-label{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:rgba(233,193,118,.5);padding:14px 18px 8px}
+
+/* ══ CALENDARIO ══ */
+.cal-wrap{background:#0e0c08;border-top:1px solid rgba(79,69,53,.18);border-bottom:1px solid rgba(79,69,53,.18);padding:22px 18px}
+.cal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.cal-nav{background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s}
+.cal-nav:hover{border-color:rgba(233,193,118,.42);color:#e9c176}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px}
+.cal-dow span{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#3d3730;padding:3px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-family:'Manrope',sans-serif;font-weight:400;cursor:pointer;position:relative;transition:all .15s;border:1px solid transparent}
+.cd.oth,.cd.past,.cd.nowork{color:#1e1c18;cursor:default;pointer-events:none}
+.cd.avail{color:#e5e2e1}
+.cd.avail:hover{background:rgba(233,193,118,.07);border-color:rgba(233,193,118,.18);color:#e9c176}
+.cd.hoy{color:#e9c176;font-weight:600}
+.cd.hoy::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:#e9c176;border-radius:50%}
+.cd.sel{background:#e9c176 !important;color:#412d00 !important;font-weight:700;border-color:#e9c176 !important}
+.cd.sel::after{display:none}
+
+/* ══ SLOTS ══ */
+.slots-section{padding:18px 18px 0}
+.slot-group-lbl{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;margin-top:14px}
+.slot-grid{display:flex;flex-wrap:wrap;gap:6px}
+.s-btn{background:#131210;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.06em;padding:8px 14px;cursor:pointer;transition:all .15s;font-weight:500}
+.s-btn:hover{border-color:rgba(233,193,118,.38);color:#e5e2e1}
+.s-btn.sel{background:#e9c176;color:#412d00;border-color:#e9c176;font-weight:700}
+
+/* ══ RESUMEN + CTA ══ */
+.booking-card{background:#131210;border:1px solid rgba(79,69,53,.22);margin:16px 18px 0}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.1)}
+.brow:last-child{border-bottom:none}
+.bkey{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b}
+.bval{font-size:11px;color:#e5e2e1;font-weight:600;text-align:right}
+
+/* ── CARRUSEL ── */
+.carousel-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 18px 16px;display:flex;gap:10px}
+.carousel-wrap::-webkit-scrollbar{display:none}
+.carousel-card{flex-shrink:0;width:138px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
+.carousel-card:hover{border-color:rgba(233,193,118,.35)}
+
+/* ── MODAL ── */
+#modal-bg{position:fixed;inset:0;background:rgba(5,3,1,.86);z-index:80;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+#modal-bg.on{opacity:1;pointer-events:all}
+#modal-sheet{background:#0e0c08;border:1px solid rgba(79,69,53,.28);border-bottom:none;width:100%;max-width:480px;padding:22px 18px 36px;transform:translateY(40px);transition:transform .3s}
+#modal-bg.on #modal-sheet{transform:translateY(0)}
+.m-inp{width:100%;background:#161412;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;outline:none;transition:border-color .2s;margin-bottom:10px}
+.m-inp:focus{border-color:rgba(233,193,118,.4)}
+.m-inp::placeholder{color:#2a2520}
+.m-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;margin-bottom:6px;display:block}
+
+/* ── NAV ── */
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 10px;cursor:pointer;color:#9c8f7b;text-decoration:none}
+.nav-item.active{color:#e9c176}
+.nav-item p{font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <svg class="spin" width="34" height="34" viewBox="0 0 34 34" fill="none">
+    <circle cx="17" cy="17" r="13" stroke="rgba(233,193,118,.12)" stroke-width="3"/>
+    <path d="M17 4 A13 13 0 0 1 30 17" stroke="#e9c176" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.45)">Cargando perfil...</p>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══ POPUP CÓDIGO DE ACCESO ══ -->
+<div id="popup-codigo">
+  <div id="popup-codigo-sheet">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+      <div>
+        <p style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:5px">Tu acceso como cliente</p>
+        <!-- Nombre de la barbería (viene del Sheet, no hardcodeado) -->
+        <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1" id="popup-bar-nombre">—</p>
+      </div>
+      <button onclick="cerrarPopupCodigo()" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:24px;line-height:1;padding:2px">&times;</button>
+    </div>
+    <p style="font-size:11px;color:#9c8f7b;line-height:1.65;margin-bottom:2px">Este es tu código de cliente para esta barbería. Guárdalo para acceder siempre a tu perfil y citas.</p>
+    <div class="codigo-box">
+      <span class="codigo-val" id="popup-codigo-val">ATL-——</span>
+      <button class="btn-copiar" onclick="copiarCodigo()">
+        <span class="material-symbols-outlined" style="font-size:14px">content_copy</span>
+        Copiar
+      </button>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:8px;background:#161412;border:1px solid rgba(79,69,53,.18);padding:10px 12px;margin-bottom:18px">
+      <span class="material-symbols-outlined" style="font-size:14px;color:rgba(233,193,118,.35);flex-shrink:0;margin-top:1px">info</span>
+      <p style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9c8f7b;line-height:1.65">Comparte este código con tu barbero para que pueda encontrarte en el sistema y gestionar tus citas</p>
+    </div>
+    <button onclick="cerrarPopupCodigo()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:15px">
+      Entendido &mdash; Ver mi barbería
+    </button>
+  </div>
+</div>
+
+<!-- ══ MODAL CONFIRMAR CITA ══ -->
+<div id="modal-bg" onclick="cerrarModal(event)">
+  <div id="modal-sheet">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+      <div>
+        <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:4px">Reserve Your Experience</p>
+        <p style="font-family:'Noto Serif',serif;font-size:19px;color:#e5e2e1" id="modal-titulo">Agendar Cita</p>
+      </div>
+      <button onclick="document.getElementById('modal-bg').classList.remove('on')" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:23px;line-height:1;padding:2px">&times;</button>
+    </div>
+
+    <!-- Resumen seleccionado -->
+    <div id="modal-resumen" style="background:#131210;border:1px solid rgba(233,193,118,.14);padding:0;margin-bottom:16px;display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid rgba(79,69,53,.12)">
+        <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Date</span>
+        <span style="font-size:11px;color:#e9c176;font-weight:600" id="mr-fecha">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid rgba(79,69,53,.12)">
+        <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Time</span>
+        <span style="font-size:11px;color:#e9c176;font-weight:600" id="mr-hora">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 13px">
+        <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Barber</span>
+        <span style="font-size:11px;color:#e5e2e1;font-weight:600" id="mr-barberia">—</span>
+      </div>
+    </div>
+    <div id="modal-aviso" style="padding:4px 0 14px;display:none">
+      <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Selecciona una fecha y hora disponible en el calendario antes de confirmar.</p>
+    </div>
+
+    <label class="m-lbl">Tu nombre completo</label>
+    <input class="m-inp" id="m-nombre" type="text" placeholder="Nombre completo"/>
+    <label class="m-lbl">Teléfono / WhatsApp</label>
+    <input class="m-inp" id="m-tel" type="tel" placeholder="+57 300 000 0000"/>
+    <label class="m-lbl" style="margin-top:2px">Special Requests (opcional)</label>
+    <textarea class="m-inp" id="m-nota" rows="2" placeholder="Tipo de corte, instrucciones especiales..." style="resize:none;font-family:'Manrope',sans-serif;font-size:13px"></textarea>
+
+    <button onclick="confirmarCita()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:16px;margin-top:6px;transition:opacity .2s">
+      <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">event_available</span>
+      Confirm Appointment
+    </button>
+    <div style="display:flex;align-items:flex-start;gap:7px;margin-top:12px;background:rgba(233,193,118,.04);border:1px solid rgba(233,193,118,.08);padding:10px 11px">
+      <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.32);flex-shrink:0;margin-top:1px">info</span>
+      <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9c8f7b;line-height:1.65">A reminder notification will be sent via WhatsApp 24 hours prior to your scheduled atelier experience.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOP BAR ══ -->
+<header style="position:fixed;top:0;width:100%;z-index:50;background:rgba(8,6,4,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(79,69,53,.18)">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 18px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:7px;height:26px;overflow:hidden;border-radius:3px;border:1px solid rgba(79,69,53,.32)">
+        <div class="pole-stripe" style="height:180px"></div>
+      </div>
+      <!-- ← nombre_barberia del Sheet, NO "THE ATELIER" fijo -->
+      <h1 style="font-family:'Noto Serif',serif;font-size:15px;color:#e9c176;letter-spacing:.14em" id="top-nombre">—</h1>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="mostrarPopupCodigo()" title="Ver código de acceso" style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 9px;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-family:'Manrope',sans-serif;transition:all .18s" onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.28)';this.style.color='#9c8f7b'">
+        <span class="material-symbols-outlined" style="font-size:14px">key</span>
+        Código
+      </button>
+      <button onclick="abrirWhatsApp()" style="display:flex;align-items:center;gap:5px;background:rgba(233,193,118,.08);border:1px solid rgba(233,193,118,.2);padding:6px 10px;color:#e9c176;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-family:'Manrope',sans-serif;cursor:pointer">
+        <span class="material-symbols-outlined" style="font-size:14px">chat</span>
+        Chat
+      </button>
+    </div>
+  </div>
+</header>
+
+<main style="padding-top:52px;padding-bottom:84px">
+
+  <!-- FOTO DEL NEGOCIO -->
+  <div style="position:relative">
+    <div id="hero-placeholder" class="hero-placeholder">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px)"></div>
+      <div style="position:relative;text-align:center">
+        <div style="width:36px;height:36px;background:rgba(233,193,118,.07);border:1px solid rgba(233,193,118,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+          <span class="material-symbols-outlined" style="font-size:18px;color:rgba(233,193,118,.26)">storefront</span>
+        </div>
+        <p style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(156,143,123,.26)">Foto del local</p>
+      </div>
+    </div>
+    <img id="hero-img" src="" alt="Foto del local" style="display:none;width:100%;aspect-ratio:4/3;object-fit:cover"/>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(8,6,4,1),transparent);pointer-events:none"></div>
+  </div>
+
+  <!-- INFO CARD -->
+  <div class="info-card">
+    <div style="display:flex;align-items:center;gap:13px;margin-bottom:12px">
+      <div class="avatar-ring" id="avatar-cliente">
+        <span class="material-symbols-outlined" style="font-size:22px;color:rgba(233,193,118,.22)">person</span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px">
+          <p style="font-family:'Noto Serif',serif;font-size:17px;color:#e5e2e1" id="c-nombre">—</p>
+          <span id="badge-estado" class="badge badge-open">Abierto</span>
+        </div>
+        <p id="c-ciudad" style="font-size:11px;color:#9c8f7b"></p>
+        <p id="c-dir" style="font-size:10px;color:#3d3730;margin-top:1px"></p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a id="link-redes" href="#" style="display:none;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;text-decoration:none;border:1px solid rgba(79,69,53,.22);padding:5px 9px">
+        <span class="material-symbols-outlined" style="font-size:12px">alternate_email</span>
+        <span id="txt-redes">Instagram</span>
+      </a>
+      <button onclick="abrirWhatsApp()" style="display:flex;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;background:transparent;border:1px solid rgba(79,69,53,.22);padding:5px 9px;cursor:pointer;font-family:'Manrope',sans-serif">
+        <span class="material-symbols-outlined" style="font-size:12px">phone</span>
+        Llamar / WA
+      </button>
+    </div>
+  </div>
+
+  <!-- MAPA -->
+  <div style="padding:14px 18px 0">
+    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.42);margin-bottom:6px">
+      <span class="material-symbols-outlined" style="font-size:10px;vertical-align:middle;margin-right:3px">location_on</span>
+      Ubicación
+    </p>
+  </div>
+  <div id="mapa-wrap">
+    <div class="mapa-placeholder" id="mapa-ph">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px)"></div>
+      <div class="pin-anim" style="position:relative;width:28px;height:28px;background:#e9c176;border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <span class="material-symbols-outlined" style="font-size:13px;color:#412d00;transform:rotate(45deg)">content_cut</span>
+      </div>
+      <p id="mapa-dir-label" style="font-size:10px;color:#9c8f7b;letter-spacing:.08em;text-align:center;padding:0 20px;position:relative">Cargando ubicación...</p>
+      <a id="mapa-ext-link" href="#" target="_blank" style="display:none;margin-top:4px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,193,118,.5);text-decoration:none;position:relative">Abrir en Maps →</a>
+    </div>
+    <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:180px;border:0"></iframe>
+  </div>
+  <div style="padding:8px 18px 0;border-top:1px solid rgba(79,69,53,.1)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <p id="dir-bajo-mapa" style="font-size:11px;color:#9c8f7b"></p>
+      <a id="link-maps-ext" href="#" target="_blank" style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.45);text-decoration:none;white-space:nowrap;padding-left:8px">Ver en Maps ↗</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════
+       SECCIÓN RESERVAR CITA
+  ══════════════════════════ -->
+  <p class="sec-label" style="margin-top:6px">Reserve Your Experience</p>
+  <div style="padding:0 18px 16px">
+    <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;margin-bottom:5px">Appointment Details</p>
+    <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Selecciona fecha y horario disponible para agendar tu cita.</p>
+  </div>
+
+  <!-- CALENDARIO EXCLUSIVO -->
+  <div class="cal-wrap">
+    <div class="cal-hdr">
+      <div>
+        <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:4px">Select Date</p>
+        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1" id="cal-mes-label">—</p>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="cal-nav" onclick="calNav(-1)">
+          <span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
+        </button>
+        <button class="cal-nav" onclick="calNav(1)">
+          <span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    <div class="cal-dow">
+      <span>Lun</span><span>Mar</span><span>Mié</span>
+      <span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+
+  <!-- SLOTS POR TURNO (aparece al seleccionar día disponible) -->
+  <div class="slots-section" id="slots-section" style="display:none">
+    <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:12px" id="slots-fecha-label">—</p>
+
+    <div id="sg-manana" style="display:none">
+      <p class="slot-group-lbl">Morning Sessions</p>
+      <div class="slot-grid" id="sg-manana-grid" style="margin-bottom:4px"></div>
+    </div>
+    <div id="sg-tarde" style="display:none">
+      <p class="slot-group-lbl">Afternoon Sessions</p>
+      <div class="slot-grid" id="sg-tarde-grid" style="margin-bottom:4px"></div>
+    </div>
+    <div id="sg-noche" style="display:none">
+      <p class="slot-group-lbl">Evening Sessions</p>
+      <div class="slot-grid" id="sg-noche-grid" style="margin-bottom:4px"></div>
+    </div>
+    <div id="sg-empty" style="display:none;padding:14px 0;text-align:center">
+      <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">No disponible este día</p>
+    </div>
+  </div>
+
+  <!-- ORDER SUMMARY (aparece al elegir slot) -->
+  <div id="booking-summary-inline" style="display:none">
+    <div class="booking-card">
+      <div class="brow" style="padding:10px 14px 6px;border-bottom:none">
+        <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:#9c8f7b">Order Summary</p>
+      </div>
+      <div style="height:1px;background:rgba(79,69,53,.14);margin:0 14px"></div>
+      <div class="brow">
+        <span class="bkey">Servicio</span>
+        <span class="bval">The Signature Cut</span>
+      </div>
+      <div class="brow">
+        <span class="bkey">Date</span>
+        <span class="bval" id="bs-fecha">—</span>
+      </div>
+      <div class="brow">
+        <span class="bkey">Time</span>
+        <span class="bval" id="bs-hora" style="color:#e9c176">—</span>
+      </div>
+      <div class="brow" id="bs-barber-row">
+        <span class="bkey">Barber</span>
+        <span class="bval" id="bs-barber">—</span>
+      </div>
+    </div>
+    <div style="padding:16px 18px 4px">
+      <button onclick="abrirModal()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:16px;display:block;transition:opacity .2s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:6px">calendar_month</span>
+        Confirm Appointment
+      </button>
+      <div style="display:flex;align-items:flex-start;gap:7px;margin-top:10px;background:rgba(233,193,118,.03);border:1px solid rgba(233,193,118,.08);padding:10px 11px">
+        <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.28);flex-shrink:0;margin-top:1px">info</span>
+        <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9c8f7b;line-height:1.65">A reminder notification will be sent via SMS and WhatsApp 24 hours prior to your scheduled atelier experience.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón base si nada seleccionado -->
+  <div id="btn-agendar-wrap" style="padding:16px 18px 4px">
+    <button onclick="abrirModal()" style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:14px;display:flex;align-items:center;justify-content:center;gap:7px">
+      <span class="material-symbols-outlined" style="font-size:15px">calendar_month</span>
+      Agendar Cita
+    </button>
+  </div>
+
+  <!-- CARRUSEL DE CORTES -->
+  <p class="sec-label" style="margin-top:10px">Trabajos del barbero</p>
+  <p style="font-size:10px;color:#9c8f7b;padding:0 18px 12px;line-height:1.6">Desliza para ver el portafolio</p>
+  <div class="carousel-wrap" id="carousel"></div>
+  <div id="carousel-empty" style="display:none;text-align:center;padding:24px 18px">
+    <span class="material-symbols-outlined" style="font-size:28px;color:rgba(233,193,118,.1);display:block;margin-bottom:6px">photo_library</span>
+    <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">Sin fotos publicadas aún</p>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.93);backdrop-filter:blur(16px);border-top:1px solid rgba(79,69,53,.18);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:8px 0 14px">
+  <a href="#" class="nav-item active">
+    <span class="material-symbols-outlined ms-filled" style="font-size:21px">explore</span>
+    <p>Inicio</p>
+  </a>
+  <a href="citas.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">event_available</span>
+    <p>Mis Citas</p>
+  </a>
+  <a href="tienda.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">storefront</span>
+    <p>Tienda</p>
+  </a>
+  <a href="panel-barbero.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">person</span>
+    <p>Panel</p>
+  </a>
+</nav>
+
+<script>
+/* ══════════════════════════════════════
+   CONFIG
+══════════════════════════════════════ */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyD-iwgwbMdBqSc4i8H62TU5AB5hV3cGaG5z9gbG32vtYM08s5kVibbmwN4EiYxoDCb/exec";
+const BAR_ID  = new URLSearchParams(location.search).get('id') || 'BAR-DEMO';
+
+let perfil    = {};
+let horarios  = [];
+let cortes    = [];
+let diaActivo  = null;
+let slotActivo = null;
+let fechaSel   = null;
+
+/* ══ CÓDIGO DE ACCESO ══
+   Se genera una vez por BAR_ID y se persiste en localStorage.
+   Se muestra la primera vez del día (o con ?nuevo=1).
+   Siempre disponible en el botón "Código" del top bar. */
+const CODIGO_KEY = `atelier_codigo_${BAR_ID}`;
+const VISTO_KEY  = `atelier_visto_${BAR_ID}_${new Date().toDateString()}`;
+
+function generarCodigo() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let r = 'ATL-';
+  for (let i=0; i<5; i++) r += c[Math.floor(Math.random()*c.length)];
+  return r;
+}
+
+function initCodigo() {
+  let codigo = localStorage.getItem(CODIGO_KEY);
+  if (!codigo) { codigo = generarCodigo(); localStorage.setItem(CODIGO_KEY, codigo); }
+  document.getElementById('popup-codigo-val').textContent = codigo;
+
+  const esNuevo = new URLSearchParams(location.search).get('nuevo') === '1';
+  const yaVisto = localStorage.getItem(VISTO_KEY);
+  if (!yaVisto || esNuevo) mostrarPopupCodigo();
+}
+
+function mostrarPopupCodigo() {
+  /* Nombre viene del Sheet cargado (o fallback localStorage) */
+  const nb = perfil.nombre_barberia
+    || localStorage.getItem(`atelier_nombre_${BAR_ID}`)
+    || '—';
+  document.getElementById('popup-bar-nombre').textContent = nb;
+  document.getElementById('popup-codigo').classList.add('on');
+}
+
+function cerrarPopupCodigo() {
+  document.getElementById('popup-codigo').classList.remove('on');
+  localStorage.setItem(VISTO_KEY, '1');
+}
+
+function copiarCodigo() {
+  const val = document.getElementById('popup-codigo-val').textContent;
+  navigator.clipboard.writeText(val)
+    .then(() => toast('✓ Código copiado'))
+    .catch(() => toast(val));   /* fallback: mostrar en toast */
+}
+
+/* ══ CARGA DESDE SHEET ══ */
+async function cargarDesdeSheet() {
+  const ses           = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
+  const cortesLocal   = JSON.parse(localStorage.getItem('atelier_cortes')   || '[]');
+  const horariosLocal = JSON.parse(localStorage.getItem('atelier_horarios') || '[]');
+
+  try {
+    const res  = await fetch(`${GAS_URL}?accion=getPerfil&barberia_id=${BAR_ID}`, {signal: AbortSignal.timeout(5000)});
+    const data = await res.json();
+    if (data.perfil)   perfil   = data.perfil;
+    if (data.horarios) horarios = data.horarios;
+    if (data.cortes)   cortes   = data.cortes;
+  } catch(e) {
+    /* Fallback: sessionStorage + localStorage */
+    perfil = {
+      nombre_barberia:  ses.nombre    || localStorage.getItem(`atelier_nombre_${BAR_ID}`) || '—',
+      nombre_dueno:     ses.dueno     || '',
+      ciudad:           ses.ciudad    || '',
+      departamento:     ses.depto     || '',
+      direccion:        ses.direccion || '',
+      telefono:         ses.telefono  || '',
+      email:            ses.email     || '',
+      redes_sociales:   ses.redes     || '',
+      foto_barbero_url: ses.foto_barbero_url || '',
+      foto_local_url:   ses.foto_local_url   || '',
+      maps_url:         ses.maps_url  || '',
+      plan:             ses.plan      || 'free',
+    };
+    horarios = horariosLocal;
+    cortes   = cortesLocal;
+  }
+
+  /* Persistir nombre en localStorage para popup offline */
+  if (perfil.nombre_barberia && perfil.nombre_barberia !== '—') {
+    localStorage.setItem(`atelier_nombre_${BAR_ID}`, perfil.nombre_barberia);
+  }
+
+  renderPerfil();
+  renderMapa();
+  buildCalendario();
+  renderCarrusel();
+  initCodigo();
+  document.getElementById('loader').classList.add('hide');
+}
+
+/* ══ RENDER PERFIL ══
+   top-nombre y c-nombre usan nombre_barberia del Sheet.
+   NUNCA "THE ATELIER" hardcodeado. */
+function renderPerfil() {
+  const p     = perfil;
+  const nombre = p.nombre_barberia || '—';
+
+  document.getElementById('top-nombre').textContent = nombre;
+  document.title = nombre;
+  document.getElementById('c-nombre').textContent   = nombre;
+  document.getElementById('c-ciudad').textContent   = [p.ciudad, p.departamento].filter(Boolean).join(', ');
+  document.getElementById('c-dir').textContent      = p.direccion || '';
+  document.getElementById('dir-bajo-mapa').textContent = p.direccion || '';
+
+  if (p.foto_local_url) {
+    const img = document.getElementById('hero-img');
+    img.src = p.foto_local_url;
+    img.style.display = 'block';
+    document.getElementById('hero-placeholder').style.display = 'none';
+    img.onerror = () => { img.style.display='none'; document.getElementById('hero-placeholder').style.display='flex'; };
+  }
+  if (p.foto_barbero_url) {
+    document.getElementById('avatar-cliente').innerHTML =
+      `<img src="${p.foto_barbero_url}" style="width:100%;height:100%;object-fit:cover"
+        onerror="this.parentElement.innerHTML='<span class=material-symbols-outlined style=font-size:22px;color:rgba(233,193,118,.22)>person</span>'"/>`;
+  }
+
+  const h = new Date().getHours();
+  const abierto = h >= 8 && h < 20;
+  const badge = document.getElementById('badge-estado');
+  badge.textContent = abierto ? 'Abierto ahora' : 'Cerrado';
+  badge.className   = 'badge ' + (abierto ? 'badge-open' : 'badge-closed');
+
+  if (p.redes_sociales) {
+    const lr = document.getElementById('link-redes');
+    lr.style.display = 'flex';
+    document.getElementById('txt-redes').textContent = p.redes_sociales;
+    lr.href = p.redes_sociales.startsWith('@')
+      ? `https://instagram.com/${p.redes_sociales.slice(1)}`
+      : p.redes_sociales;
+  }
+  if (p.maps_url) {
+    document.getElementById('link-maps-ext').href = p.maps_url;
+    document.getElementById('mapa-ext-link').href = p.maps_url;
+    document.getElementById('mapa-ext-link').style.display = 'block';
+  }
+  if (p.nombre_dueno) {
+    document.getElementById('bs-barber').textContent = p.nombre_dueno;
+  }
+}
+
+/* ══ MAPA ══ */
+function renderMapa() {
+  const p      = perfil;
+  const iframe = document.getElementById('mapa-iframe');
+  const ph     = document.getElementById('mapa-ph');
+  document.getElementById('mapa-dir-label').textContent =
+    p.direccion ? `${p.direccion}${p.ciudad ? ', '+p.ciudad : ''}` : 'Sin dirección registrada';
+
+  const buildSrc = () => {
+    const q = encodeURIComponent([p.nombre_barberia, p.direccion, p.ciudad].filter(Boolean).join(', '));
+    return `https://maps.google.com/maps?q=${q}&output=embed&hl=es&z=16`;
+  };
+  if (p.maps_url || p.direccion) {
+    let src = (p.maps_url && p.maps_url.includes('/maps/embed')) ? p.maps_url : buildSrc();
+    iframe.src = src;
+    iframe.style.display = 'block';
+    ph.style.display = 'none';
+  }
+}
+
+/* ══ CALENDARIO ══ */
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MESES3 = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const DIAS3  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const DKEYS  = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+
+let horarioMap = {};
+let calAno, calMes;
+
+function buildHorarioMap() {
+  horarioMap = {};
+  horarios.forEach(h => { const k = h.dia_semana || h.dia; if(k) horarioMap[k]=h; });
+}
+
+function buildCalendario() {
+  buildHorarioMap();
+  const hoy = new Date();
+  calAno = hoy.getFullYear();
+  calMes = hoy.getMonth();
+  renderCalGrid();
+}
+
+function calNav(d) {
+  calMes += d;
+  if (calMes > 11) { calMes=0; calAno++; }
+  if (calMes < 0)  { calMes=11; calAno--; }
+  renderCalGrid();
+}
+
+function renderCalGrid() {
+  document.getElementById('cal-mes-label').textContent = `${MESES[calMes]} ${calAno}`;
+  const grid = document.getElementById('cal-grid');
+  const hoy  = new Date();
+  const hoyStr = hoy.toDateString();
+  const primerDia = new Date(calAno, calMes, 1);
+  let startDow = primerDia.getDay() - 1;
+  if (startDow < 0) startDow = 6;
+  const diasMes = new Date(calAno, calMes+1, 0).getDate();
+  const prevDias = new Date(calAno, calMes, 0).getDate();
+  grid.innerHTML = '';
+
+  /* Relleno mes anterior */
+  for (let i = startDow-1; i >= 0; i--) {
+    const c = document.createElement('div');
+    c.className = 'cd oth';
+    c.textContent = prevDias - i;
+    grid.appendChild(c);
+  }
+  /* Días del mes */
+  for (let d = 1; d <= diasMes; d++) {
+    const fecha  = new Date(calAno, calMes, d);
+    const dowJS  = fecha.getDay();
+    const diaKey = DKEYS[dowJS];
+    const hd     = horarioMap[diaKey];
+    const esPas  = fecha < new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+    const esHoy  = fecha.toDateString() === hoyStr;
+    const disp   = hd && (hd.activo === true || hd.activo === 'TRUE' || hd.activo === 1);
+    const c = document.createElement('div');
+    c.textContent = d;
+    if (esPas || !disp) {
+      c.className = 'cd ' + (esPas ? 'past' : 'nowork');
+    } else {
+      c.className = 'cd avail' + (esHoy ? ' hoy' : '');
+      if (fechaSel && fecha.toDateString() === fechaSel.toDateString()) c.classList.add('sel');
+      c.onclick = () => selFecha(fecha, diaKey, hd, c);
+    }
+    grid.appendChild(c);
+  }
+  /* Relleno mes siguiente */
+  const tot = grid.children.length;
+  const rest = tot%7===0 ? 0 : 7-(tot%7);
+  for (let i=1; i<=rest; i++) {
+    const c = document.createElement('div'); c.className='cd oth'; c.textContent=i; grid.appendChild(c);
+  }
+}
+
+function selFecha(fecha, diaKey, horario, celda) {
+  fechaSel   = fecha;
+  diaActivo  = { dia: diaKey, horario };
+  slotActivo = null;
+  document.querySelectorAll('.cd.sel').forEach(c => c.classList.remove('sel'));
+  celda.classList.add('sel');
+  renderSlots(horario, fecha);
+  document.getElementById('booking-summary-inline').style.display = 'none';
+  document.getElementById('btn-agendar-wrap').style.display = 'none';
+}
+
+/* ══ SLOTS ══ */
+function renderSlots(h, fecha) {
+  document.getElementById('slots-section').style.display = 'block';
+  document.getElementById('slots-fecha-label').textContent =
+    `${DIAS3[fecha.getDay()]} ${fecha.getDate()} ${MESES3[fecha.getMonth()]} ${fecha.getFullYear()}`;
+
+  const ini = (h.hora_inicio || '08:00').slice(0,5);
+  const fin = (h.hora_fin    || '20:00').slice(0,5);
+  const inv = parseInt(h.intervalo_min || 30);
+  const [hh,mm] = ini.split(':').map(Number);
+  const [eh,em] = fin.split(':').map(Number);
+  let cur = hh*60+mm;
+  const end = eh*60+em;
+  const man=[], tar=[], noc=[];
+  while (cur < end) {
+    const hr=String(Math.floor(cur/60)).padStart(2,'0'), mi=String(cur%60).padStart(2,'0');
+    const s=`${hr}:${mi}`, curH=Math.floor(cur/60);
+    if(curH<12) man.push(s); else if(curH<17) tar.push(s); else noc.push(s);
+    cur+=inv;
+  }
+  document.getElementById('sg-empty').style.display = (!man.length&&!tar.length&&!noc.length) ? 'block':'none';
+  llenarSG('manana', man);
+  llenarSG('tarde',  tar);
+  llenarSG('noche',  noc);
+}
+
+function llenarSG(id, slots) {
+  const w = document.getElementById('sg-'+id);
+  const g = document.getElementById('sg-'+id+'-grid');
+  w.style.display = slots.length ? 'block':'none';
+  g.innerHTML = '';
+  slots.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 's-btn';
+    b.textContent = s;
+    b.onclick = () => selSlot(s, b);
+    g.appendChild(b);
+  });
+}
+
+function selSlot(s, btn) {
+  document.querySelectorAll('.s-btn.sel').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  slotActivo = s;
+  if (fechaSel) {
+    const fStr = `${DIAS3[fechaSel.getDay()]} ${fechaSel.getDate()} ${MESES3[fechaSel.getMonth()]} ${fechaSel.getFullYear()}`;
+    document.getElementById('bs-fecha').textContent = fStr;
+    document.getElementById('mr-fecha').textContent = fStr;
+  }
+  document.getElementById('bs-hora').textContent  = s;
+  document.getElementById('mr-hora').textContent  = s;
+  document.getElementById('mr-barberia').textContent = perfil.nombre_barberia || '—';
+  document.getElementById('booking-summary-inline').style.display = 'block';
+  document.getElementById('btn-agendar-wrap').style.display = 'none';
+}
+
+/* ══ MODAL ══ */
+function abrirModal(corteNombre) {
+  document.getElementById('modal-titulo').textContent = corteNombre ? `Reservar · ${corteNombre}` : 'Agendar Cita';
+  const tieneSeleccion = diaActivo && slotActivo && fechaSel;
+  document.getElementById('modal-resumen').style.display = tieneSeleccion ? 'block':'none';
+  document.getElementById('modal-aviso').style.display   = tieneSeleccion ? 'none' :'block';
+  document.getElementById('modal-bg').classList.add('on');
+}
+function cerrarModal(e) {
+  if (e.target.id === 'modal-bg') document.getElementById('modal-bg').classList.remove('on');
+}
+
+async function confirmarCita() {
+  const nombre = document.getElementById('m-nombre').value.trim();
+  const tel    = document.getElementById('m-tel').value.trim();
+  if (!nombre||!tel) return toast('Completa tu nombre y teléfono', true);
+  if (!diaActivo||!slotActivo||!fechaSel) return toast('Selecciona fecha y hora primero', true);
+  const fStr = `${fechaSel.getDate()} ${MESES3[fechaSel.getMonth()]} ${fechaSel.getFullYear()}`;
+  const cita = {
+    accion:'agendarCita', barberia_id:BAR_ID, cliente:nombre, telefono:tel,
+    nota: document.getElementById('m-nota').value.trim(),
+    dia: diaActivo.dia, hora: slotActivo,
+    fecha: fechaSel.toISOString().split('T')[0], estado:'pendiente',
+    codigo_cliente: localStorage.getItem(CODIGO_KEY)||''
+  };
+  try { await fetch(`${GAS_URL}?datos=${encodeURIComponent(JSON.stringify(cita))}`); } catch(e){}
+  document.getElementById('modal-bg').classList.remove('on');
+  toast(`✓ Cita solicitada · ${fStr} ${slotActivo}`);
+  ['m-nombre','m-tel','m-nota'].forEach(id => document.getElementById(id).value='');
+}
+
+/* ══ CARRUSEL ══ */
+function renderCarrusel() {
+  const wrap  = document.getElementById('carousel');
+  const empty = document.getElementById('carousel-empty');
+  wrap.innerHTML = '';
+  const items = cortes.filter(c => c.activo===true||c.activo==='TRUE'||c.activo===1||c.activo===undefined);
+  if (!items.length) { empty.style.display='block'; return; }
+  empty.style.display='none';
+  items.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'carousel-card';
+    card.innerHTML = `
+      <div style="position:relative">
+        <img src="${c.imagen_url||''}" alt="${c.nombre||''}" loading="lazy"
+          style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:#161412"
+          onerror="this.style.background='#1c1b1b'"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,4,.9),transparent 45%)"></div>
+        <div style="position:absolute;bottom:8px;left:8px;right:8px">
+          <p style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#e9c176;margin-bottom:2px">${c.estilo||''}</p>
+          <p style="font-family:'Noto Serif',serif;font-size:11px;color:#e5e2e1;line-height:1.2">${c.nombre||''}</p>
+        </div>
+      </div>
+      ${c.descripcion?`<p style="font-size:9px;color:#9c8f7b;padding:7px 8px;line-height:1.4;border-top:1px solid rgba(79,69,53,.14)">${c.descripcion}</p>`:''}`;
+    card.onclick = () => abrirModal(c.nombre);
+    wrap.appendChild(card);
+  });
+}
+
+/* ══ WA + TOAST ══ */
+function abrirWhatsApp() {
+  const tel = (perfil.telefono||'').replace(/\D/g,'');
+  const msg = encodeURIComponent('Hola! Vi tu perfil y quiero agendar una cita.');
+  if (tel) window.open(`https://wa.me/${tel}?text=${msg}`,'_blank');
+  else toast('Teléfono no configurado aún', true);
+}
+let _tt;
+function toast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'on'+(err?' err':'');
+  clearTimeout(_tt);
+  _tt = setTimeout(()=>t.className='', 3200);
+}
+
+/* ══ INIT ══ */
+cargarDesdeSheet();
+</script>
+</body>
+</html>

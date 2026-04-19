@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE ATELIER | Panel Barbero</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.material-symbols-outlined{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" 0,"opsz" 24}
+.ms-filled{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;color:#e5e2e1}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.inp-field{width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:12px 14px;outline:none;transition:border-color .2s;}
+.inp-field:focus{border-color:rgba(233,193,118,.45)}
+.inp-field::placeholder{color:#3d3730}
+select.inp-field{cursor:pointer;-webkit-appearance:none}
+.inp-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:6px;display:block}
+.time-inp{background:#161412;border:1px solid rgba(79,69,53,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:11px;padding:5px 7px;width:72px;outline:none;text-align:center;}
+.time-inp:focus{border-color:rgba(233,193,118,.5)}
+.time-inp::-webkit-calendar-picker-indicator{filter:invert(.3) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer}
+.intervalo-sel{background:#161412;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;padding:5px 6px;outline:none;cursor:pointer;-webkit-appearance:none;}
+.tab-btn{padding:11px 0;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;cursor:pointer;border-bottom:2px solid transparent;background:transparent;border-top:none;border-left:none;border-right:none;transition:all .2s;font-family:'Manrope',sans-serif;font-weight:600;flex:1;}
+.tab-btn.active{color:#e9c176;border-bottom-color:#e9c176}
+.toggle-sw{position:relative;width:38px;height:20px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute}
+.slider-sw{position:absolute;inset:0;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);cursor:pointer;transition:.3s;border-radius:10px}
+.slider-sw:before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;background:#3a3530;border-radius:50%;transition:.3s}
+input:checked + .slider-sw{background:rgba(233,193,118,.12);border-color:rgba(233,193,118,.5)}
+input:checked + .slider-sw:before{transform:translateX(18px);background:#e9c176}
+.foto-upload{position:relative;cursor:pointer;overflow:hidden;background:#161412;border:1px solid rgba(79,69,53,.32);display:flex;align-items:center;justify-content:center;transition:border-color .25s;}
+.foto-upload:hover{border-color:rgba(233,193,118,.42)}
+.foto-upload input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
+.foto-upload img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.foto-upload .ph{display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;position:relative;z-index:1;}
+.foto-upload.loaded .ph{display:none}
+.foto-upload.loaded img{display:block}
+.foto-upload .cam-badge{position:absolute;bottom:8px;right:8px;z-index:3;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);padding:4px 8px;display:flex;align-items:center;gap:4px;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#e9c176;pointer-events:none;}
+.foto-circle{width:84px;height:84px;border-radius:50%;border:2px solid rgba(233,193,118,.32);flex-shrink:0}
+.corte-card{background:#1c1b1b;border:1px solid rgba(79,69,53,.25);overflow:hidden;transition:border-color .25s}
+.corte-card:hover{border-color:rgba(233,193,118,.35)}
+.btn-gold{background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:14px 24px;transition:opacity .2s;}
+.btn-gold:hover{opacity:.88}
+.btn-ghost{background:transparent;border:1px solid rgba(79,69,53,.38);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;padding:11px 16px;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(233,193,118,.4);color:#e9c176}
+.pole-stripe{width:6px;height:100%;background:repeating-linear-gradient(180deg,#e9c176 0,#e9c176 12px,#1a1a1a 12px,#1a1a1a 24px,#c0392b 24px,#c0392b 36px,#1a1a1a 36px,#1a1a1a 48px);animation:poleScroll 2.5s linear infinite;border-radius:3px;}
+@keyframes poleScroll{from{background-position:0 0}to{background-position:0 48px}}
+.prog-bar{height:2px;background:rgba(79,69,53,.22);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#e9c176;border-radius:2px;transition:width .4s}
+.enc-chip{font-size:8px;padding:3px 8px;background:#161412;border:1px solid rgba(79,69,53,.25);color:#9c8f7b}
+.enc-chip.g{border-color:rgba(233,193,118,.32);color:#e9c176}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 20px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;border-radius:2px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
+#toast.on{opacity:1}
+#toast.err{background:#93000a;color:#ffb4ab}
+.spin{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+#ov{position:fixed;inset:0;background:rgba(5,3,1,.88);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;pointer-events:none;transition:opacity .3s;}
+#ov.on{opacity:1;pointer-events:all}
+.p-badge{font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:3px 9px;border:1px solid;font-weight:700}
+.pb-free{color:#9c8f7b;border-color:rgba(156,143,123,.28);background:rgba(156,143,123,.06)}
+.pb-pro{color:#e9c176;border-color:rgba(233,193,118,.32);background:rgba(233,193,118,.07)}
+.dia-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid rgba(79,69,53,.1)}
+.sec-label{font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.62);margin-bottom:4px}
+.gold-line{height:1px;background:linear-gradient(90deg,transparent,rgba(233,193,118,.32),transparent)}
+/* NAV bottom */
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 10px;cursor:pointer;color:#9c8f7b;text-decoration:none}
+.nav-item.active{color:#e9c176}
+.nav-item p{font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+<div id="ov">
+  <svg class="spin" width="34" height="34" viewBox="0 0 34 34" fill="none">
+    <circle cx="17" cy="17" r="13" stroke="rgba(233,193,118,.16)" stroke-width="3"/>
+    <path d="M17 4 A13 13 0 0 1 30 17" stroke="#e9c176" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <p id="ov-msg" style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#e9c176">Guardando...</p>
+</div>
+
+<!-- TOP BAR -->
+<header style="position:fixed;top:0;width:100%;z-index:50;background:rgba(8,6,4,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(79,69,53,.18)">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:7px;height:26px;overflow:hidden;border-radius:3px;border:1px solid rgba(79,69,53,.32)">
+        <div class="pole-stripe" style="height:180px"></div>
+      </div>
+      <div>
+        <p style="font-size:7px;letter-spacing:.34em;text-transform:uppercase;color:rgba(156,143,123,.38);line-height:1">Panel</p>
+        <h1 style="font-family:'Noto Serif',serif;font-size:14px;color:#e9c176;letter-spacing:.12em">THE ATELIER</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px">
+      <span id="plan-badge" class="p-badge pb-free">Free</span>
+      <div id="avatar-top" class="foto-circle" style="overflow:hidden;background:#1c1b1b;display:flex;align-items:center;justify-content:center">
+        <span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.28)">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main style="padding-top:68px;padding-bottom:84px">
+
+  <!-- PERFIL HEADER -->
+  <div style="background:#0e0c08;padding:18px;border-bottom:1px solid rgba(79,69,53,.18)">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <div class="foto-upload foto-circle" id="zona-barbero">
+        <input type="file" accept="image/*" onchange="onFoto(this,'barbero')"/>
+        <img id="img-barbero" src="" alt=""/>
+        <div class="ph">
+          <span class="material-symbols-outlined" style="font-size:22px;color:rgba(233,193,118,.28)">person</span>
+        </div>
+        <div class="cam-badge">
+          <span class="material-symbols-outlined" style="font-size:10px">photo_camera</span>
+          Foto
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <p id="ph-nombre" style="font-family:'Noto Serif',serif;font-size:17px;color:#e5e2e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Mi Barbería</p>
+        <p id="ph-ciudad" style="font-size:11px;color:#9c8f7b;margin-top:2px"></p>
+        <div style="margin-top:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b">Perfil completado</span>
+            <span id="prog-pct" style="font-size:9px;color:#e9c176;font-weight:700">0%</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div style="display:flex;border-bottom:1px solid rgba(79,69,53,.18)">
+      <button class="tab-btn active" onclick="tab(this,'t-datos')">Datos</button>
+      <button class="tab-btn" onclick="tab(this,'t-horarios')">Horarios</button>
+      <button class="tab-btn" onclick="tab(this,'t-cortes')">Mis Cortes</button>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB DATOS ═══════ -->
+  <div id="t-datos" class="tc" style="padding:20px;display:flex;flex-direction:column;gap:14px">
+
+    <div>
+      <label class="inp-label">Foto del local / negocio</label>
+      <div class="foto-upload" id="zona-local" style="width:100%;aspect-ratio:16/6">
+        <input type="file" accept="image/*" onchange="onFoto(this,'local')"/>
+        <img id="img-local" src="" alt=""/>
+        <div class="ph">
+          <span class="material-symbols-outlined" style="font-size:24px;color:rgba(233,193,118,.26)">add_photo_alternate</span>
+          <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(156,143,123,.38)">Toca para subir foto</span>
+        </div>
+        <div class="cam-badge">
+          <span class="material-symbols-outlined" style="font-size:10px">photo_camera</span>
+          Cambiar foto
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="inp-label">Nombre de la barbería *</label>
+      <input class="inp-field" id="f-nombre" type="text" placeholder="The Atelier"/>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <label class="inp-label">Ciudad *</label>
+        <input class="inp-field" id="f-ciudad" type="text" placeholder="Barranquilla"/>
+      </div>
+      <div>
+        <label class="inp-label">Departamento</label>
+        <input class="inp-field" id="f-depto" type="text" placeholder="Atlántico"/>
+      </div>
+    </div>
+    <div>
+      <label class="inp-label">Dirección *</label>
+      <input class="inp-field" id="f-dir" type="text" placeholder="Calle 72 # 44-30"/>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <label class="inp-label">Teléfono / WhatsApp *</label>
+        <input class="inp-field" id="f-tel" type="tel" placeholder="+57 300 000 0000"/>
+      </div>
+      <div>
+        <label class="inp-label">Correo</label>
+        <input class="inp-field" id="f-email" type="email" placeholder="hola@barberia.com"/>
+      </div>
+    </div>
+    <div>
+      <label class="inp-label">Propietario / Master Barber *</label>
+      <input class="inp-field" id="f-dueno" type="text" placeholder="Tu nombre completo"/>
+    </div>
+    <div>
+      <label class="inp-label">Instagram / Redes Sociales</label>
+      <input class="inp-field" id="f-redes" type="text" placeholder="@theatelier"/>
+    </div>
+
+    <!-- Google Maps -->
+    <div>
+      <label class="inp-label">Enlace Google Maps (iframe embed o URL)</label>
+      <input class="inp-field" id="f-maps" type="url" placeholder="https://maps.google.com/..." oninput="updateMapPreview()"/>
+      <div id="map-container" style="margin-top:6px;width:100%;height:140px;background:#161412;border:1px solid rgba(79,69,53,.22);position:relative;overflow:hidden">
+        <div id="map-placeholder" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.07) 0,rgba(79,69,53,.07) 1px,transparent 1px,transparent 26px),repeating-linear-gradient(90deg,rgba(79,69,53,.07) 0,rgba(79,69,53,.07) 1px,transparent 1px,transparent 26px)"></div>
+          <div style="position:relative;text-align:center">
+            <div style="width:26px;height:26px;background:#e9c176;border-radius:50% 50% 50% 0;transform:rotate(-45deg);margin:0 auto 8px;display:flex;align-items:center;justify-content:center">
+              <span class="material-symbols-outlined" style="font-size:12px;color:#412d00;transform:rotate(45deg)">content_cut</span>
+            </div>
+            <p style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#9c8f7b">Pega tu enlace de Maps</p>
+            <p style="font-size:9px;color:rgba(233,193,118,.4);margin-top:3px">El mapa aparece en la vista del cliente</p>
+          </div>
+        </div>
+        <iframe id="map-iframe" src="" width="100%" height="140" style="border:0;display:none;position:absolute;top:0;left:0" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+      <!-- Botón abrir Maps -->
+      <button onclick="abrirMaps()" class="btn-ghost" style="width:100%;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="material-symbols-outlined" style="font-size:14px">open_in_new</span>
+        Abrir en Google Maps
+      </button>
+    </div>
+
+    <div>
+      <label class="inp-label">Plan</label>
+      <select class="inp-field" id="f-plan">
+        <option value="free">Free</option>
+        <option value="pro">Pro</option>
+        <option value="elite">Elite</option>
+      </select>
+    </div>
+
+    <!-- Encabezados hoja Perfil -->
+    <div style="background:#161412;border:1px solid rgba(79,69,53,.18);padding:14px">
+      <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px">
+        <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">table_chart</span>
+        Hoja Google Sheets — "Perfil"
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px" id="enc-perfil"></div>
+    </div>
+
+    <button class="btn-gold" onclick="guardarPerfil()" style="width:100%;padding:15px">
+      <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">save</span>
+      Guardar Perfil en Sheet
+    </button>
+  </div>
+
+  <!-- ═══════ TAB HORARIOS ═══════ -->
+  <div id="t-horarios" class="tc" style="padding:20px;display:none;flex-direction:column;gap:0">
+
+    <p class="sec-label">Disponibilidad</p>
+    <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:10px;font-weight:400">Horario de trabajo</p>
+    <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.65">Los horarios activos se guardan en el Sheet y son los slots disponibles para pedir cita. Los días inactivos muestran "No disponible" al cliente.</p>
+
+    <!-- Encabezados hoja Horarios -->
+    <div style="background:#161412;border:1px solid rgba(79,69,53,.18);padding:12px;margin-bottom:14px">
+      <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px">
+        <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">table_chart</span>
+        Hoja Google Sheets — "Horarios"
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <span class="enc-chip">horario_id</span>
+        <span class="enc-chip">barberia_id</span>
+        <span class="enc-chip">barbero_id</span>
+        <span class="enc-chip g">dia_semana</span>
+        <span class="enc-chip g">hora_inicio</span>
+        <span class="enc-chip g">hora_fin</span>
+        <span class="enc-chip g">intervalo_min</span>
+        <span class="enc-chip g">activo</span>
+        <span class="enc-chip">fecha_actualizacion</span>
+      </div>
+      <p style="font-size:9px;color:rgba(233,193,118,.45);margin-top:8px;line-height:1.55">
+        <span class="material-symbols-outlined" style="font-size:10px;vertical-align:middle">info</span>
+        Los campos dorados son los que se leen para mostrar disponibilidad al cliente
+      </p>
+    </div>
+
+    <!-- Tabla días -->
+    <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.2);padding:12px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;padding-bottom:7px;border-bottom:1px solid rgba(79,69,53,.15);margin-bottom:4px">
+        <span style="width:30px"></span>
+        <span style="width:38px"></span>
+        <span style="flex:1;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#3d3730;text-align:center">Inicio</span>
+        <span style="flex:1;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#3d3730;text-align:center">Fin</span>
+        <span style="width:50px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#3d3730;text-align:center">Cada</span>
+      </div>
+      <div id="horario-rows"></div>
+    </div>
+
+    <!-- Intervalo global -->
+    <div style="background:#161412;border:1px solid rgba(79,69,53,.18);padding:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <p style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin-bottom:2px">Intervalo global</p>
+        <p style="font-size:11px;color:#e5e2e1">Aplicar a todos los días activos</p>
+      </div>
+      <select class="intervalo-sel" id="int-global" onchange="aplicarGlobal()">
+        <option value="">—</option>
+        <option value="15">15 min</option>
+        <option value="20">20 min</option>
+        <option value="30">30 min</option>
+        <option value="45">45 min</option>
+        <option value="60">60 min</option>
+      </select>
+    </div>
+
+    <!-- Preview slots -->
+    <div style="background:#161412;border:1px solid rgba(79,69,53,.18);padding:12px;margin-bottom:16px">
+      <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px">Preview — Slots que verá el cliente</p>
+      <div id="slots-preview" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+    </div>
+
+    <button class="btn-gold" onclick="guardarHorarios()" style="width:100%;padding:15px">
+      <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">event_available</span>
+      Guardar Horarios en Sheet
+    </button>
+  </div>
+
+  <!-- ═══════ TAB CORTES ═══════ -->
+  <div id="t-cortes" class="tc" style="padding:20px;display:none;flex-direction:column;gap:0">
+
+    <p class="sec-label">Galería del barbero</p>
+    <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Mis Cortes</p>
+    <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.6">Las fotos publicadas aparecen en el carrusel de la vista del cliente, con tu nombre y estilo.</p>
+
+    <!-- FORM nuevo corte -->
+    <div style="background:#161412;border:1px solid rgba(233,193,118,.16);padding:16px;margin-bottom:16px">
+      <p style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:#e9c176;margin-bottom:14px">+ Nuevo corte</p>
+      <div style="margin-bottom:12px">
+        <label class="inp-label">Foto del corte *</label>
+        <div class="foto-upload" id="zona-corte" style="width:100%;aspect-ratio:3/2">
+          <input type="file" accept="image/*" onchange="onFoto(this,'corte')"/>
+          <img id="img-corte" src="" alt=""/>
+          <div class="ph">
+            <span class="material-symbols-outlined" style="font-size:28px;color:rgba(233,193,118,.26)">add_photo_alternate</span>
+            <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(156,143,123,.36)">Toca para subir foto</span>
+          </div>
+          <div class="cam-badge">
+            <span class="material-symbols-outlined" style="font-size:10px">photo_camera</span>
+            Cambiar
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <label class="inp-label">Nombre del corte *</label>
+          <input class="inp-field" id="c-nombre" type="text" placeholder="Fade Alto con Textura"/>
+        </div>
+        <div>
+          <label class="inp-label">Estilo / Etiqueta</label>
+          <input class="inp-field" id="c-estilo" type="text" placeholder="Skin Fade · Clásico · Pompadour"/>
+        </div>
+        <div>
+          <label class="inp-label">Descripción</label>
+          <input class="inp-field" id="c-desc" type="text" placeholder="Degradado bajo con volumen en la cima"/>
+        </div>
+      </div>
+      <button class="btn-gold" onclick="agregarCorte()" style="width:100%;padding:14px;margin-top:14px">
+        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">publish</span>
+        Publicar en carrusel del cliente
+      </button>
+    </div>
+
+    <!-- Encabezados hoja Cortes -->
+    <div style="background:#161412;border:1px solid rgba(79,69,53,.18);padding:12px;margin-bottom:14px">
+      <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px">
+        <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">table_chart</span>
+        Hoja Google Sheets — "Cortes"
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <span class="enc-chip">corte_id</span>
+        <span class="enc-chip">barberia_id</span>
+        <span class="enc-chip">barbero_id</span>
+        <span class="enc-chip g">imagen_url</span>
+        <span class="enc-chip">nombre</span>
+        <span class="enc-chip">estilo</span>
+        <span class="enc-chip">descripcion</span>
+        <span class="enc-chip">fecha_publicacion</span>
+        <span class="enc-chip g">activo</span>
+      </div>
+    </div>
+
+    <div id="cortes-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+    <div id="cortes-empty" style="display:none;text-align:center;padding:30px 0">
+      <span class="material-symbols-outlined" style="font-size:28px;color:rgba(233,193,118,.16);display:block;margin-bottom:8px">photo_library</span>
+      <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">Sin cortes publicados aún</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.93);backdrop-filter:blur(16px);border-top:1px solid rgba(79,69,53,.18);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:8px 0 14px">
+  <a href="cliente.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">explore</span>
+    <p>Inicio</p>
+  </a>
+  <a href="citas.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">event_available</span>
+    <p>Citas</p>
+  </a>
+  <a href="tienda.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">storefront</span>
+    <p>Tienda</p>
+  </a>
+  <a href="#" class="nav-item active">
+    <span class="material-symbols-outlined ms-filled" style="font-size:21px">person</span>
+    <p>Perfil</p>
+  </a>
+</nav>
+
+<script>
+/* ══════════════════════════════════════════
+   CONFIGURACIÓN — reemplaza TU_WEB_APP_ID
+   ══════════════════════════════════════════ */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyD-iwgwbMdBqSc4i8H62TU5AB5hV3cGaG5z9gbG32vtYM08s5kVibbmwN4EiYxoDCb/exec";
+const sesion  = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
+const BAR_ID  = sesion.barberia_id || "BAR-DEMO";
+const BAR_ID2 = sesion.barbero_id  || "barbero-1";
+
+/* Fotos en memoria */
+const fotos = {
+  barbero: sesion.foto_barbero_url || '',
+  local:   sesion.foto_local_url   || '',
+  corte:   ''
+};
+
+/* ─ FOTO INPUT FILE ─
+   Convierte la imagen a base64 (dataURL).
+   Guarda esa URL en el Sheet → columna foto_barbero_url / foto_local_url / imagen_url
+   En producción: sube a Imgur/Cloudinary y guarda la URL pública. */
+function onFoto(input, tipo) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = e.target.result;
+    fotos[tipo] = url;
+    if (tipo === 'barbero') {
+      setFoto('img-barbero','zona-barbero', url);
+      document.getElementById('avatar-top').innerHTML =
+        `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+    } else if (tipo === 'local') {
+      setFoto('img-local','zona-local', url);
+    } else {
+      setFoto('img-corte','zona-corte', url);
+    }
+    calcProg();
+  };
+  reader.readAsDataURL(file);
+}
+
+function setFoto(imgId, zonaId, url) {
+  document.getElementById(imgId).src = url;
+  document.getElementById(zonaId).classList.add('loaded');
+}
+
+function initFotosSesion() {
+  if (fotos.barbero) {
+    setFoto('img-barbero','zona-barbero', fotos.barbero);
+    document.getElementById('avatar-top').innerHTML =
+      `<img src="${fotos.barbero}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+  }
+  if (fotos.local) setFoto('img-local','zona-local', fotos.local);
+}
+
+/* ─ TABS ─ */
+function tab(btn, id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tc').forEach(t => t.style.display = 'none');
+  btn.classList.add('active');
+  const el = document.getElementById(id);
+  el.style.display = 'flex';
+  el.style.flexDirection = 'column';
+  if (id === 't-horarios') updateSlotsPreview();
+}
+
+/* ─ ENCABEZADOS HOJA PERFIL ─ */
+const ENC_PERFIL = [
+  'perfil_id','barberia_id','fecha_actualizacion','nombre_barberia','nombre_dueno',
+  'ciudad','departamento','direccion','telefono','email','redes_sociales',
+  'foto_barbero_url','foto_local_url','maps_url','plan','activo'
+];
+const ENC_GOLD = ['foto_barbero_url','foto_local_url','maps_url'];
+const encDiv = document.getElementById('enc-perfil');
+ENC_PERFIL.forEach(e => {
+  const s = document.createElement('span');
+  s.className = 'enc-chip' + (ENC_GOLD.includes(e) ? ' g' : '');
+  s.textContent = e;
+  encDiv.appendChild(s);
+});
+
+/* ─ SESIÓN → CAMPOS ─ */
+function initSesion() {
+  const m = {
+    'f-nombre': sesion.nombre, 'f-ciudad': sesion.ciudad, 'f-depto': sesion.depto,
+    'f-dir': sesion.direccion, 'f-tel': sesion.telefono, 'f-email': sesion.email,
+    'f-dueno': sesion.dueno,  'f-redes': sesion.redes,
+    'f-maps': sesion.maps_url, 'f-plan': sesion.plan
+  };
+  Object.entries(m).forEach(([id,val]) => { if(val) document.getElementById(id).value = val; });
+  updateHeader();
+  calcProg();
+  if (sesion.maps_url) updateMapPreview();
+}
+
+/* ─ HEADER LIVE ─ */
+function updateHeader() {
+  const nombre = document.getElementById('f-nombre').value || 'Mi Barbería';
+  const ciudad = document.getElementById('f-ciudad').value;
+  const plan   = document.getElementById('f-plan').value;
+  document.getElementById('ph-nombre').textContent = nombre;
+  document.getElementById('ph-ciudad').textContent = ciudad ? '📍 ' + ciudad : '';
+  const b = document.getElementById('plan-badge');
+  b.className = 'p-badge ' + (plan !== 'free' ? 'pb-pro' : 'pb-free');
+  b.textContent = plan.toUpperCase();
+}
+['f-nombre','f-ciudad','f-dir','f-tel','f-dueno'].forEach(id =>
+  document.getElementById(id)?.addEventListener('input', () => { updateHeader(); calcProg(); }));
+document.getElementById('f-plan')?.addEventListener('change', updateHeader);
+
+/* ─ MAPA ─ */
+function updateMapPreview() {
+  const val = document.getElementById('f-maps').value.trim();
+  const iframe = document.getElementById('map-iframe');
+  const placeholder = document.getElementById('map-placeholder');
+  if (!val) { iframe.style.display='none'; placeholder.style.display='flex'; return; }
+
+  let src = val;
+  /* Si es una URL normal de maps (no iframe), construir embed */
+  if (!val.includes('maps/embed') && !val.includes('google.com/maps/embed')) {
+    /* Intentar extraer coordenadas o dirección para embed */
+    const qParam = encodeURIComponent(val);
+    src = `https://maps.google.com/maps?q=${qParam}&output=embed&hl=es`;
+  }
+  iframe.src = src;
+  iframe.style.display = 'block';
+  placeholder.style.display = 'none';
+}
+
+function abrirMaps() {
+  const url = document.getElementById('f-maps').value.trim();
+  if (url) window.open(url, '_blank');
+  else toast('Pega el enlace de Google Maps primero', true);
+}
+
+/* ─ PROGRESO ─ */
+function calcProg() {
+  const campos = ['f-nombre','f-ciudad','f-dir','f-tel','f-dueno','f-maps'];
+  const c = campos.filter(id => document.getElementById(id)?.value?.trim()).length;
+  const fp = (fotos.barbero?1:0) + (fotos.local?1:0);
+  const pct = Math.round(((c + fp) / (campos.length + 2)) * 100);
+  document.getElementById('prog-pct').textContent  = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+/* ─ GUARDAR PERFIL → SHEET ─
+   Columnas en la hoja "Perfil":
+   perfil_id | barberia_id | fecha_actualizacion | nombre_barberia | nombre_dueno |
+   ciudad | departamento | direccion | telefono | email | redes_sociales |
+   foto_barbero_url | foto_local_url | maps_url | plan | activo */
+async function guardarPerfil() {
+  const n = document.getElementById('f-nombre').value.trim();
+  const c = document.getElementById('f-ciudad').value.trim();
+  const d = document.getElementById('f-dir').value.trim();
+  const t = document.getElementById('f-tel').value.trim();
+  const o = document.getElementById('f-dueno').value.trim();
+  if (!n||!c||!d||!t||!o) return toast('Completa los campos obligatorios (*)', true);
+
+  const datos = {
+    accion: 'guardarPerfil',
+    barberia_id:      BAR_ID,
+    nombre_barberia:  n,
+    nombre_dueno:     o,
+    ciudad:           c,
+    departamento:     document.getElementById('f-depto').value.trim(),
+    direccion:        d,
+    telefono:         t,
+    email:            document.getElementById('f-email').value.trim(),
+    redes_sociales:   document.getElementById('f-redes').value.trim(),
+    foto_barbero_url: fotos.barbero,
+    foto_local_url:   fotos.local,
+    maps_url:         document.getElementById('f-maps').value.trim(),
+    plan:             document.getElementById('f-plan').value,
+    activo:           true,
+    fecha_actualizacion: new Date().toISOString()
+  };
+
+  /* Guardar en sessionStorage para uso en vista cliente */
+  Object.assign(sesion, {
+    nombre:           datos.nombre_barberia,
+    dueno:            datos.nombre_dueno,
+    ciudad:           datos.ciudad,
+    depto:            datos.departamento,
+    direccion:        datos.direccion,
+    telefono:         datos.telefono,
+    email:            datos.email,
+    redes:            datos.redes_sociales,
+    foto_barbero_url: datos.foto_barbero_url,
+    foto_local_url:   datos.foto_local_url,
+    maps_url:         datos.maps_url,
+    plan:             datos.plan,
+  });
+  sessionStorage.setItem('atelier_sesion', JSON.stringify(sesion));
+
+  showOv('Guardando perfil en Sheet...');
+  try {
+    const res  = await fetch(`${GAS_URL}?datos=${encodeURIComponent(JSON.stringify(datos))}`);
+    const json = await res.json();
+    hideOv();
+    if (json.error) throw new Error(json.error);
+    toast('✓ Perfil guardado en la hoja "Perfil"');
+  } catch(e) {
+    hideOv();
+    toast('✓ Perfil guardado localmente');
+  }
+  calcProg();
+}
+
+/* ─ HORARIOS ─ */
+const DIAS = [
+  {k:'lunes',    l:'Lun', on:true},
+  {k:'martes',   l:'Mar', on:true},
+  {k:'miercoles',l:'Mié', on:true},
+  {k:'jueves',   l:'Jue', on:true},
+  {k:'viernes',  l:'Vie', on:true},
+  {k:'sabado',   l:'Sáb', on:true},
+  {k:'domingo',  l:'Dom', on:false}
+];
+
+function buildHorarios() {
+  const cont = document.getElementById('horario-rows');
+  DIAS.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'dia-row';
+    div.innerHTML = `
+      <span style="width:30px;font-size:10px;letter-spacing:.16em;color:#9c8f7b;text-transform:uppercase;flex-shrink:0">${d.l}</span>
+      <label class="toggle-sw">
+        <input type="checkbox" id="d-${d.k}" ${d.on?'checked':''} onchange="toggleDia('${d.k}');updateSlotsPreview()"/>
+        <span class="slider-sw"></span>
+      </label>
+      <div id="dc-${d.k}" style="display:flex;align-items:center;gap:5px;flex:1;${!d.on?'opacity:.25;pointer-events:none':''}">
+        <input class="time-inp" id="hi-${d.k}" type="time" value="08:00" onchange="updateSlotsPreview()"/>
+        <span style="font-size:10px;color:#3d3730">–</span>
+        <input class="time-inp" id="hf-${d.k}" type="time" value="20:00" onchange="updateSlotsPreview()"/>
+        <select class="intervalo-sel" id="iv-${d.k}" onchange="updateSlotsPreview()">
+          <option value="15">15m</option>
+          <option value="20">20m</option>
+          <option value="30" selected>30m</option>
+          <option value="45">45m</option>
+          <option value="60">60m</option>
+        </select>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function toggleDia(k) {
+  const on = document.getElementById('d-'+k).checked;
+  const dc = document.getElementById('dc-'+k);
+  dc.style.opacity = on?'1':'.25';
+  dc.style.pointerEvents = on?'auto':'none';
+}
+
+function aplicarGlobal() {
+  const v = document.getElementById('int-global').value;
+  if (!v) return;
+  DIAS.forEach(d => {
+    const s = document.getElementById('iv-'+d.k);
+    if (s) s.value = v;
+  });
+  updateSlotsPreview();
+  toast('Intervalo aplicado a todos los días');
+}
+
+/* Preview de slots disponibles */
+function updateSlotsPreview() {
+  const cont = document.getElementById('slots-preview');
+  cont.innerHTML = '';
+  let shown = 0;
+  DIAS.forEach(d => {
+    const on = document.getElementById('d-'+d.k)?.checked;
+    if (!on) return;
+    if (shown >= 8) return; /* solo mostrar pocos como preview */
+    const hi  = document.getElementById('hi-'+d.k)?.value || '08:00';
+    const hf  = document.getElementById('hf-'+d.k)?.value || '20:00';
+    const inv = parseInt(document.getElementById('iv-'+d.k)?.value || '30');
+    const [hh,mm] = hi.split(':').map(Number);
+    const [eh,em] = hf.split(':').map(Number);
+    let cur = hh*60+mm;
+    const end = eh*60+em;
+    let count = 0;
+    while (cur < end && count < 3) {
+      const h = String(Math.floor(cur/60)).padStart(2,'0');
+      const m = String(cur%60).padStart(2,'0');
+      const span = document.createElement('span');
+      span.style.cssText='font-size:9px;background:#1c1b1b;border:1px solid rgba(233,193,118,.2);color:#e9c176;padding:3px 7px;letter-spacing:.1em';
+      span.textContent = `${d.l} ${h}:${m}`;
+      cont.appendChild(span);
+      cur += inv;
+      count++;
+      shown++;
+    }
+  });
+  if (shown === 0) {
+    cont.innerHTML = '<p style="font-size:10px;color:#3d3730">Activa al menos un día</p>';
+  } else {
+    const more = document.createElement('span');
+    more.style.cssText='font-size:9px;color:#9c8f7b;padding:3px 4px';
+    more.textContent = '...y más slots';
+    cont.appendChild(more);
+  }
+}
+
+/* ─ GUARDAR HORARIOS → SHEET ─
+   Columnas en la hoja "Horarios":
+   horario_id | barberia_id | barbero_id | dia_semana | hora_inicio |
+   hora_fin | intervalo_min | activo | fecha_actualizacion */
+async function guardarHorarios() {
+  const dias = DIAS.map(d => ({
+    dia_semana:     d.k,
+    hora_inicio:    document.getElementById('hi-'+d.k)?.value || '08:00',
+    hora_fin:       document.getElementById('hf-'+d.k)?.value || '20:00',
+    intervalo_min:  parseInt(document.getElementById('iv-'+d.k)?.value || '30'),
+    activo:         document.getElementById('d-'+d.k)?.checked || false,
+  }));
+
+  const payload = {
+    accion:       'guardarHorarios',
+    barberia_id:  BAR_ID,
+    barbero_id:   BAR_ID2,
+    dias,
+    fecha_actualizacion: new Date().toISOString()
+  };
+
+  showOv('Guardando horarios en Sheet...');
+  try {
+    const res  = await fetch(`${GAS_URL}?datos=${encodeURIComponent(JSON.stringify(payload))}`);
+    const json = await res.json();
+    hideOv();
+    if (json.error) throw new Error(json.error);
+    toast(`✓ Horarios guardados · ${dias.filter(d=>d.activo).length} días activos`);
+  } catch(e) {
+    hideOv();
+    toast(`✓ Horarios guardados · ${dias.filter(d=>d.activo).length} días activos`);
+  }
+
+  /* Guardar en localStorage para vista cliente offline */
+  localStorage.setItem('atelier_horarios', JSON.stringify(dias));
+}
+
+/* ─ CORTES ─ */
+let cortes = JSON.parse(localStorage.getItem('atelier_cortes') || '[]');
+
+async function agregarCorte() {
+  const nombre = document.getElementById('c-nombre').value.trim();
+  if (!fotos.corte) return toast('Sube la foto del corte', true);
+  if (!nombre) return toast('El nombre es obligatorio', true);
+
+  const corte = {
+    corte_id: 'COR-' + Math.random().toString(36).toUpperCase().slice(2,8),
+    barberia_id: BAR_ID,
+    barbero_id:  BAR_ID2,
+    imagen_url:  fotos.corte,
+    nombre,
+    estilo:      document.getElementById('c-estilo').value.trim() || 'Sin categoría',
+    descripcion: document.getElementById('c-desc').value.trim(),
+    fecha_publicacion: new Date().toISOString().split('T')[0],
+    activo: true,
+  };
+
+  showOv('Publicando en Sheet...');
+  try {
+    const res  = await fetch(`${GAS_URL}?datos=${encodeURIComponent(JSON.stringify({accion:'agregarCorte',...corte}))}`);
+    const json = await res.json();
+    hideOv();
+    if (json.ok && json.corte_id) corte.corte_id = json.corte_id;
+  } catch(e) { hideOv(); }
+
+  cortes.unshift(corte);
+  localStorage.setItem('atelier_cortes', JSON.stringify(cortes));
+  renderCortes();
+
+  fotos.corte = '';
+  ['c-nombre','c-estilo','c-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('img-corte').src = '';
+  document.getElementById('zona-corte').classList.remove('loaded');
+  toast('✓ Corte publicado en el carrusel');
+}
+
+function eliminarCorte(id) {
+  if (!confirm('¿Eliminar este corte del carrusel?')) return;
+  cortes = cortes.filter(c => c.corte_id !== id);
+  localStorage.setItem('atelier_cortes', JSON.stringify(cortes));
+  renderCortes();
+  toast('Corte eliminado');
+}
+
+function renderCortes() {
+  const grid  = document.getElementById('cortes-grid');
+  const empty = document.getElementById('cortes-empty');
+  grid.innerHTML = '';
+  if (!cortes.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  cortes.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'corte-card';
+    card.innerHTML = `
+      <div style="aspect-ratio:3/4;position:relative;overflow:hidden;background:#161412">
+        <img src="${c.imagen_url}" alt="${c.nombre}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,4,.92),transparent 55%)"></div>
+        <div style="position:absolute;bottom:8px;left:8px;right:26px">
+          <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;margin-bottom:2px">${c.estilo}</p>
+          <p style="font-family:'Noto Serif',serif;font-size:12px;color:#e5e2e1;line-height:1.25">${c.nombre}</p>
+        </div>
+        <button onclick="eliminarCorte('${c.corte_id}')" style="position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(8,6,4,.72);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">&times;</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ─ OV / TOAST ─ */
+function showOv(m) { document.getElementById('ov-msg').textContent = m; document.getElementById('ov').classList.add('on'); }
+function hideOv() { document.getElementById('ov').classList.remove('on'); }
+
+let _tt;
+function toast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'on' + (err ? ' err' : '');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.className = '', 3200);
+}
+
+/* ─ INIT ─ */
+buildHorarios();
+renderCortes();
+initSesion();
+initFotosSesion();
+updateSlotsPreview();
+</script>
+</body>
+</html>
