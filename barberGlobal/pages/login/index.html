@@ -433,9 +433,10 @@ body { min-height: max(884px, 100dvh); }
    → Reemplaza APPS_SCRIPT_URL con la URL que obtienes en
      Apps Script > Implementar > Nueva implementación > Aplicación web
 ════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyD-iwgwbMdBqSc4i8H62TU5AB5hV3cGaG5z9gbG32vtYM08s5kVibbmwN4EiYxoDCb/exec"; // ← pega tu URL aquí
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAxeJ4uqttNXkI44AQXQij7ik-3DkKigYjOyGjBLtm6SjdtjiK6yOBYiveBRYOl5Aa/exec"; // ← pega tu URL aquí
 const SHEET_NAME      = "NuevaBarberia";
-const HOME_URL        = "home.html";
+const HOME_URL  = "home.html";
+const PANEL_URL = "panel.html";
 
 /* ════════════════════════════════════════════
    ROL ACTIVO
@@ -662,47 +663,53 @@ async function handleIngresarDueno() {
     const respuesta     = await leerBarberias();
     const filas         = respuesta.filas || [];
 
-    // Busca coincidencia de nombre + hash + activo
-    const barberia = filas.slice(1).find(f => {
-      const nombreSheet = String(f[4]  || '').toLowerCase().trim();
-      const hashSheet   = String(f[15] || '').toLowerCase().trim(); // ← índice password_hash
-      const activo      = f[17];
-      const estaActivo  = activo === true || String(activo).toUpperCase() === 'TRUE';
-      return nombreSheet === nombreBarberia.toLowerCase() &&
-             hashSheet   === password_hash &&
-             estaActivo;
-    });
+    const fila = filas.slice(1).find(f =>
+      String(f[4] || '').toLowerCase().trim() === nombreBarberia.toLowerCase().trim()
+    );
 
-    if (!barberia) {
-      toast("Barbería o contraseña incorrecta", "err");
+    if (!fila) {
+      toast("No existe una barbería con ese nombre", "err");
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
+      return;
+    }
+
+    // f[14] = password_hash, f[3] = estado ("activa")
+    const hashSheet  = String(fila[14] || '').toLowerCase().trim();
+    const estaActivo = String(fila[3] || '').toLowerCase().trim() === 'activa';
+
+    if (hashSheet !== password_hash) {
+      toast("Contraseña incorrecta", "err");
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
+      return;
+    }
+
+    if (!estaActivo) {
+      toast("Esta barbería está inactiva", "err");
       setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
       return;
     }
 
     guardarSesion({
-      barberia_id   : barberia[0],
-      nombre        : barberia[4],
-      dueno         : barberia[3],
-      email         : barberia[5],
-      ciudad        : barberia[9] || barberia[7],
-      plan          : barberia[2],
-      codigo_acceso : barberia[16],
+      barberia_id   : fila[0],
+      nombre        : fila[4],
+      dueno         : fila[6],
+      email         : fila[7],
+      telefono      : fila[8],
+      ciudad        : fila[9],
+      plan          : fila[2],
+      codigo_acceso : fila[16],
       rol           : 'dueno'
     });
 
-    toast(`Bienvenido, ${barberia[3] || barberia[4]} ✓`);
-    setTimeout(() => window.location.href = HOME_URL, 1200);
+    toast(`Bienvenido, ${fila[6] || fila[4]} ✓`);
+    setTimeout(() => window.location.href = PANEL_URL, 1200);
 
   } catch (e) {
     console.error("Error login dueño:", e);
-    const msg = e.message.includes('Failed to fetch') || e.message.includes('NetworkError')
-      ? "Sin conexión con el servidor."
-      : "Error al verificar: " + e.message;
-    toast(msg, "err");
+    toast("Error al verificar: " + e.message, "err");
     setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
   }
 }
-
 /* ════════════════════════════════════════════
    HANDLE REGISTRAR BARBERÍA
    → al completar regresa a pestaña INGRESAR
