@@ -68,13 +68,14 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .sec-lbl{font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.55);margin-bottom:3px}
 .carousel-wrap{position:relative;overflow:hidden;width:100%}
 .carousel-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
-.carousel-track .c-slide{flex:0 0 calc(50% - 5px);min-width:0}
+.carousel-track .c-slide{flex:0 0 calc(70% - 5px);min-width:0}
 .car-btn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s}
 .car-btn:disabled{opacity:.2;cursor:not-allowed}
 .car-btn.prev{left:4px}.car-btn.next{right:4px}
 .car-dots{display:flex;justify-content:center;gap:5px;margin-top:8px}
 .car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.4);cursor:pointer;transition:background .2s}
 .car-dot.on{background:#e9c176}
+
 /* ══ CORTE 3D CARD ══ */
 .corte-3d-scene{perspective:900px;aspect-ratio:4/3;position:relative;cursor:grab;user-select:none;-webkit-user-select:none}
 .corte-3d-scene:active{cursor:grabbing}
@@ -85,12 +86,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .corte-face-back{background:#0e0c09;transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid rgba(233,193,118,.12)}
 .corte-face img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .corte-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(8,6,4,.92));padding:10px 8px 8px;pointer-events:none}
+
+
 /* controles inline dentro de la imagen */
 .corte-3d-ctrl{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all}
 .ctrl-btn-3d{background:transparent;border:none;color:#e9c176;cursor:pointer;display:flex;align-items:center;padding:2px 5px;transition:opacity .2s;font-size:13px}
 .ctrl-btn-3d:hover{opacity:.7}
 .ctrl-sep{width:1px;height:14px;background:rgba(233,193,118,.2)}
 .rot-deg{font-size:8px;letter-spacing:.14em;color:#9c8f7b;min-width:30px;text-align:center}
+
 /* badge destacado */
 .corte-dest-badge{position:absolute;top:6px;left:6px;background:#e9c176;padding:2px 7px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00;z-index:5;pointer-events:none}
 /* hint de giro inicial */
@@ -122,6 +126,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 10px;cursor:pointer;color:#9c8f7b;text-decoration:none;transition:color .2s}
 .nav-i.on,.nav-i:hover{color:#e9c176}
 .nav-i p{font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
@@ -208,14 +213,64 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       <iframe id="map-if" src="" width="100%" height="130" style="border:0;display:none;position:absolute;top:0;left:0" allowfullscreen loading="lazy"></iframe>
     </div>
   </div>
-  <div>
-    <label class="lbl">Plan</label>
-    <select class="inp" id="f-plan" onchange="syncPlanBadge()">
-      <option value="Básico">Básico — $50.000/mes</option>
-      <option value="Pro" selected>Pro — $89.000/mes</option>
-      <option value="Élite">Élite — $149.000/mes</option>
-    </select>
+ <div>
+  <label class="lbl">Plan</label>
+  <button type="button" id="btn-open-plan" onclick="abrirModalPlan()"
+    style="width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;
+    font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;text-align:left;
+    cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+    <span id="plan-btn-txt">Pro — $89.000/mes</span>
+    <span class="material-symbols-outlined" style="font-size:16px;color:#9c8f7b">expand_more</span>
+  </button>
+  <input type="hidden" id="f-plan" value="Pro"/>
+</div>
+
+<!-- MODAL PLAN -->
+<div id="modal-plan" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.92);backdrop-filter:blur(12px);align-items:flex-end;justify-content:center">
+  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;transform:translateY(0);animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+    <p style="font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.45);text-align:center;margin-bottom:20px">Elige tu plan</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div class="plan-opt" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlan(this)"
+        style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:4px">Básico</p>
+            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1">$50.000<span style="font-size:11px;color:#9c8f7b">/mes</span></p>
+          </div>
+          <div style="text-align:right">
+            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Perfil · Citas<br>Horarios básicos</p>
+          </div>
+        </div>
+      </div>
+      <div class="plan-opt" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlan(this)"
+        style="padding:16px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.4);cursor:pointer;position:relative">
+        <div style="position:absolute;top:-1px;right:12px;background:#e9c176;padding:2px 9px;font-size:7px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#412d00">Popular</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#e9c176;margin-bottom:4px">Pro</p>
+            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e9c176">$89.000<span style="font-size:11px;color:rgba(233,193,118,.6)">/mes</span></p>
+          </div>
+          <div style="text-align:right">
+            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Básico +<br>Tienda · Cortes · Fotos</p>
+          </div>
+        </div>
+      </div>
+      <div class="plan-opt" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlan(this)"
+        style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#d4af7a;margin-bottom:4px">Élite</p>
+            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#d4af7a">$149.000<span style="font-size:11px;color:rgba(212,175,122,.5)">/mes</span></p>
+          </div>
+          <div style="text-align:right">
+            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Pro +<br>Analytics · Prioridad</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button onclick="cerrarModalPlan()" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
   </div>
+</div>
  
   <div>
     <div style="display:flex;justify-content:space-between;margin-bottom:5px">
@@ -515,7 +570,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
    CONFIG
 ══════════════════════════════════════ */
 /* ══ CONFIG — sin sessionStorage, todo desde Sheet ══ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzAxeJ4uqttNXkI44AQXQij7ik-3DkKigYjOyGjBLtm6SjdtjiK6yOBYiveBRYOl5Aa/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx7CbapDgNpBAOWjUF_f6z7XU60JIEnVXLDNFW89s8yjmrnpO4c8XdUsNNaa9PzIyxU/exec";
 
 // BAR_ID: primero busca en URL (?bar=BAR-XXX), si no usa DEMO
 const _urlBar  = new URLSearchParams(location.search).get('bar');
@@ -632,6 +687,30 @@ function normDriveUrl(url) {
   const id = (m && m[1]) || (m2 && m2[1]);
   if (id) return "https://lh3.googleusercontent.com/d/" + id + "=s600";
   return url;
+}
+
+function abrirLupaCorte(imgUrl, nombre) {
+  let lupa = document.getElementById('_lupa-modal');
+  if (!lupa) {
+    lupa = document.createElement('div');
+    lupa.id = '_lupa-modal';
+    lupa.style.cssText = `position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.96);
+      backdrop-filter:blur(16px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px`;
+    lupa.innerHTML = `
+      <div style="position:relative;width:100%;max-width:480px">
+        <button id="_lupa-close" style="position:absolute;top:-14px;right:-14px;width:36px;height:36px;
+          background:#e9c176;border:none;color:#412d00;font-size:20px;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;z-index:5;border-radius:50%">&times;</button>
+        <img id="_lupa-img" src="" style="width:100%;max-height:80dvh;object-fit:contain;display:block"/>
+        <p id="_lupa-name" style="font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;text-align:center;margin-top:12px;letter-spacing:.06em"></p>
+      </div>`;
+    document.body.appendChild(lupa);
+    document.getElementById('_lupa-close').onclick = () => { lupa.style.display = 'none'; };
+    lupa.onclick = e => { if (e.target === lupa) lupa.style.display = 'none'; };
+  }
+  document.getElementById('_lupa-img').src = imgUrl;
+  document.getElementById('_lupa-name').textContent = nombre;
+  lupa.style.display = 'flex';
 }
 
 /* ══════════════════════════════════════
@@ -1324,11 +1403,24 @@ function filtrarCitas(filtro,btn) {
   renderCitas(filtro==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtro));
 }
 
-async function accionCita(id,estado) {
-  todasCitas=todasCitas.map(c=>c.cita_id===id?{...c,estado}:c);
-  renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
-  toast(`Cita ${estado}`);
-  try { await gasPost({accion:'actualizarCita',cita_id:id,estado,barberia_id:BAR_ID}); } catch(e){}
+async function accionCita(id, estado) {
+  // Actualizar localmente de inmediato
+  todasCitas = todasCitas.map(c => c.cita_id === id ? {...c, estado} : c);
+  renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
+  toast(estado === 'confirmada' ? '✓ Cita confirmada' : 'Cita cancelada');
+  // Guardar en Sheet — usa acción actualizarEstadoCita que busca por reserva_id / cita_id
+  try {
+    const res = await gasPost({
+      accion      : 'actualizarEstadoCita',
+      reserva_id  : id,       // columna reserva_id en la hoja Reservas
+      cita_id     : id,       // por si el GAS usa cita_id
+      barberia_id : BAR_ID,
+      estado,
+    });
+    if (res.error) toast('GAS: ' + res.error, true);
+  } catch(e) {
+    toast('No se pudo sincronizar con Sheet', true);
+  }
 }
 
 function copiarCodigo() {
@@ -1342,49 +1434,43 @@ let _refreshInterval = null;
 async function cargarCitas(silencioso = false) {
   const ico = document.getElementById('refresh-ico');
   const btn = document.getElementById('btn-refresh');
-
   if (!silencioso) {
     if (ico) ico.style.animation = 'rot 1s linear infinite';
     if (btn) btn.style.opacity = '.5';
   }
-
   try {
     const json = await gasGet({ accion: 'leerCitas', barberia_id: BAR_ID });
-    const raw  = json.citas || json.data || [];
-
+    // Soporta citas[] o data[] o array directo
+    const raw = json.citas || json.data || (Array.isArray(json) ? json : []);
     todasCitas = raw.map(c => ({
-      ...c,
-      nombre   : c.nombre   || c.cliente        || '',
-      telefono : c.telefono || c.tel            || '',
-      precio   : c.precio   || c.servicio_precio || 0,
+      cita_id   : c.cita_id    || c.reserva_id || '',
+      barberia_id: c.barberia_id || BAR_ID,
+      nombre    : c.nombre     || c.cliente    || c.cliente_id || 'Cliente',
+      telefono  : c.telefono   || c.tel        || '',
+      barbero_id: c.barbero_id || c.barbero    || BAR_ID2,
+      servicio  : c.servicio_nombre || c.servicio || c.servicio_id || 'Corte',
+      fecha     : c.fecha      || '',
+      hora      : c.hora       || '',
+      duracion  : c.duracion_min || c.duracion || '',
+      estado    : c.estado     || 'pendiente',
+      precio    : c.precio     || c.servicio_precio || 0,
+      notas     : c.notas      || '',
       _fechaDisplay: normFecha(c.fecha),
       _horaDisplay : normHora(c.hora),
     }));
-
-    renderCitas(
-      filtroActivo === 'todas'
-        ? todasCitas
-        : todasCitas.filter(c => c.estado === filtroActivo)
-    );
-
-    // ★ Mostrar hora de última actualización
+    renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
     const ahora = new Date();
-    const hh = String(ahora.getHours()).padStart(2,'0');
-    const mm = String(ahora.getMinutes()).padStart(2,'0');
     const el = document.getElementById('ultima-actualizacion');
-    if (el) el.textContent = 'última vez ' + hh + ':' + mm;
-
-    if (!silencioso) toast('✓ Citas actualizadas · ' + raw.length + ' en total');
-
+    if (el) el.textContent = `última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    if (!silencioso) toast('✓ ' + todasCitas.length + ' citas cargadas');
   } catch(e) {
-    if (!silencioso) toast('Error cargando citas — verifica conexión', true);
+    if (!silencioso) toast('Error cargando citas: ' + e.message, true);
     renderCitas([]);
   } finally {
     if (ico) ico.style.animation = '';
     if (btn) btn.style.opacity = '1';
   }
 }
-
 // ★ Botón manual
 function actualizarCitas() {
   cargarCitas(false);
@@ -1462,33 +1548,60 @@ function buildCarousel(type, items) {
           </div>
         </div>`;
     } else {
-      const imgUrl  = normDriveUrl(item.imagen_url, 400);
+      const imgUrl  = normDriveUrl(item.imagen_url, 600);
       const cid     = item.corte_id;
       const descTxt = item.descripcion
         ? `<p class="dorso-desc">${item.descripcion}</p>` : '';
       slide.innerHTML = `
         <div style="position:relative;border:1px solid rgba(79,69,53,.22)">
-          <div class="corte-3d-scene" id="scene-${cid}">
+          <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4">
             <div class="corte-3d-inner" id="inner-${cid}">
-             <div class="corte-face corte-face-front">
-  <img src="${imgUrl}" alt="${item.nombre}"
-    onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
-  ${item.destacado ? `<div class="corte-dest-badge">★ Dest.</div>` : ''}
-  <div class="corte-3d-hint" id="hint-${cid}">
-    <span style="font-size:11px">↔</span>Girar
-  </div>
-  <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.88),transparent);padding:8px 8px 18px">
-    <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
-    <p style="font-family:'Noto Serif',serif;font-size:12px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
-    ${item.precio > 0 ? `<p style="font-family:'Noto Serif',serif;font-size:13px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
-  </div>
-</div>
+              <div class="corte-face corte-face-front">
+                <img src="${imgUrl}" alt="${item.nombre}"
+                  onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
+                ${item.destacado ? `<div class="corte-dest-badge">★ Dest.</div>` : ''}
+                <!-- CONTROLES DENTRO arriba-derecha -->
+                <div style="position:absolute;top:8px;right:8px;z-index:10;display:flex;flex-direction:column;gap:5px;pointer-events:all">
+                  <!-- lupa -->
+                  <button onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado"
+                    style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);
+                    color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+                    <span class="material-symbols-outlined" style="font-size:16px">zoom_in</span>
+                  </button>
+                  <!-- eliminar -->
+                  <button onclick="eliminarCorte('${cid}')"
+                    style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(255,255,255,.1);
+                    color:#9c8f7b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)">&times;</button>
+                </div>
+                <!-- hint giro -->
+                <div class="corte-3d-hint" id="hint-${cid}">
+                  <span style="font-size:11px">↔</span>Girar
+                </div>
+                <!-- info abajo -->
+                <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px">
+                  <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
+                  <p style="font-family:'Noto Serif',serif;font-size:13px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
+                  ${item.precio > 0 ? `<p style="font-size:14px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
+                </div>
+                <!-- CONTROLES GIRO dentro imagen abajo-centro -->
+                <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:10;
+                  display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);
+                  border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all">
+                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)">◀</button>
+                  <div class="ctrl-sep"></div>
+                  <span class="rot-deg" id="deg-${cid}">0°</span>
+                  <div class="ctrl-sep"></div>
+                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)">▶</button>
+                  <div class="ctrl-sep"></div>
+                  <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" style="font-size:10px">↺</button>
+                </div>
+              </div>
               <div class="corte-face corte-face-back">
                 <div class="dorso-label">The Atelier · Portafolio</div>
                 <div class="dorso-deco"></div>
                 <p class="dorso-name">${item.nombre}</p>
                 <p class="dorso-estilo">${item.estilo||'Corte'}</p>
-${item.precio > 0 ? `<p style="font-family:'Noto Serif',serif;font-size:16px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
+                ${item.precio > 0 ? `<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
                 ${descTxt}
                 <div class="dorso-deco"></div>
                 <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
@@ -1497,17 +1610,7 @@ ${item.precio > 0 ? `<p style="font-family:'Noto Serif',serif;font-size:16px;col
                 </div>
               </div>
             </div>
-            <div class="corte-3d-ctrl">
-              <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)" title="Girar izquierda">◀</button>
-              <div class="ctrl-sep"></div>
-              <span class="rot-deg" id="deg-${cid}">0°</span>
-              <div class="ctrl-sep"></div>
-              <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)" title="Girar derecha">▶</button>
-              <div class="ctrl-sep"></div>
-              <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" title="Resetear" style="font-size:10px">↺</button>
-            </div>
           </div>
-          <button class="corte-del-btn" onclick="eliminarCorte('${cid}')">&times;</button>
         </div>`;
       requestAnimationFrame(() => init3DCorte(cid));
     }
@@ -1778,6 +1881,24 @@ function toast(msg,err=false){
   t.textContent=msg; t.className='on'+(err?' err':'');
   clearTimeout(_tt); _tt=setTimeout(()=>t.className='',3200);
 }
+
+function abrirModalPlan() {
+  const m = document.getElementById('modal-plan');
+  m.style.display = 'flex';
+  const cur = document.getElementById('f-plan').value;
+  document.querySelectorAll('.plan-opt').forEach(o => {
+    const sel = o.dataset.val === cur;
+    o.style.borderColor = sel ? 'rgba(233,193,118,.6)' : (o.dataset.val === 'Pro' ? 'rgba(233,193,118,.4)' : 'rgba(79,69,53,.3)');
+  });
+}
+function cerrarModalPlan() { document.getElementById('modal-plan').style.display = 'none'; }
+function selPlan(el) {
+  document.getElementById('f-plan').value = el.dataset.val;
+  document.getElementById('plan-btn-txt').textContent = el.dataset.txt;
+  syncPlanBadge(); cerrarModalPlan();
+}
+
+
 
 /* ══ INIT ══ */
 async function init() {
