@@ -1,6 +1,6 @@
 {
+  "rootDirectory": "barberGlobal",
   "rewrites": [
-    { "source": "/", "destination": "/pages/login/index.html" },
     { "source": "/(.*)", "destination": "/$1" }
   ]
 }
