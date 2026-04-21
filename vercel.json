@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "barberGlobal",
   "rewrites": [
     { "source": "/(.*)", "destination": "/$1" }
   ]
