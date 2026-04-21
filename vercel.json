@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/",             "destination": "/pages/login/index.html" },
+    { "source": "/login",        "destination": "/pages/login/index.html" },
+    { "source": "/home",         "destination": "/pages/login/home.html" },
+    { "source": "/panel",        "destination": "/pages/login/panel.html" },
+    { "source": "/agendar",      "destination": "/pages/agendar/index.html" },
+    { "source": "/confirmacion", "destination": "/pages/confirmacion/index.html" },
+    { "source": "/servicios",    "destination": "/pages/servicios/index.html" },
+    { "source": "/admin",        "destination": "/pages/admin/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options",        "value": "SAMEORIGIN" },
+        { "key": "X-XSS-Protection",       "value": "1; mode=block" }
+      ]
+    }
+  ]
+}
