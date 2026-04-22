@@ -169,6 +169,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <button class="tab-btn" id="tb-citas" onclick="goTab(this,'t-citas')" style="position:relative">Citas<span id="badge-citas" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
     <button class="tab-btn" id="tb-tienda" onclick="goTab(this,'t-tienda')" style="position:relative">Tienda<span id="badge-tienda" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
     <button class="tab-btn" id="tb-cortes" onclick="goTab(this,'t-cortes')" style="position:relative">Cortes<span id="badge-cortes" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
+     <button class="tab-btn" id="tb-dash" onclick="goTab(this,'t-dash');renderDashboard()" style="position:relative">Dashboard</button>
   </div>
 </header>
 
@@ -555,6 +556,170 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       <span class="material-symbols-outlined" style="font-size:15px">content_cut</span>Publicar corte en portafolio
     </button>
   </div>
+</div>
+
+<div id="t-dash" class="tc" style="padding:18px;gap:0">
+ 
+  <!-- ── Encabezado ── -->
+  <p class="sec-lbl" style="margin-bottom:3px">Análisis</p>
+  <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Dashboard</p>
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.65">
+    Estadísticas de citas, ingresos y walk-ins. Filtra por período para ver el rendimiento de tu barbería.
+  </p>
+ 
+  <!-- ── Filtros rápidos ── -->
+  <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap">
+    <button id="df-hoy"     class="dash-fb" onclick="filtrarDash('hoy',this)"   style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Hoy</button>
+    <button id="df-semana"  class="dash-fb" onclick="filtrarDash('semana',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Semana</button>
+    <button id="df-mes"     class="dash-fb" onclick="filtrarDash('mes',this)"    style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;transition:all .2s;font-weight:700;min-width:44px">Mes</button>
+    <button id="df-todo"    class="dash-fb" onclick="filtrarDash('todo',this)"   style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Todo</button>
+    <button id="df-custom"  class="dash-fb" onclick="filtrarDash('custom',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Fechas</button>
+  </div>
+ 
+  <!-- Rango personalizado -->
+  <div id="dash-custom-row" style="display:none;align-items:center;gap:8px;margin-bottom:12px">
+    <input type="date" id="dash-desde" class="inp" style="flex:1;color:#e9c176"
+      onchange="dashDesde=this.value;if(dashHasta)renderDashboard()"/>
+    <span style="font-size:10px;color:#9c8f7b;flex-shrink:0">—</span>
+    <input type="date" id="dash-hasta" class="inp" style="flex:1;color:#e9c176"
+      onchange="dashHasta=this.value;if(dashDesde)renderDashboard()"/>
+  </div>
+ 
+  <!-- ── Tarjetas de estadísticas ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">
+ 
+    <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.22);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Total citas</p>
+      <p id="ds-total" style="font-family:'Noto Serif',serif;font-size:30px;color:#e5e2e1;line-height:1;margin-bottom:4px">0</p>
+      <p style="font-size:9px;color:#6b5f52">en el período</p>
+    </div>
+ 
+    <div style="background:#1c1b1b;border:1px solid rgba(74,222,128,.15);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Confirmadas</p>
+      <p id="ds-conf" style="font-family:'Noto Serif',serif;font-size:30px;color:#4ade80;line-height:1;margin-bottom:4px">0</p>
+      <p style="font-size:9px;color:#6b5f52"><span id="ds-tasa">0%</span> tasa de éxito</p>
+    </div>
+ 
+    <div style="background:#1c1b1b;border:1px solid rgba(233,118,118,.12);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Canceladas</p>
+      <p id="ds-canc" style="font-family:'Noto Serif',serif;font-size:30px;color:#e97676;line-height:1;margin-bottom:4px">0</p>
+      <p style="font-size:9px;color:#6b5f52">en el período</p>
+    </div>
+ 
+    <div style="background:#1c1b1b;border:1px solid rgba(126,207,168,.15);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Walk-ins</p>
+      <p id="ds-wi" style="font-family:'Noto Serif',serif;font-size:30px;color:#7ecfa8;line-height:1;margin-bottom:4px">0</p>
+      <p style="font-size:9px;color:#6b5f52">sin agenda</p>
+    </div>
+ 
+    <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.22);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Clientes únicos</p>
+      <p id="ds-cli" style="font-family:'Noto Serif',serif;font-size:30px;color:#e9c176;line-height:1;margin-bottom:4px">0</p>
+      <p style="font-size:9px;color:#6b5f52">identificados</p>
+    </div>
+ 
+    <div style="background:rgba(233,193,118,.05);border:1px solid rgba(233,193,118,.25);padding:14px">
+      <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(233,193,118,.6);margin-bottom:7px">Ingresos est.</p>
+      <p id="ds-ing" style="font-family:'Noto Serif',serif;font-size:22px;color:#e9c176;line-height:1;margin-bottom:4px">$0</p>
+      <p style="font-size:9px;color:#6b5f52">confirmadas + walk-ins</p>
+    </div>
+ 
+  </div>
+ 
+  <!-- ── Gráfica últimos 7 días ── -->
+  <div style="background:#161412;border:1px solid rgba(79,69,53,.15);padding:14px;margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b">Últimos 7 días</p>
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;align-items:center;gap:4px">
+          <div style="width:8px;height:8px;background:rgba(233,193,118,.75)"></div>
+          <span style="font-size:8px;color:#9c8f7b;letter-spacing:.1em">Citas</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <div style="width:8px;height:8px;background:rgba(126,207,168,.75)"></div>
+          <span style="font-size:8px;color:#9c8f7b;letter-spacing:.1em">Walk-ins</span>
+        </div>
+      </div>
+    </div>
+    <div id="dash-barchart" style="display:flex;align-items:flex-end;gap:6px;height:110px;padding-top:8px"></div>
+  </div>
+ 
+  <!-- ── Top servicios ── -->
+  <div style="background:#161412;border:1px solid rgba(79,69,53,.15);padding:14px;margin-bottom:22px">
+    <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px">Top servicios · período</p>
+    <div id="dash-svc-body">
+      <p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>
+    </div>
+  </div>
+ 
+  <!-- ══════ WALK-INS ══════ -->
+  <p class="sec-lbl" style="margin-bottom:3px">Sin agenda</p>
+  <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Registrar Walk-in</p>
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.65">
+    Cliente que llegó directo a tu silla. Regístralo para llevar el control real de tu negocio.
+  </p>
+ 
+  <!-- Formulario walk-in -->
+  <div style="background:#161412;border:1px solid rgba(126,207,168,.18);padding:16px;margin-bottom:18px">
+    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#7ecfa8;margin-bottom:14px">+ Nuevo walk-in</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+ 
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="lbl">Cliente (opcional)</label>
+          <input class="inp" id="wi-cliente" type="text" placeholder="Nombre o alias"/>
+        </div>
+        <div>
+          <label class="lbl">Servicio *</label>
+          <input class="inp" id="wi-servicio" type="text" placeholder="Fade, Clásico, Barba..."/>
+        </div>
+      </div>
+ 
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="lbl">Precio (COP)</label>
+          <input class="inp" id="wi-precio" type="number" placeholder="45000" min="0"/>
+        </div>
+        <div>
+          <label class="lbl">Método de pago</label>
+          <select class="inp" id="wi-pago">
+            <option value="Efectivo">Efectivo</option>
+            <option value="Nequi">Nequi</option>
+            <option value="Daviplata">Daviplata</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+ 
+      <div>
+        <label class="lbl">Notas</label>
+        <input class="inp" id="wi-notas" type="text" placeholder="Corte adicional, observaciones..."/>
+      </div>
+ 
+    </div>
+ 
+    <button onclick="registrarWalkIn()"
+      style="width:100%;padding:14px;margin-top:14px;background:rgba(126,207,168,.18);border:1px solid rgba(126,207,168,.4);color:#7ecfa8;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s"
+      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Registrar walk-in
+    </button>
+  </div>
+ 
+  <!-- Historial hoy -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b">Hoy · walk-ins</p>
+    <span id="wi-count-hoy" style="font-size:8px;letter-spacing:.12em;color:#7ecfa8">0 hoy</span>
+  </div>
+ 
+  <div id="wi-empty" style="display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:6px">
+    <span class="material-symbols-outlined" style="font-size:20px;color:rgba(126,207,168,.15)">person_add</span>
+    <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin walk-ins hoy</p>
+  </div>
+ 
+  <div id="wi-lista" style="margin-bottom:20px"></div>
+ 
 </div>
 
 </main>
@@ -1872,7 +2037,7 @@ async function init() {
         }
       });
       updateSlots();
-      toast('✓ Horarios cargados desde Sheet');
+      toast('✓ Horarios cargados');
     }
   } catch(e) { console.warn('[horarios]', e); }
  
@@ -1896,6 +2061,350 @@ async function init() {
   hideOv();
 }
 init();
+
+
+/* ══ DASHBOARD STATE ══ */
+let walkIns      = [];
+let dashFilter   = 'mes';
+let dashDesde    = '';
+let dashHasta    = '';
+let _dashReady   = false;   // se vuelve true tras cargar walk-ins la primera vez
+ 
+/* ══ DATE HELPERS ══ */
+function dFechaToDate(raw) {
+  if (!raw) return null;
+  const s = String(raw).trim();
+  if (!s || s === '—') return null;
+  if (s.includes('T')) {
+    const part = s.split('T')[0];
+    const [y,m,d] = part.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const [y,m,d] = s.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) {
+    const [d,m,y] = s.split('/').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  return null;
+}
+ 
+function dashRangeFor(filtro) {
+  const now  = new Date();
+  const hoy  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (filtro === 'hoy')   return { desde: hoy, hasta: hoy };
+  if (filtro === 'semana') {
+    const d = new Date(hoy); d.setDate(d.getDate() - 6);
+    return { desde: d, hasta: hoy };
+  }
+  if (filtro === 'mes') {
+    return { desde: new Date(hoy.getFullYear(), hoy.getMonth(), 1), hasta: hoy };
+  }
+  if (filtro === 'custom' && dashDesde && dashHasta) {
+    const [y1,m1,d1] = dashDesde.split('-').map(Number);
+    const [y2,m2,d2] = dashHasta.split('-').map(Number);
+    return { desde: new Date(y1, m1-1, d1), hasta: new Date(y2, m2-1, d2) };
+  }
+  return { desde: null, hasta: null };
+}
+ 
+function inRange(fechaRaw, filtro) {
+  const { desde, hasta } = dashRangeFor(filtro);
+  if (!desde || !hasta) return true;
+  const f = dFechaToDate(fechaRaw);
+  if (!f) return false;
+  return f >= desde && f <= hasta;
+}
+ 
+function citasEnRango()   { return todasCitas.filter(c => inRange(c.fecha, dashFilter)); }
+function walkInsEnRango() { return walkIns.filter(w => inRange(w.fecha, dashFilter)); }
+ 
+/* ══ STATS ══ */
+function computeStats() {
+  const citas = citasEnRango();
+  const wis   = walkInsEnRango();
+ 
+  const total       = citas.length;
+  const confirmadas = citas.filter(c => c.estado === 'confirmada').length;
+  const canceladas  = citas.filter(c => c.estado === 'cancelada').length;
+  const tasa        = total > 0 ? Math.round((confirmadas / total) * 100) : 0;
+ 
+  const setClientes = new Set();
+  citas.forEach(c => { if (c.nombre && c.nombre !== 'Cliente') setClientes.add(c.nombre.toLowerCase()); });
+  wis.forEach(w  => { if (w.cliente && w.cliente !== 'Walk-in') setClientes.add(w.cliente.toLowerCase()); });
+ 
+  let ingresos = 0;
+  citas.filter(c => c.estado === 'confirmada').forEach(c => { ingresos += Number(c.precio) || 0; });
+  wis.forEach(w => { ingresos += Number(w.precio) || 0; });
+ 
+  return { total, confirmadas, canceladas, walkins: wis.length, clientesUnicos: setClientes.size, ingresos, tasa };
+}
+ 
+/* ══ RENDER STATS CARDS ══ */
+function renderStatCards() {
+  const s = computeStats();
+  const map = {
+    'ds-total': s.total,
+    'ds-conf' : s.confirmadas,
+    'ds-canc' : s.canceladas,
+    'ds-wi'   : s.walkins,
+    'ds-cli'  : s.clientesUnicos,
+    'ds-ing'  : '$' + s.ingresos.toLocaleString('es-CO'),
+    'ds-tasa' : s.tasa + '%',
+  };
+  Object.entries(map).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  });
+}
+ 
+/* ══ BAR CHART ══ */
+function renderBarChart() {
+  const ct = document.getElementById('dash-barchart');
+  if (!ct) return;
+ 
+  const now = new Date();
+  const LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const days   = [];
+ 
+  for (let i = 6; i >= 0; i--) {
+    const d   = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+ 
+    const nCitas = todasCitas.filter(c => {
+      const f = dFechaToDate(c.fecha);
+      if (!f) return false;
+      return f.getFullYear()===d.getFullYear() && f.getMonth()===d.getMonth() && f.getDate()===d.getDate() && c.estado!=='cancelada';
+    }).length;
+ 
+    const nWI = walkIns.filter(w => w.fecha === iso).length;
+ 
+    days.push({ label: LABELS[d.getDay()], citas: nCitas, wi: nWI, total: nCitas + nWI, isToday: i === 0 });
+  }
+ 
+  const maxV = Math.max(...days.map(d => d.total), 1);
+ 
+  ct.innerHTML = '';
+  days.forEach(({ label, citas, wi, total, isToday }) => {
+    const citaH = citas > 0 ? Math.max(Math.round((citas / maxV) * 75), 6) : 0;
+    const wiH   = wi   > 0 ? Math.max(Math.round((wi   / maxV) * 75), 6) : 0;
+ 
+    const col = document.createElement('div');
+    col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0';
+    col.innerHTML = `
+      <span style="font-size:9px;color:${total>0?'#e9c176':'transparent'};font-weight:700">${total}</span>
+      <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:78px;gap:1px">
+        ${citas > 0 ? `<div style="width:100%;height:${citaH}px;background:rgba(233,193,118,.72);transition:height .45s"></div>` : ''}
+        ${wi    > 0 ? `<div style="width:100%;height:${wiH}px;background:rgba(126,207,168,.72);transition:height .45s"></div>` : ''}
+        ${total === 0 ? `<div style="width:100%;height:3px;background:rgba(79,69,53,.14)"></div>` : ''}
+      </div>
+      <span style="font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:${isToday?'#e9c176':'#9c8f7b'};font-weight:${isToday?700:400};margin-top:2px">${label}</span>`;
+    ct.appendChild(col);
+  });
+}
+ 
+/* ══ TOP SERVICIOS ══ */
+function renderServiciosSummary() {
+  const el = document.getElementById('dash-svc-body');
+  if (!el) return;
+ 
+  const citas = citasEnRango().filter(c => c.estado !== 'cancelada');
+  const wis   = walkInsEnRango();
+ 
+  const mapa = {};
+  citas.forEach(c => {
+    const k = c.servicio || 'Corte';
+    if (!mapa[k]) mapa[k] = { count:0, ingresos:0 };
+    mapa[k].count++;
+    mapa[k].ingresos += Number(c.precio) || 0;
+  });
+  wis.forEach(w => {
+    const k = w.servicio || 'Walk-in';
+    if (!mapa[k]) mapa[k] = { count:0, ingresos:0 };
+    mapa[k].count++;
+    mapa[k].ingresos += Number(w.precio) || 0;
+  });
+ 
+  const sorted = Object.entries(mapa).sort((a,b) => b[1].count - a[1].count);
+  el.innerHTML = '';
+ 
+  if (!sorted.length) {
+    el.innerHTML = '<p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>';
+    return;
+  }
+ 
+  const maxC = sorted[0][1].count;
+  sorted.slice(0, 6).forEach(([svc, data]) => {
+    const pct = Math.round((data.count / maxC) * 100);
+    const row = document.createElement('div');
+    row.style.cssText = 'padding:8px 0;border-bottom:1px solid rgba(79,69,53,.07)';
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <p style="font-size:11px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%">${svc}</p>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          ${data.ingresos > 0 ? `<span style="font-size:11px;color:#e9c176;font-weight:700">$${data.ingresos.toLocaleString('es-CO')}</span>` : ''}
+          <span style="font-size:9px;color:#9c8f7b">${data.count} vez${data.count!==1?'es':''}</span>
+        </div>
+      </div>
+      <div style="height:3px;background:rgba(79,69,53,.14)">
+        <div style="height:100%;width:${pct}%;background:rgba(233,193,118,.55);transition:width .5s"></div>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+ 
+/* ══ FILTRO ══ */
+function filtrarDash(tipo, btn) {
+  dashFilter = tipo;
+  document.querySelectorAll('.dash-fb').forEach(b => {
+    b.style.background    = 'transparent';
+    b.style.color         = '#9c8f7b';
+    b.style.borderColor   = 'rgba(79,69,53,.3)';
+    b.style.fontWeight    = '';
+  });
+  if (tipo !== 'custom') {
+    btn.style.background  = '#e9c176';
+    btn.style.color       = '#412d00';
+    btn.style.borderColor = '#e9c176';
+    btn.style.fontWeight  = '700';
+  } else {
+    btn.style.borderColor = 'rgba(233,193,118,.5)';
+    btn.style.color       = '#e9c176';
+  }
+  const customRow = document.getElementById('dash-custom-row');
+  if (customRow) customRow.style.display = tipo === 'custom' ? 'flex' : 'none';
+  if (tipo !== 'custom') renderDashboard();
+}
+ 
+/* ══ WALK-IN — REGISTRAR ══ */
+async function registrarWalkIn() {
+  const servicio = document.getElementById('wi-servicio').value.trim();
+  if (!servicio) return toast('El servicio es obligatorio', true);
+ 
+  const now   = new Date();
+  const fecha = now.toISOString().split('T')[0];
+  const hora  = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+ 
+  const wi = {
+    wi_id      : 'WI-' + Math.random().toString(36).toUpperCase().slice(2, 8),
+    barberia_id: BAR_ID,
+    barbero_id : BAR_ID2,
+    cliente    : document.getElementById('wi-cliente').value.trim() || 'Walk-in',
+    servicio,
+    precio     : parseFloat(String(document.getElementById('wi-precio').value||'0').replace(/[^0-9.]/g,'')) || 0,
+    metodo_pago: document.getElementById('wi-pago').value,
+    notas      : document.getElementById('wi-notas').value.trim(),
+    fecha,
+    hora,
+  };
+ 
+  walkIns.unshift(wi);
+  renderWalkIns();
+  renderDashboard();
+ 
+  ['wi-cliente','wi-servicio','wi-precio','wi-notas'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+ 
+  toast('✓ Walk-in registrado · ' + wi.cliente + ' · ' + servicio);
+  gasPost({ accion:'registrarWalkIn', ...wi }).catch(() => {});
+}
+ 
+/* ══ WALK-IN — ELIMINAR ══ */
+function eliminarWalkIn(id) {
+  walkIns = walkIns.filter(w => w.wi_id !== id);
+  renderWalkIns();
+  renderDashboard();
+  toast('Walk-in eliminado');
+  gasPost({ accion:'eliminarWalkIn', wi_id: id, barberia_id: BAR_ID }).catch(() => {});
+}
+ 
+/* ══ WALK-IN — RENDER HISTORIAL HOY ══ */
+function renderWalkIns() {
+  const lista  = document.getElementById('wi-lista');
+  const empty  = document.getElementById('wi-empty');
+  const cntEl  = document.getElementById('wi-count-hoy');
+  if (!lista) return;
+ 
+  const today   = new Date().toISOString().split('T')[0];
+  const todayWI = walkIns.filter(w => w.fecha === today);
+ 
+  if (cntEl) cntEl.textContent = todayWI.length + ' hoy';
+  lista.innerHTML = '';
+ 
+  if (!todayWI.length) {
+    if (empty) empty.style.display = 'flex';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+ 
+  todayWI.forEach(w => {
+    const precio = Number(w.precio) > 0 ? '$' + Number(w.precio).toLocaleString('es-CO') : '—';
+    const card   = document.createElement('div');
+    card.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22);margin-bottom:7px;transition:border-color .2s';
+    card.innerHTML = `
+      <div style="width:36px;height:36px;background:rgba(126,207,168,.1);border:1px solid rgba(126,207,168,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span class="material-symbols-outlined" style="font-size:17px;color:#7ecfa8">content_cut</span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px">
+          <p style="font-size:12px;color:#e5e2e1;font-weight:600">${w.cliente}</p>
+          <span style="font-size:7.5px;padding:2px 7px;background:rgba(126,207,168,.08);border:1px solid rgba(126,207,168,.22);color:#7ecfa8;letter-spacing:.14em;text-transform:uppercase">walk-in</span>
+        </div>
+        <p style="font-size:11px;color:#9c8f7b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          ${w.servicio} · <span style="color:#e9c176;font-weight:700">${precio}</span> · ${w.hora}
+        </p>
+        ${w.metodo_pago ? `<p style="font-size:8.5px;color:#6b5f52;letter-spacing:.12em;text-transform:uppercase;margin-top:2px">${w.metodo_pago}</p>` : ''}
+        ${w.notas ? `<p style="font-size:10px;color:#6b5f52;margin-top:3px;line-height:1.4">${w.notas}</p>` : ''}
+      </div>
+      <button onclick="eliminarWalkIn('${w.wi_id}')" class="btn-r" title="Eliminar">
+        <span class="material-symbols-outlined" style="font-size:14px">delete</span>
+      </button>`;
+    lista.appendChild(card);
+  });
+}
+ 
+/* ══ CARGAR WALK-INS DESDE GAS ══ */
+async function cargarWalkIns() {
+  try {
+    const json = await gasGet({ accion:'leerWalkIns', barberia_id: BAR_ID });
+    const raw  = json.walkIns || json.data || [];
+    if (raw.length) {
+      walkIns = raw.map(w => ({
+        wi_id      : String(w.wi_id || 'WI-' + Math.random().toString(36).slice(2,8)),
+        barberia_id: w.barberia_id || BAR_ID,
+        barbero_id : w.barbero_id  || BAR_ID2,
+        cliente    : String(w.cliente    || 'Walk-in'),
+        servicio   : String(w.servicio   || ''),
+        precio     : Number(w.precio)    || 0,
+        metodo_pago: String(w.metodo_pago|| ''),
+        notas      : String(w.notas      || ''),
+        fecha      : String(w.fecha      || ''),
+        hora       : String(w.hora       || ''),
+      }));
+    }
+  } catch(e) { /* sin walk-ins previos — ok */ }
+}
+ 
+/* ══ RENDER DASHBOARD (punto de entrada) ══ */
+async function renderDashboard() {
+  if (!_dashReady) {
+    showOv('Cargando dashboard...');
+    await cargarWalkIns();
+    _dashReady = true;
+    hideOv();
+  }
+  renderStatCards();
+  renderBarChart();
+  renderServiciosSummary();
+  renderWalkIns();
+}
+
+
+
+
 </script>
 
 </body>
