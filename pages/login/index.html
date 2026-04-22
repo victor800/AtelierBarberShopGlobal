@@ -72,6 +72,8 @@ body::after {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── INPUTS — placeholder muy sutil, texto reducido ── */
 .inp {
   display: block; width: 100%;
   background: rgba(14,12,8,0.85) !important;
@@ -80,9 +82,9 @@ body::after {
   -webkit-text-fill-color: #e5e2e1 !important;
   caret-color: #e9c176;
   border: none; border-bottom: 1px solid rgba(79,69,53,0.5);
-  padding: 13px 36px 13px 10px;
+  padding: 11px 32px 11px 10px;
   color: #e5e2e1;
-  font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 300;
+  font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 300;
   outline: none; transition: border-color .25s;
   -webkit-appearance: none;
 }
@@ -91,10 +93,11 @@ body::after {
   -webkit-box-shadow: 0 0 0px 1000px rgba(20,16,8,0.98) inset !important;
   box-shadow: 0 0 0px 1000px rgba(20,16,8,0.98) inset !important;
 }
-/* ── PLACEHOLDERS MÁS OPACOS ── */
-.inp::placeholder                { color: rgba(156,143,123,0.22) !important; opacity: 1 !important; font-style: italic; font-weight: 300; letter-spacing: .04em; }
-.inp::-webkit-input-placeholder  { color: rgba(156,143,123,0.22) !important; font-style: italic; }
-.inp::-moz-placeholder           { color: rgba(156,143,123,0.22) !important; opacity: 1 !important; font-style: italic; }
+/* ── PLACEHOLDERS muy opacos y pequeños ── */
+.inp::placeholder                { color: rgba(156,143,123,0.13) !important; opacity: 1 !important; font-style: italic; font-weight: 300; letter-spacing: .03em; font-size: 11px; }
+.inp::-webkit-input-placeholder  { color: rgba(156,143,123,0.13) !important; font-style: italic; font-size: 11px; }
+.inp::-moz-placeholder           { color: rgba(156,143,123,0.13) !important; opacity: 1 !important; font-style: italic; font-size: 11px; }
+
 .plan-btn {
   padding: 11px 4px;
   border: 1px solid rgba(79,69,53,0.4); background: transparent;
@@ -128,6 +131,29 @@ body { min-height: max(884px, 100dvh); }
   vertical-align: middle; margin-right: 8px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PLAN PREMIUM CARDS ── */
+.plan-btn-premium {
+  width: 100%; text-align: left;
+  padding: 13px 14px;
+  background: #1c1b1b;
+  border: 1px solid rgba(79,69,53,.25);
+  cursor: pointer; transition: all .2s;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.plan-btn-premium:hover { border-color: rgba(233,193,118,.3); }
+.plan-btn-premium.activo-premium { border-color: rgba(233,193,118,.55) !important; background: rgba(233,193,118,.04); }
+
+/* Plan gratuito badge */
+.badge-gratis {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(126,207,168,.12);
+  border: 1px solid rgba(126,207,168,.3);
+  color: #7ecfa8;
+  font-family: 'Manrope', sans-serif;
+  font-size: 7.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
+}
 </style>
 </head>
 
@@ -161,7 +187,7 @@ body { min-height: max(884px, 100dvh); }
       </p>
     </div>
 
-    <div class="w-full max-w-md" style="display:flex;flex-direction:column;gap:22px;padding: 0 4px;">
+    <div class="w-full max-w-md" style="display:flex;flex-direction:column;gap:22px;padding:0 4px;">
 
       <!-- PESTAÑAS -->
       <div style="border-bottom:1px solid rgba(79,69,53,.38);">
@@ -171,64 +197,66 @@ body { min-height: max(884px, 100dvh); }
         </div>
       </div>
 
-      <!-- ══ PANEL: INGRESAR ══ -->
-      <div class="tab-panel active" id="panel-ingresar" style="padding: 0 2px;">
+      <!-- ══════════════════════════════════════
+           PANEL: INGRESAR
+      ══════════════════════════════════════ -->
+      <div class="tab-panel active" id="panel-ingresar" style="padding:0 2px;">
 
-        <form onsubmit="return false;" style="display:flex;flex-direction:column;gap:20px;">
+        <form onsubmit="return false;" style="display:flex;flex-direction:column;gap:18px;">
 
           <!-- Rol -->
           <div style="background:#0e0e0e;padding:4px;display:flex;">
             <button type="button" id="rol-cliente" onclick="activarRol(this,'cliente')"
-              style="flex:1;padding:12px 4px;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:#2a2a2a;color:#e9c176;transition:all .2s;">
+              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:#2a2a2a;color:#e9c176;transition:all .2s;">
               CLIENTE
             </button>
             <button type="button" id="rol-barbero" onclick="activarRol(this,'barbero')"
-              style="flex:1;padding:12px 4px;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
+              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
               BARBERO
             </button>
             <button type="button" id="rol-dueno" onclick="activarRol(this,'dueno')"
-              style="flex:1;padding:12px 4px;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
+              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
               DUEÑO
             </button>
           </div>
 
           <!-- CLIENTE: nombre barbería + código -->
           <div id="campos-cliente">
-            <div style="margin-bottom:20px;">
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px;">
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
                 Nombre de tu Barbería
               </label>
               <div style="position:relative;">
                 <input id="cliente-nombre-barberia" class="inp" type="text" placeholder="Ej. The Julius Barber Shop"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:18px;">storefront</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.14);font-size:16px;">storefront</span>
               </div>
             </div>
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px;">
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
                 Código de Acceso
               </label>
               <div style="position:relative;">
                 <input id="cliente-codigo" class="inp" type="text" placeholder="Ej. JULIUS-4X9K" style="text-transform:uppercase;letter-spacing:.1em;"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:18px;">key</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.14);font-size:16px;">key</span>
               </div>
             </div>
           </div>
 
           <!-- BARBERO/DUEÑO: sede + contraseña -->
           <div id="campos-admin" style="display:none;">
-            <div style="margin-bottom:20px;">
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px;">
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
                 Nombre de tu Barbería
               </label>
               <div style="position:relative;">
                 <input id="admin-sede" class="inp" type="text" placeholder="Ej. The Julius Barber Shop"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:18px;">storefront</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.14);font-size:16px;">storefront</span>
               </div>
             </div>
             <div>
-              <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px;">
-                <label style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#9c8f7b;">Contraseña</label>
-                <a href="#" style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#9c8f7b;text-decoration:none;"
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;">
+                <label style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;">Contraseña</label>
+                <a href="#" style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;text-decoration:none;"
                   onmouseover="this.style.color='#e9c176'" onmouseout="this.style.color='#9c8f7b'">¿Olvidaste?</a>
               </div>
               <input id="admin-password" class="inp" type="password" placeholder="Mínimo 8 caracteres"/>
@@ -236,7 +264,7 @@ body { min-height: max(884px, 100dvh); }
           </div>
 
           <button id="btn-ingresar-submit" type="button" onclick="handleIngresar()"
-            style="width:100%;padding:18px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px;"
+            style="width:100%;padding:16px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;margin-top:2px;"
             onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
             INGRESAR
           </button>
@@ -244,172 +272,185 @@ body { min-height: max(884px, 100dvh); }
         </form>
 
         <!-- CTA dueños -->
-        <div style="margin-top:26px;padding:22px;background:#1c1b1b;border:1px solid rgba(233,193,118,.2);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <span class="material-symbols-outlined" style="font-size:20px;color:#e9c176;">analytics</span>
-            <h3 class="font-headline" style="font-size:17px;color:#e5e2e1;">Para Dueños de Negocio</h3>
+        <div style="margin-top:22px;padding:18px;background:#1c1b1b;border:1px solid rgba(233,193,118,.2);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span class="material-symbols-outlined" style="font-size:18px;color:#e9c176;">analytics</span>
+            <h3 class="font-headline" style="font-size:16px;color:#e5e2e1;">Para Dueños de Negocio</h3>
           </div>
-          <p style="font-size:12px;color:#d3c4af;font-weight:300;line-height:1.7;margin-bottom:16px;">
+          <p style="font-size:11px;color:#d3c4af;font-weight:300;line-height:1.7;margin-bottom:14px;">
             Gestiona citas, barberos, pagos y reportes desde un solo panel. La suite profesional para barberías de élite.
           </p>
           <button onclick="cambiarTabNombre('registrar')"
-            style="width:100%;padding:13px;background:transparent;border:1px solid #e9c176;color:#e9c176;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:14px;"
+            style="width:100%;padding:12px;background:transparent;border:1px solid #e9c176;color:#e9c176;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:12px;"
             onmouseover="this.style.background='#e9c176';this.style.color='#412d00';"
             onmouseout="this.style.background='transparent';this.style.color='#e9c176';">
             Registra tu Barbería
           </button>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <!-- Precios y Planes → va a pestaña Registrarme y hace scroll a planes -->
             <a href="#" onclick="irAPrecios(event)"
-              style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 8px;background:#201f1f;border:1px solid rgba(79,69,53,.38);text-decoration:none;text-align:center;transition:border-color .2s;"
+              style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;background:#201f1f;border:1px solid rgba(79,69,53,.38);text-decoration:none;text-align:center;transition:border-color .2s;"
               onmouseover="this.style.borderColor='rgba(233,193,118,.5)'" onmouseout="this.style.borderColor='rgba(79,69,53,.38)'">
-              <span class="material-symbols-outlined" style="font-size:18px;color:#e9c176;">payments</span>
-              <span style="font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#e9c176;">Precios y Planes</span>
+              <span class="material-symbols-outlined" style="font-size:17px;color:#e9c176;">payments</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#e9c176;">Precios</span>
               <span style="font-family:'Noto Serif',serif;font-style:italic;font-size:10px;color:#9c8f7b;">Ver tarifas</span>
             </a>
-            <a href="#" onclick="cambiarTabNombre('registrar');return false;"
-              style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 8px;background:#e9c176;border:1px solid #e9c176;text-decoration:none;text-align:center;transition:filter .2s;"
+            <!-- ★ Prueba Gratis → lleva a plan Gratuito en Registrarme -->
+            <a href="#" onclick="irAPruebaGratis(event)"
+              style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;background:#e9c176;border:1px solid #e9c176;text-decoration:none;text-align:center;transition:filter .2s;"
               onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='brightness(1)'">
-              <span class="material-symbols-outlined" style="font-size:18px;color:#412d00;">arrow_forward</span>
-              <span style="font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#412d00;">Prueba Gratis</span>
-              <span style="font-family:'Noto Serif',serif;font-style:italic;font-size:10px;color:#6b4e00;">Sin tarjeta</span>
+              <span class="material-symbols-outlined" style="font-size:17px;color:#412d00;">arrow_forward</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00;">Prueba Gratis</span>
+              <span style="font-family:'Noto Serif',serif;font-style:italic;font-size:10px;color:#6b4e00;">15 días gratis</span>
             </a>
           </div>
         </div>
 
         <!-- Footer -->
-        <div style="margin-top:26px;text-align:center;">
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+        <div style="margin-top:22px;text-align:center;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
             <div style="flex:1;height:1px;background:rgba(79,69,53,.38);"></div>
-            <span style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:rgba(156,143,123,.5);">Copy Right 2026 - Mobile Design</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(156,143,123,.4);">Copy Right 2026</span>
             <div style="flex:1;height:1px;background:rgba(79,69,53,.38);"></div>
           </div>
-          <p style="font-size:13px;color:#d3c4af;font-weight:300;">
+          <p style="font-size:12px;color:#d3c4af;font-weight:300;">
             ¿Nuevo en la red?
-            <a href="#" style="color:#e9c176;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(233,193,118,.3);">Únete a la comunidad</a>
+            <a href="#" onclick="cambiarTabNombre('registrar');return false;" style="color:#e9c176;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(233,193,118,.3);">Únete a la comunidad</a>
           </p>
         </div>
 
       </div><!-- /panel-ingresar -->
 
-      <!-- ══ PANEL: REGISTRARME ══ -->
-      <div class="tab-panel" id="panel-registrar" style="max-height:75vh;overflow-y:auto;padding: 0 18px 0 2px;">
+      <!-- ══════════════════════════════════════
+           PANEL: REGISTRARME
+      ══════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-registrar" style="max-height:75vh;overflow-y:auto;padding:0 18px 0 2px;">
 
-        <!-- Intro -->
-        <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:13px;color:#d3c4af;font-weight:300;line-height:1.8;margin-bottom:24px;border-left:1px solid rgba(233,193,118,.25);padding-left:14px;">
+        <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:12px;color:#d3c4af;font-weight:300;line-height:1.8;margin-bottom:20px;border-left:1px solid rgba(233,193,118,.25);padding-left:12px;">
           Escala tu arte. Gestiona citas, personal y pagos con nuestra suite empresarial dedicada a barberías de élite.
         </p>
 
         <form onsubmit="return false;" style="display:flex;flex-direction:column;gap:0;">
 
           <!-- Fila 1: nombre + propietario -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Nombre de la Barbería</label>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Nombre Barbería</label>
               <div style="position:relative;">
                 <input id="reg-nombre" class="inp" type="text" placeholder="Ej. The Julius"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:16px;">store</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.12);font-size:14px;">store</span>
               </div>
             </div>
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Nombre del Propietario</label>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Propietario</label>
               <input id="reg-dueno" class="inp" type="text" placeholder="Tu nombre"/>
             </div>
           </div>
 
           <!-- Fila 2: ciudad + teléfono -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Ciudad / Sede</label>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Ciudad</label>
               <div style="position:relative;">
                 <input id="reg-ciudad" class="inp" type="text" placeholder="Medellín"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:16px;">location_on</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.12);font-size:14px;">location_on</span>
               </div>
             </div>
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Teléfono</label>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Teléfono</label>
               <div style="position:relative;">
                 <input id="reg-telefono" class="inp" type="tel" placeholder="+57 300 000 0000"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.18);font-size:16px;">phone</span>
+                <span class="material-symbols-outlined" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.12);font-size:14px;">phone</span>
               </div>
             </div>
           </div>
 
           <!-- Fila 3: email + contraseña -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Correo del Dueño</label>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Correo</label>
               <input id="reg-email" class="inp" type="email" placeholder="propietario@email.com"/>
             </div>
             <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Contraseña</label>
-              <input id="reg-password" class="inp" type="password" placeholder="Mínimo 8 caracteres"/>
+              <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;">Contraseña</label>
+              <input id="reg-password" class="inp" type="password" placeholder="Mín. 8 caracteres"/>
             </div>
           </div>
 
-          <!-- Planes premium — con id para scroll -->
-          <div id="seccion-planes" style="margin-bottom:22px;">
-            <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px;">Selecciona tu Membresía</label>
-            <div style="display:flex;flex-direction:column;gap:8px;">
+          <!-- ★ PLANES — con Prueba Gratuita primero -->
+          <div id="seccion-planes" style="margin-bottom:18px;">
+            <label style="display:block;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">Membresía</label>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+
+              <!-- ★ Prueba Gratuita — primera opción -->
+              <button type="button" class="plan-btn-premium" onclick="activarPlan(this)" data-plan="Prueba"
+                id="plan-prueba-btn"
+                style="position:relative;overflow:hidden;">
+                <div>
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+                    <span style="font-family:'Noto Serif',serif;font-size:14px;color:#7ecfa8;">Atelier · Prueba Gratuita</span>
+                    <span class="badge-gratis">15 días</span>
+                  </div>
+                  <span style="font-family:'Manrope',sans-serif;font-size:9.5px;color:#9c8f7b;">Acceso completo · Sin tarjeta · Cancela cuando quieras</span>
+                </div>
+                <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#7ecfa8;white-space:nowrap;">$0<span style="font-size:8px;font-weight:400;color:#9c8f7b;">/15d</span></span>
+              </button>
 
               <!-- Básico -->
-              <button type="button" class="plan-btn-premium" onclick="activarPlan(this)" data-plan="Básico"
-                style="width:100%;text-align:left;padding:14px 16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.25);cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center;">
+              <button type="button" class="plan-btn-premium" onclick="activarPlan(this)" data-plan="Básico">
                 <div>
-                  <span style="font-family:'Noto Serif',serif;font-size:15px;color:#e5e2e1;display:block;">Atelier Basic</span>
-                  <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;">Gestión de citas básica y perfil en la red</span>
+                  <span style="font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;display:block;margin-bottom:2px;">Atelier Basic</span>
+                  <span style="font-family:'Manrope',sans-serif;font-size:9.5px;color:#9c8f7b;">Citas básica y perfil en la red</span>
                 </div>
-                <span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#e9c176;">$50.000<span style="font-size:9px;font-weight:400;color:#9c8f7b;">/mes</span></span>
+                <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#e9c176;white-space:nowrap;">$50k<span style="font-size:8px;font-weight:400;color:#9c8f7b;">/mes</span></span>
               </button>
 
               <!-- Pro — destacado -->
               <button type="button" class="plan-btn-premium activo-premium" onclick="activarPlan(this)" data-plan="Pro"
-                style="width:100%;text-align:left;padding:14px 16px;background:#1c1b1b;border:1px solid rgba(233,193,118,.4);cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden;">
-                <div style="position:absolute;top:0;right:0;background:#e9c176;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:#412d00;">Recomendado</div>
+                style="border-color:rgba(233,193,118,.4);position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;right:0;background:#e9c176;padding:2px 9px;font-family:'Manrope',sans-serif;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#412d00;">Popular</div>
                 <div>
-                  <span style="font-family:'Noto Serif',serif;font-size:15px;color:#e9c176;display:block;">Atelier Pro</span>
-                  <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;">Analíticas avanzadas, marketing y soporte 24/7</span>
+                  <span style="font-family:'Noto Serif',serif;font-size:14px;color:#e9c176;display:block;margin-bottom:2px;">Atelier Pro</span>
+                  <span style="font-family:'Manrope',sans-serif;font-size:9.5px;color:#9c8f7b;">Analíticas, marketing y soporte 24/7</span>
                 </div>
-                <span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#e9c176;">$89.000<span style="font-size:9px;font-weight:400;color:#9c8f7b;">/mes</span></span>
+                <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#e9c176;white-space:nowrap;">$89k<span style="font-size:8px;font-weight:400;color:#9c8f7b;">/mes</span></span>
               </button>
 
               <!-- Élite -->
-              <button type="button" class="plan-btn-premium" onclick="activarPlan(this)" data-plan="Élite"
-                style="width:100%;text-align:left;padding:14px 16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.25);cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center;">
+              <button type="button" class="plan-btn-premium" onclick="activarPlan(this)" data-plan="Élite">
                 <div>
-                  <span style="font-family:'Noto Serif',serif;font-size:15px;color:#e5e2e1;display:block;">Atelier Élite</span>
-                  <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;">Marca personalizada, consultoría y eventos VIP</span>
+                  <span style="font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;display:block;margin-bottom:2px;">Atelier Élite</span>
+                  <span style="font-family:'Manrope',sans-serif;font-size:9.5px;color:#9c8f7b;">Marca personalizada y consultoría VIP</span>
                 </div>
-                <span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#e9c176;">$149.000<span style="font-size:9px;font-weight:400;color:#9c8f7b;">/mes</span></span>
+                <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#e9c176;white-space:nowrap;">$149k<span style="font-size:8px;font-weight:400;color:#9c8f7b;">/mes</span></span>
               </button>
 
             </div>
           </div>
 
           <!-- Quote decorativa -->
-          <div style="padding:16px;background:rgba(14,12,8,.6);border-left:1px solid rgba(233,193,118,.2);margin-bottom:20px;">
-            <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:12px;color:#d3c4af;line-height:1.7;margin:0;">
+          <div style="padding:14px;background:rgba(14,12,8,.6);border-left:1px solid rgba(233,193,118,.2);margin-bottom:18px;">
+            <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:11px;color:#d3c4af;line-height:1.7;margin:0;">
               "La excelencia no es un acto, es un hábito."
             </p>
           </div>
 
           <!-- Botón registrar -->
           <button id="btn-registrar-submit" type="button" onclick="handleRegistrar()"
-            style="width:100%;padding:17px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;"
+            style="width:100%;padding:16px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;"
             onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
             CONFIRMAR REGISTRO
           </button>
 
-          <p style="text-align:center;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;margin-top:10px;">
+          <p style="text-align:center;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:#9c8f7b;margin-top:8px;">
             Sin permanencia · Cancela en cualquier momento
           </p>
 
         </form>
 
-        <p style="text-align:center;font-size:13px;color:#d3c4af;font-weight:300;margin-top:18px;">
+        <p style="text-align:center;font-size:12px;color:#d3c4af;font-weight:300;margin-top:16px;">
           ¿Ya tienes cuenta?
           <button onclick="cambiarTabNombre('ingresar')"
-            style="background:none;border:none;border-bottom:1px solid rgba(233,193,118,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:0;">
+            style="background:none;border:none;border-bottom:1px solid rgba(233,193,118,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;">
             Ingresar aquí
           </button>
         </p>
@@ -429,14 +470,12 @@ body { min-height: max(884px, 100dvh); }
 
 <script>
 /* ════════════════════════════════════════════
-   ⚙️  CONFIGURACIÓN
-   → Reemplaza APPS_SCRIPT_URL con la URL que obtienes en
-     Apps Script > Implementar > Nueva implementación > Aplicación web
+   ⚙️  CONFIG
 ════════════════════════════════════════════ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7CbapDgNpBAOWjUF_f6z7XU60JIEnVXLDNFW89s8yjmrnpO4c8XdUsNNaa9PzIyxU/exec"; // ← pega tu URL aquí
-const SHEET_NAME      = "NuevaBarberia";
-const HOME_URL  = "home.html";
-const PANEL_URL = "panel.html";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbye7-Al_Q7G4JGGCzc2RyovFpCA8WoQsv-KK0IU-IZIqiYotXAPpXoK83Zwqkpvm2R8/exec";
+const SHEET_NAME = "NuevaBarberia";
+const HOME_URL   = "home.html";
+const PANEL_URL  = "panel.html";
 
 /* ════════════════════════════════════════════
    ROL ACTIVO
@@ -450,17 +489,7 @@ function activarRol(btn, rol) {
   });
   btn.style.background = '#2a2a2a'; btn.style.color = '#e9c176';
   document.getElementById('campos-cliente').style.display = rol === 'cliente' ? 'block' : 'none';
-  document.getElementById('campos-admin').style.display   = rol !== 'cliente' ? 'block' : 'none';
-
-  // Para DUEÑO: el campo admin-sede pide nombre de barbería
-  // Para BARBERO: podría pedir otro dato en el futuro
-  const labelSede = document.querySelector('label[for-sede]');
-  const inputSede = document.getElementById('admin-sede');
-  if (rol === 'dueno') {
-    if (inputSede) inputSede.placeholder = 'Ej. The Julius Barber Shop';
-  } else if (rol === 'barbero') {
-    if (inputSede) inputSede.placeholder = 'Déjalo vacío para acceso global';
-  }
+  document.getElementById('campos-admin').style.display   = rol !== 'cliente'  ? 'block' : 'none';
 }
 
 /* ════════════════════════════════════════════
@@ -477,49 +506,55 @@ function cambiarTabNombre(nombre) {
 }
 
 /* ════════════════════════════════════════════
-   IR A PRECIOS — abre registro y hace scroll a planes
+   IR A PRECIOS
 ════════════════════════════════════════════ */
 function irAPrecios(e) {
   e.preventDefault();
   cambiarTabNombre('registrar');
-  // Dar tiempo al panel para mostrarse antes de hacer scroll
   setTimeout(() => {
-    const seccion = document.getElementById('seccion-planes');
-    if (seccion) seccion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const s = document.getElementById('seccion-planes');
+    if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 120);
+}
+
+/* ★ IR A PRUEBA GRATIS — abre registrar y selecciona plan Prueba */
+function irAPruebaGratis(e) {
+  e.preventDefault();
+  cambiarTabNombre('registrar');
+  setTimeout(() => {
+    const btn = document.getElementById('plan-prueba-btn');
+    if (btn) { activarPlan(btn); btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  }, 140);
 }
 
 /* ════════════════════════════════════════════
    PLAN SELECCIONADO
 ════════════════════════════════════════════ */
 function activarPlan(btn) {
-  document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('activo'));
   document.querySelectorAll('.plan-btn-premium').forEach(b => {
     b.classList.remove('activo-premium');
     b.style.borderColor = 'rgba(79,69,53,.25)';
   });
-  if (btn.classList.contains('plan-btn-premium')) {
-    btn.classList.add('activo-premium');
-    btn.style.borderColor = 'rgba(233,193,118,.4)';
-  } else {
-    btn.classList.add('activo');
-  }
+  btn.classList.add('activo-premium');
+  btn.style.borderColor = btn.dataset.plan === 'Prueba'
+    ? 'rgba(126,207,168,.5)'
+    : 'rgba(233,193,118,.55)';
 }
 function getPlanActivo() {
-  const premium = document.querySelector('.plan-btn-premium.activo-premium');
-  if (premium) return premium.dataset.plan || 'Pro';
-  const basico  = document.querySelector('.plan-btn.activo');
-  return basico ? basico.textContent.trim() : 'Pro';
+  const p = document.querySelector('.plan-btn-premium.activo-premium');
+  return p ? (p.dataset.plan || 'Pro') : 'Pro';
 }
 
 /* ════════════════════════════════════════════
    TOAST
 ════════════════════════════════════════════ */
+let _toastT;
 function toast(msg, tipo = 'ok') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = `show ${tipo}`;
-  setTimeout(() => t.className = '', 3500);
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => t.className = '', 3500);
 }
 
 /* ════════════════════════════════════════════
@@ -527,6 +562,7 @@ function toast(msg, tipo = 'ok') {
 ════════════════════════════════════════════ */
 function setBtnLoading(btnId, loading, textoOriginal) {
   const btn = document.getElementById(btnId);
+  if (!btn) return;
   if (loading) {
     btn.disabled = true;
     btn.innerHTML = `<span class="btn-spinner"></span> PROCESANDO...`;
@@ -537,23 +573,26 @@ function setBtnLoading(btnId, loading, textoOriginal) {
 }
 
 /* ════════════════════════════════════════════
-   GOOGLE APPS SCRIPT — API CALLS
+   API — GAS GET/POST
 ════════════════════════════════════════════ */
-async function apiCall(accion, datos = {}) {
-  const params = new URLSearchParams({ accion, ...datos });
-  const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`);
-  if (!res.ok) throw new Error("Error de red: " + res.status);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-  return data;
+async function gasGet(params) {
+  const qs  = new URLSearchParams(params).toString();
+  const res = await fetch(`${APPS_SCRIPT_URL}?${qs}`);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const txt = await res.text();
+  try { return JSON.parse(txt); } catch { return {}; }
 }
 
-async function leerBarberias() {
-  return await apiCall("leerBarberias");
-}
-
-async function registrarBarberiaAPI(fila) {
-  return await apiCall("registrarBarberia", { datos: JSON.stringify(fila) });
+async function gasPost(payload) {
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method : 'POST',
+    redirect: 'follow',
+    body   : JSON.stringify(payload),
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const txt = await res.text();
+  try { return JSON.parse(txt); } catch { return { ok: true }; }
 }
 
 /* ════════════════════════════════════════════
@@ -564,155 +603,145 @@ function sanitizar(val) {
   if (['=','+','-','@'].includes(val[0])) val = "'" + val;
   return val;
 }
-
 async function hashPassword(password) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(password));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
-
 function guardarSesion(datos) {
   sessionStorage.setItem("atelier_sesion", JSON.stringify(datos));
 }
 
 /* ════════════════════════════════════════════
-   HANDLE INGRESAR (CLIENTE)
-   → navega a home.html
+   HANDLE INGRESAR
 ════════════════════════════════════════════ */
 async function handleIngresar() {
-  if (rolActivo === 'barbero') {
-    toast("Login de barbero próximamente", "err");
-    return;
-  }
-  if (rolActivo === 'dueno') {
-    await handleIngresarDueno();
-    return;
-  }
+  if (rolActivo === 'barbero') { toast("Login de barbero próximamente", "err"); return; }
+  if (rolActivo === 'dueno')   { await handleIngresarDueno(); return; }
 
-  // ── CLIENTE ──────────────────────────────────────
+  // ── CLIENTE ──────────────────────────────
   const nombre = document.getElementById('cliente-nombre-barberia').value.trim();
   const codigo = document.getElementById('cliente-codigo').value.trim().toUpperCase();
-
-  if (!nombre || !codigo) {
-    toast("Ingresa el nombre de tu barbería y el código", "err");
-    return;
-  }
+  if (!nombre || !codigo) { toast("Ingresa el nombre de tu barbería y el código", "err"); return; }
 
   setBtnLoading('btn-ingresar-submit', true, 'INGRESAR');
-
   try {
-    const respuesta = await leerBarberias();
+    const respuesta = await gasGet({ accion: 'leerBarberias' });
     const filas = respuesta.filas || [];
-
     const barberia = filas.slice(1).find(f => {
       const nombreSheet = String(f[4] || '').toLowerCase().trim();
       const codigoSheet = String(f[16] || '').toUpperCase().trim();
       const activo      = f[17];
       const estaActivo  = activo === true || String(activo).toUpperCase() === 'TRUE';
-      return nombreSheet === nombre.toLowerCase() &&
-             codigoSheet === codigo &&
-             estaActivo;
+      return nombreSheet === nombre.toLowerCase() && codigoSheet === codigo && estaActivo;
     });
-
     if (!barberia) {
       toast("Barbería o código incorrecto", "err");
-      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
-      return;
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR'); return;
     }
-
-    guardarSesion({
-      barberia_id : barberia[0],
-      nombre      : barberia[4],
-      ciudad      : barberia[9],
-      plan        : barberia[2],
-      rol         : 'cliente'
-    });
-
+    guardarSesion({ barberia_id: barberia[0], nombre: barberia[4], ciudad: barberia[9], plan: barberia[2], rol: 'cliente' });
     toast(`Bienvenido a ${barberia[4]} ✓`);
     setTimeout(() => window.location.href = HOME_URL, 1200);
-
   } catch (e) {
-    console.error("Error ingresar:", e);
-    const msg = e.message.includes('Failed to fetch') || e.message.includes('NetworkError')
-      ? "Sin conexión con el servidor. Verifica tu internet."
-      : "Error al verificar acceso: " + e.message;
-    toast(msg, "err");
+    toast("Error: " + e.message, "err");
     setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
   }
 }
 
 /* ════════════════════════════════════════════
    LOGIN DUEÑO
-   Columnas del sheet (ajusta los índices si tu Apps Script las ordena diferente):
-   [0] barberia_id  [2] plan  [3] dueno_nombre  [4] nombre_barberia
-   [5] email  [6] telefono  [7] ciudad  [9] ciudad_full
-   [15] password_hash  [16] codigo_acceso  [17] activo
+   Columnas NuevaBarberia (A=0 … R=17):
+   A=0  barberia_id
+   B=1  fecha_registro
+   C=2  plan
+   D=3  estado            ← "activa"
+   E=4  nombre_barberia
+   F=5  slogan
+   G=6  dueno_nombre
+   H=7  dueno_email
+   I=8  dueno_telefono
+   J=9  ciudad
+   K=10 departamento
+   L=11 direccion
+   M=12 como_llegar
+   N=13 coordenadas
+   O=14 password_hash
+   P=15 token_activo
+   Q=16 codigo_acceso_cliente
+   R=17 codigo_activo
 ════════════════════════════════════════════ */
 async function handleIngresarDueno() {
   const nombreBarberia = document.getElementById('admin-sede').value.trim();
   const password       = document.getElementById('admin-password').value;
-
   if (!nombreBarberia || !password) {
-    toast("Ingresa el nombre de tu barbería y tu contraseña", "err");
-    return;
+    toast("Ingresa el nombre de tu barbería y contraseña", "err"); return;
   }
-
   setBtnLoading('btn-ingresar-submit', true, 'INGRESAR');
-
   try {
     const password_hash = await hashPassword(password);
-    const respuesta     = await leerBarberias();
+    const respuesta     = await gasGet({ accion: 'leerBarberias' });
     const filas         = respuesta.filas || [];
 
+    // Buscar por nombre_barberia (col E = índice 4)
     const fila = filas.slice(1).find(f =>
-      String(f[4] || '').toLowerCase().trim() === nombreBarberia.toLowerCase().trim()
+      String(f[4] || '').toLowerCase().trim() === nombreBarberia.toLowerCase()
     );
-
     if (!fila) {
       toast("No existe una barbería con ese nombre", "err");
-      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
-      return;
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR'); return;
     }
 
-    // f[14] = password_hash, f[3] = estado ("activa")
+    // Validar password_hash (col O = índice 14)
     const hashSheet  = String(fila[14] || '').toLowerCase().trim();
+    // Validar estado (col D = índice 3) = "activa"
     const estaActivo = String(fila[3] || '').toLowerCase().trim() === 'activa';
 
     if (hashSheet !== password_hash) {
       toast("Contraseña incorrecta", "err");
-      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
-      return;
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR'); return;
     }
-
     if (!estaActivo) {
-      toast("Esta barbería está inactiva", "err");
-      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
-      return;
+      toast("Esta barbería está inactiva o en período de prueba pendiente", "err");
+      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR'); return;
     }
 
+    // Guardar sesión con todos los campos que panel.html necesita
     guardarSesion({
-      barberia_id   : fila[0],
-      nombre        : fila[4],
-      dueno         : fila[6],
-      email         : fila[7],
-      telefono      : fila[8],
-      ciudad        : fila[9],
-      plan          : fila[2],
-      codigo_acceso : fila[16],
-      rol           : 'dueno'
+      barberia_id       : fila[0],   // A
+      plan              : fila[2],   // C
+      estado            : fila[3],   // D
+      nombre_barberia   : fila[4],   // E
+      nombre            : fila[4],
+      slogan            : fila[5],   // F
+      dueno_nombre      : fila[6],   // G
+      dueno_email       : fila[7],   // H
+      dueno_telefono    : fila[8],   // I
+      ciudad            : fila[9],   // J
+      departamento      : fila[10],  // K
+      direccion         : fila[11],  // L
+      como_llegar       : fila[12],  // M
+      coordenadas       : fila[13],  // N
+      codigo_acceso     : fila[16],  // Q
+      codigo_activo     : fila[17],  // R
+      rol               : 'dueno'
     });
 
     toast(`Bienvenido, ${fila[6] || fila[4]} ✓`);
     setTimeout(() => window.location.href = PANEL_URL, 1200);
 
   } catch (e) {
-    console.error("Error login dueño:", e);
-    toast("Error al verificar: " + e.message, "err");
+    toast("Error: " + e.message, "err");
     setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
   }
 }
+
 /* ════════════════════════════════════════════
-   HANDLE REGISTRAR BARBERÍA
-   → al completar regresa a pestaña INGRESAR
+   HANDLE REGISTRAR — envía a NuevaBarberia
+   Columnas A→R:
+   barberia_id, fecha_registro, plan, estado,
+   nombre_barberia, slogan, dueno_nombre, dueno_email,
+   dueno_telefono, ciudad, departamento, direccion,
+   como_llegar, coordenadas, password_hash,
+   token_activo, codigo_acceso_cliente, codigo_activo
 ════════════════════════════════════════════ */
 async function handleRegistrar() {
   const nombre   = document.getElementById('reg-nombre').value.trim();
@@ -726,51 +755,50 @@ async function handleRegistrar() {
   if (!nombre || !dueno || !ciudad || !email || !telefono || !password) {
     toast("Completa todos los campos", "err"); return;
   }
-  if (password.length < 8) {
-    toast("La contraseña debe tener mínimo 8 caracteres", "err"); return;
-  }
-  if (!email.includes('@')) {
-    toast("Correo no válido", "err"); return;
-  }
+  if (password.length < 8) { toast("Contraseña mínimo 8 caracteres", "err"); return; }
+  if (!email.includes('@')) { toast("Correo no válido", "err"); return; }
 
   setBtnLoading('btn-registrar-submit', true, 'CONFIRMAR REGISTRO');
 
   try {
-    const partes        = ciudad.split(',');
-    const ciudadLimpia  = sanitizar(partes[0] || ciudad);
-    const depto         = sanitizar(partes[1] || '');
+    const partes       = ciudad.split(',');
+    const ciudadLimpia = sanitizar(partes[0] || ciudad);
+    const depto        = sanitizar(partes[1] || '');
     const password_hash = await hashPassword(password);
 
-    const datosBarberia = {
-      nombre    : sanitizar(nombre),
-      dueno     : sanitizar(dueno),
-      email     : sanitizar(email),
-      telefono  : sanitizar(telefono),
-      ciudad    : ciudadLimpia,
+    // ★ Llamar al GAS con acción registrarBarberia — mapea A→R
+    const resultado = await gasPost({
+      accion        : 'registrarBarberia',
+      nombre        : sanitizar(nombre),
+      dueno         : sanitizar(dueno),
+      email         : sanitizar(email),
+      telefono      : sanitizar(telefono),
+      ciudad        : ciudadLimpia,
       depto,
       plan,
-      password_hash
-    };
+      password_hash,
+    });
 
-    const resultado = await registrarBarberiaAPI(datosBarberia);
+    if (resultado.error) throw new Error(resultado.error);
+
     const { barberia_id, codigo_acceso } = resultado;
 
     guardarSesion({
       barberia_id,
       nombre,
-      ciudad     : ciudadLimpia,
+      nombre_barberia : nombre,
+      ciudad          : ciudadLimpia,
       plan,
-      rol        : 'dueno',
-      codigo_acceso
+      rol             : 'dueno',
+      codigo_acceso,
     });
 
-    // Limpiar formulario
+    // Limpiar form
     ['reg-nombre','reg-dueno','reg-ciudad','reg-email','reg-telefono','reg-password'].forEach(id => {
       document.getElementById(id).value = '';
     });
     setBtnLoading('btn-registrar-submit', false, 'CONFIRMAR REGISTRO');
 
-    // Mostrar popup creativo
     mostrarPopupRegistro(nombre, codigo_acceso, () => {
       cambiarTabNombre('ingresar');
       document.getElementById('cliente-nombre-barberia').value = nombre;
@@ -779,7 +807,7 @@ async function handleRegistrar() {
 
   } catch (e) {
     console.error(e);
-    toast("Error al registrar. Intenta de nuevo.", "err");
+    toast("Error al registrar: " + e.message, "err");
     setBtnLoading('btn-registrar-submit', false, 'CONFIRMAR REGISTRO');
   }
 }
@@ -788,7 +816,6 @@ async function handleRegistrar() {
    POPUP REGISTRO EXITOSO
 ════════════════════════════════════════════ */
 function mostrarPopupRegistro(nombre, codigo, onCerrar) {
-  // Overlay
   const overlay = document.createElement('div');
   overlay.id = 'popup-overlay';
   overlay.style.cssText = `
@@ -797,7 +824,6 @@ function mostrarPopupRegistro(nombre, codigo, onCerrar) {
     background:rgba(5,3,1,0.88);
     animation:fadeInOverlay .3s ease both;
   `;
-
   overlay.innerHTML = `
     <style>
       @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
@@ -806,131 +832,61 @@ function mostrarPopupRegistro(nombre, codigo, onCerrar) {
       @keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
       #popup-card {
         position:relative;width:92%;max-width:360px;
-        background:#131313;
-        border:1px solid rgba(233,193,118,.35);
-        padding:0 0 28px;
-        animation:slideUp .4s cubic-bezier(.16,1,.3,1) both .1s;
-        overflow:hidden;
+        background:#131313;border:1px solid rgba(233,193,118,.35);
+        padding:0 0 24px;
+        animation:slideUp .4s cubic-bezier(.16,1,.3,1) both .1s;overflow:hidden;
       }
-      #popup-card::before {
-        content:'';position:absolute;top:0;left:0;right:0;height:2px;
-        background:linear-gradient(90deg,transparent,#e9c176,transparent);
-      }
-      .popup-header {
-        background:#0e0c08;
-        padding:22px 24px 18px;
-        border-bottom:1px solid rgba(79,69,53,.3);
-        display:flex;align-items:center;gap:14px;
-      }
-      .scissors-icon {
-        flex-shrink:0;width:42px;height:42px;
-        display:flex;align-items:center;justify-content:center;
-        animation:snip 2.4s ease-in-out infinite;
-      }
-      .popup-body { padding:24px 24px 0; }
-      .codigo-box {
-        background:#0e0c08;
-        border:1px solid rgba(233,193,118,.25);
-        padding:14px 16px;
-        display:flex;align-items:center;justify-content:space-between;
-        gap:10px;margin-top:18px;
-        position:relative;
-      }
-      .codigo-texto {
-        font-family:'Manrope',sans-serif;font-size:17px;
-        font-weight:700;letter-spacing:.18em;
-        color:#e9c176;flex:1;word-break:break-all;
-      }
-      .btn-copiar {
-        flex-shrink:0;padding:8px 14px;
-        background:transparent;border:1px solid rgba(233,193,118,.4);
-        color:#e9c176;font-family:'Manrope',sans-serif;
-        font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
-        cursor:pointer;transition:all .2s;white-space:nowrap;
-      }
+      #popup-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#e9c176,transparent); }
+      .popup-header { background:#0e0c08;padding:18px 20px 16px;border-bottom:1px solid rgba(79,69,53,.3);display:flex;align-items:center;gap:12px; }
+      .scissors-icon { flex-shrink:0;width:38px;height:38px;display:flex;align-items:center;justify-content:center;animation:snip 2.4s ease-in-out infinite; }
+      .popup-body { padding:20px 20px 0; }
+      .codigo-box { background:#0e0c08;border:1px solid rgba(233,193,118,.25);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;position:relative; }
+      .codigo-texto { font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;letter-spacing:.16em;color:#e9c176;flex:1;word-break:break-all; }
+      .btn-copiar { flex-shrink:0;padding:7px 12px;background:transparent;border:1px solid rgba(233,193,118,.4);color:#e9c176;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap; }
       .btn-copiar:hover { background:rgba(233,193,118,.1); }
       .btn-copiar.copiado { background:#e9c176;color:#412d00;border-color:#e9c176; }
-      .popup-aviso {
-        margin-top:12px;
-        font-family:'Manrope',sans-serif;font-size:10px;
-        color:rgba(156,143,123,.55);letter-spacing:.04em;line-height:1.6;
-        display:flex;align-items:flex-start;gap:6px;
-      }
-      .btn-ingresar-popup {
-        width:calc(100% - 48px);margin:20px 24px 0;
-        padding:16px;background:#e9c176;border:none;
-        color:#412d00;font-family:'Manrope',sans-serif;
-        font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;
-        cursor:pointer;transition:filter .2s;display:block;
-      }
+      .popup-aviso { margin-top:10px;font-family:'Manrope',sans-serif;font-size:9.5px;color:rgba(156,143,123,.5);letter-spacing:.03em;line-height:1.6;display:flex;align-items:flex-start;gap:5px; }
+      .btn-ingresar-popup { width:calc(100% - 40px);margin:18px 20px 0;padding:14px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:filter .2s;display:block; }
       .btn-ingresar-popup:hover { filter:brightness(1.1); }
-      .sparkle {
-        position:absolute;width:5px;height:5px;border-radius:50%;background:#e9c176;
-        animation:sparkle 1.8s ease-in-out infinite;
-      }
+      .sparkle { position:absolute;width:5px;height:5px;border-radius:50%;background:#e9c176;animation:sparkle 1.8s ease-in-out infinite; }
     </style>
-
     <div id="popup-card">
-
-      <!-- Destellos decorativos -->
-      <div class="sparkle" style="top:18px;right:28px;animation-delay:.2s;"></div>
-      <div class="sparkle" style="top:34px;right:54px;width:3px;height:3px;animation-delay:.7s;opacity:.5;"></div>
-      <div class="sparkle" style="top:12px;right:44px;width:4px;height:4px;animation-delay:1.1s;"></div>
-
-      <!-- Header con tijera -->
+      <div class="sparkle" style="top:16px;right:26px;animation-delay:.2s;"></div>
+      <div class="sparkle" style="top:30px;right:50px;width:3px;height:3px;animation-delay:.7s;opacity:.5;"></div>
       <div class="popup-header">
         <div class="scissors-icon">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
             <circle cx="10" cy="10" r="5.5" stroke="#e9c176" stroke-width="1.4" fill="none"/>
             <circle cx="10" cy="26" r="5.5" stroke="#e9c176" stroke-width="1.4" fill="none"/>
             <circle cx="10" cy="10" r="1.8" fill="#e9c176"/>
             <circle cx="10" cy="26" r="1.8" fill="#e9c176"/>
             <line x1="14.2" y1="12.8" x2="32" y2="4" stroke="#e9c176" stroke-width="1.4" stroke-linecap="round"/>
             <line x1="14.2" y1="23.2" x2="32" y2="32" stroke="#e9c176" stroke-width="1.4" stroke-linecap="round"/>
-            <line x1="20" y1="18" x2="32" y2="18" stroke="rgba(233,193,118,.2)" stroke-width="1" stroke-dasharray="2 3"/>
           </svg>
         </div>
         <div>
-          <p style="font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:rgba(156,143,123,.55);margin:0 0 4px;">Registro completado</p>
-          <h2 style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin:0;font-weight:400;line-height:1.2;">${escHtml(nombre)}</h2>
+          <p style="font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(156,143,123,.5);margin:0 0 3px;">Registro completado</p>
+          <h2 style="font-family:'Noto Serif',serif;font-size:17px;color:#e5e2e1;margin:0;font-weight:400;line-height:1.2;">${escHtml(nombre)}</h2>
         </div>
       </div>
-
-      <!-- Body -->
       <div class="popup-body">
-        <p style="font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9c8f7b;margin:0 0 4px;">Tu código de acceso</p>
-        <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:12px;color:rgba(211,196,175,.6);margin:0;line-height:1.6;">
-          Compártelo con tus clientes para que ingresen a tu barbería.
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin:0 0 3px;">Tu código de acceso</p>
+        <p style="font-family:'Noto Serif',serif;font-style:italic;font-size:11px;color:rgba(211,196,175,.55);margin:0;line-height:1.6;">
+          Compártelo con tus clientes para que ingresen.
         </p>
-
         <div class="codigo-box">
-          <span class="codigo-texto" id="codigo-display">${escHtml(codigo || '—')}</span>
-          <button class="btn-copiar" id="btn-copiar-codigo" onclick="copiarCodigo('${escHtml(codigo || '')}')">
-            Copiar
-          </button>
+          <span class="codigo-texto">${escHtml(codigo || '—')}</span>
+          <button class="btn-copiar" id="btn-copiar-codigo" onclick="copiarCodigo('${escHtml(codigo || '')}')">Copiar</button>
         </div>
-
         <div class="popup-aviso">
-          <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.4);flex-shrink:0;margin-top:1px;">info</span>
-          <span>Guarda este código en un lugar seguro. Lo necesitarás para que tus clientes accedan.</span>
+          <span class="material-symbols-outlined" style="font-size:12px;color:rgba(233,193,118,.35);flex-shrink:0;margin-top:1px;">info</span>
+          <span>Guarda este código. Lo necesitarás para que tus clientes accedan.</span>
         </div>
       </div>
-
-      <button class="btn-ingresar-popup" onclick="cerrarPopupYContinuar()">
-        Ir a Ingresar →
-      </button>
-
-    </div>
-  `;
-
+      <button class="btn-ingresar-popup" onclick="cerrarPopupYContinuar()">Ir a Ingresar →</button>
+    </div>`;
   document.body.appendChild(overlay);
-
-  // Cerrar al hacer clic en el overlay (fuera de la card)
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) cerrarPopupYContinuar();
-  });
-
-  // Guardar callback
+  overlay.addEventListener('click', e => { if (e.target === overlay) cerrarPopupYContinuar(); });
   window._popupOnCerrar = onCerrar;
 }
 
@@ -943,40 +899,25 @@ function copiarCodigo(codigo) {
   navigator.clipboard.writeText(codigo).then(() => {
     const btn = document.getElementById('btn-copiar-codigo');
     if (!btn) return;
-    btn.textContent = '¡Copiado!';
-    btn.classList.add('copiado');
-    setTimeout(() => {
-      btn.textContent = 'Copiar';
-      btn.classList.remove('copiado');
-    }, 2200);
+    btn.textContent = '¡Copiado!'; btn.classList.add('copiado');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copiado'); }, 2200);
   }).catch(() => {
-    // fallback
     const el = document.createElement('textarea');
-    el.value = codigo;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+    el.value = codigo; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
     const btn = document.getElementById('btn-copiar-codigo');
     if (btn) { btn.textContent = '¡Copiado!'; btn.classList.add('copiado'); }
-    setTimeout(() => {
-      const b = document.getElementById('btn-copiar-codigo');
-      if (b) { b.textContent = 'Copiar'; b.classList.remove('copiado'); }
-    }, 2200);
+    setTimeout(() => { const b = document.getElementById('btn-copiar-codigo'); if (b) { b.textContent = 'Copiar'; b.classList.remove('copiado'); }}, 2200);
   });
 }
 
 function cerrarPopupYContinuar() {
   const overlay = document.getElementById('popup-overlay');
   if (overlay) {
-    overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity .25s';
+    overlay.style.opacity = '0'; overlay.style.transition = 'opacity .25s';
     setTimeout(() => {
       overlay.remove();
-      if (typeof window._popupOnCerrar === 'function') {
-        window._popupOnCerrar();
-        window._popupOnCerrar = null;
-      }
+      if (typeof window._popupOnCerrar === 'function') { window._popupOnCerrar(); window._popupOnCerrar = null; }
     }, 250);
   }
 }

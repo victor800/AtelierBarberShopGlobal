@@ -530,7 +530,7 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 /* ══════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx7CbapDgNpBAOWjUF_f6z7XU60JIEnVXLDNFW89s8yjmrnpO4c8XdUsNNaa9PzIyxU/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbye7-Al_Q7G4JGGCzc2RyovFpCA8WoQsv-KK0IU-IZIqiYotXAPpXoK83Zwqkpvm2R8/exec";
 
 const params = new URLSearchParams(location.search);
 const BAR_ID = (function() {
@@ -678,24 +678,42 @@ async function cargarDesdeSheet() {
         rawFecha = epoch.toISOString().split('T')[0];
       }
 
-      let rawHora = String(c.hora || '').trim();
-      if (rawHora.includes('T')) {
-        try {
-          const hd = new Date(rawHora);
-          const totalMin = hd.getUTCHours() * 60 + hd.getUTCMinutes();
-          const intervalo = 30;
-          const redondeado = Math.round(totalMin / intervalo) * intervalo;
-          const hh = String(Math.floor(redondeado / 60)).padStart(2, '0');
-          const mm = String(redondeado % 60).padStart(2, '0');
-          rawHora = hh + ':' + mm;
-        } catch(e) {
-          const tPart = rawHora.split('T')[1] || '';
-          rawHora = tPart.slice(0, 5);
-        }
-      } else {
-        rawHora = rawHora.slice(0, 5);
-        if (/^\d:\d{2}$/.test(rawHora)) rawHora = '0' + rawHora;
-      }
+      let rawHora = (function parseHora(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+
+  // Caso 1: ISO timestamp "...T10:00:00..."
+  if (s.includes('T')) {
+    try {
+      const d = new Date(s);
+      // GAS convierte la hora local a UTC sumando el offset — revertimos con getHours() local
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
+  }
+
+  // Caso 2: decimal Excel (0.4166... = 10:00)
+   const num = parseFloat(s);
+  if (!isNaN(num) && num > 0 && num < 1) {
+    const totalMinBruto = Math.round(num * 24 * 60);
+    const offsetMin = new Date().getTimezoneOffset(); // +300 en Colombia
+    const corregido = totalMinBruto + offsetMin;
+    const intervalo = 30;
+    const redondeado = Math.round(corregido / intervalo) * intervalo;
+    const hh = ((Math.floor(redondeado / 60)) % 24 + 24) % 24;
+    const mm = redondeado % 60;
+    return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+  }
+
+  // Caso 3: "10:00:00" o "10:00"
+  if (/^\d{1,2}:\d{2}/.test(s)) {
+    const part = s.slice(0,5);
+    return part.length === 4 ? '0' + part : part;
+  }
+
+  return s.slice(0,5);
+})(c.hora);
+
+console.log('[HORA RAW]', JSON.stringify(c.hora), '→', rawHora, '| fecha:', rawFecha);
 
       return { ...c, _fecha: rawFecha, _hora: rawHora };
     });
@@ -1025,13 +1043,14 @@ function selFecha(fecha, fechaStr, diaKey, horario, hesp, celda) {
 ══════════════════════════════════════════════════════ */
 function horasBloqueadas(fechaStr) {
   const bloqueadas = new Set();
+  console.log('[BLOQUEO] Buscando fecha:', fechaStr, '| Citas disponibles:', citas.map(c => c._fecha + ' ' + c._hora + ' estado:' + c.estado));
   citas
     .filter(c => c._fecha === fechaStr && c.estado !== 'cancelada')
     .forEach(c => {
-      if (/^\d{2}:\d{2}$/.test(c._hora)) bloqueadas.add(c._hora);
+      const h = String(c._hora || '').trim().slice(0,5);
+      if (/^\d{2}:\d{2}$/.test(h)) bloqueadas.add(h);
     });
-  if (bloqueadas.size > 0)
-    console.log('[Atelier] Horas bloqueadas para ' + fechaStr + ':', [...bloqueadas]);
+  console.log('[BLOQUEO] Resultado para', fechaStr, ':', [...bloqueadas]);
   return bloqueadas;
 }
 
@@ -1053,8 +1072,23 @@ function renderSlots(h, hesp, fecha, fechaStr) {
     return;
   }
 
-  let hiStr = ((h && h.hora_inicio) || '08:00').toString().slice(0,5);
-  let hfStr = ((h && h.hora_fin)    || '20:00').toString().slice(0,5);
+  function extractHHMM(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return null;
+  if (s.includes('T')) {
+    try {
+      const d = new Date(s);
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
+  }
+  if (/^\d{1,2}:\d{2}/.test(s)) {
+    const p = s.slice(0,5);
+    return p.length === 4 ? '0' + p : p;
+  }
+  return null;
+}
+let hiStr = extractHHMM(h && h.hora_inicio) || '08:00';
+let hfStr = extractHHMM(h && h.hora_fin)    || '20:00';
   if (hesp && hesp.tipo !== 'cierre' && hesp.hora_inicio && hesp.hora_fin) {
     hiStr = hesp.hora_inicio.toString().slice(0,5);
     hfStr = hesp.hora_fin.toString().slice(0,5);
@@ -1259,6 +1293,7 @@ async function confirmarCita() {
     citas.push({
       barberia_id: BAR_ID,
       _fecha: fechaISO,
+      
       _hora : horaFinal,
       estado: 'pendiente',
     });

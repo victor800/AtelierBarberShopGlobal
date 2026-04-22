@@ -61,6 +61,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .pb-basic{color:#9c8f7b;border-color:rgba(156,143,123,.28);background:rgba(156,143,123,.06)}
 .pb-pro{color:#e9c176;border-color:rgba(233,193,118,.35);background:rgba(233,193,118,.08)}
 .pb-elite{color:#d4af7a;border-color:rgba(212,175,122,.4);background:rgba(212,175,122,.1)}
+.pb-prueba{color:#7ecfa8;border-color:rgba(126,207,168,.35);background:rgba(126,207,168,.07)}
 .time-inp{background:#161412;border:1px solid rgba(79,69,53,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:11px;padding:5px 7px;width:70px;outline:none;text-align:center}
 .time-inp::-webkit-calendar-picker-indicator{filter:invert(.3) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer}
 .int-sel{background:#161412;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;padding:5px 6px;outline:none;cursor:pointer;-webkit-appearance:none}
@@ -68,15 +69,13 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .sec-lbl{font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.55);margin-bottom:3px}
 .carousel-wrap{position:relative;overflow:hidden;width:100%}
 .carousel-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
-.carousel-track .c-slide{flex:0 0 calc(70% - 5px);min-width:0}
+.carousel-track .c-slide{flex:0 0 calc(50% - 5px);min-width:0}
 .car-btn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s}
 .car-btn:disabled{opacity:.2;cursor:not-allowed}
 .car-btn.prev{left:4px}.car-btn.next{right:4px}
 .car-dots{display:flex;justify-content:center;gap:5px;margin-top:8px}
 .car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.4);cursor:pointer;transition:background .2s}
 .car-dot.on{background:#e9c176}
-
-/* ══ CORTE 3D CARD ══ */
 .corte-3d-scene{perspective:900px;aspect-ratio:4/3;position:relative;cursor:grab;user-select:none;-webkit-user-select:none}
 .corte-3d-scene:active{cursor:grabbing}
 .corte-3d-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .06s linear;will-change:transform}
@@ -86,23 +85,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .corte-face-back{background:#0e0c09;transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid rgba(233,193,118,.12)}
 .corte-face img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .corte-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(8,6,4,.92));padding:10px 8px 8px;pointer-events:none}
-
-
-/* controles inline dentro de la imagen */
 .corte-3d-ctrl{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all}
 .ctrl-btn-3d{background:transparent;border:none;color:#e9c176;cursor:pointer;display:flex;align-items:center;padding:2px 5px;transition:opacity .2s;font-size:13px}
 .ctrl-btn-3d:hover{opacity:.7}
 .ctrl-sep{width:1px;height:14px;background:rgba(233,193,118,.2)}
 .rot-deg{font-size:8px;letter-spacing:.14em;color:#9c8f7b;min-width:30px;text-align:center}
-
-/* badge destacado */
 .corte-dest-badge{position:absolute;top:6px;left:6px;background:#e9c176;padding:2px 7px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00;z-index:5;pointer-events:none}
-/* hint de giro inicial */
 .corte-3d-hint{position:absolute;top:8px;right:8px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(8,6,4,.72);border:1px solid rgba(233,193,118,.2);padding:3px 7px;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(233,193,118,.7);pointer-events:none;animation:hintFade 3s ease forwards 1.2s}
 @keyframes hintFade{0%{opacity:1}80%{opacity:1}100%{opacity:0}}
-/* delete btn */
 .corte-del-btn{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(8,6,4,.8);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:10}
-/* dorso info */
 .dorso-label{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(233,193,118,.4);margin-bottom:4px}
 .dorso-name{font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;text-align:center;line-height:1.3}
 .dorso-estilo{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin-top:6px}
@@ -111,12 +102,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .preview-sep{border-top:1px solid rgba(79,69,53,.18);margin:14px 0 12px;padding-top:14px}
 .preview-lbl{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.5);display:flex;align-items:center;gap:6px;margin-bottom:10px}
 .preview-lbl::before{content:'';flex:1;height:1px;background:rgba(79,69,53,.2)}
-/* Horarios especiales cards */
 .hesp-card{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22);margin-bottom:8px}
 .hesp-tipo-c{font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:2px 7px;border:1px solid}
 .ht-cierre{color:#e97676;border-color:rgba(233,118,118,.3);background:rgba(233,118,118,.07)}
 .ht-tarde{color:#e9c176;border-color:rgba(233,193,118,.3);background:rgba(233,193,118,.07)}
 .ht-especial{color:#7ecfa8;border-color:rgba(126,207,168,.3);background:rgba(126,207,168,.07)}
+.chip-nueva{display:inline-flex;align-items:center;gap:5px;background:rgba(126,207,168,.08);border:1px solid rgba(126,207,168,.3);color:#7ecfa8;font-size:8px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;margin-bottom:14px}
+/* ★ WhatsApp button inline */
+.btn-wa{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);color:#25d366;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;padding:4px 9px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.btn-wa:hover{background:rgba(37,211,102,.22);border-color:rgba(37,211,102,.6)}
 #toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);padding:10px 20px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;z-index:9998;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.on{opacity:1}#toast.err{background:#7a0008;color:#ffb4ab}
 #ov{position:fixed;inset:0;background:rgba(5,3,1,.9);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -127,6 +121,9 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .nav-i.on,.nav-i:hover{color:#e9c176}
 .nav-i p{font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
 @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skel{background:linear-gradient(90deg,#1c1b1b 25%,#2a2825 50%,#1c1b1b 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:2px;height:40px;width:100%}
+@keyframes pinPulse{0%{box-shadow:0 0 0 0 rgba(233,193,118,.5)}70%{box-shadow:0 0 0 12px rgba(233,193,118,0)}100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}}
 </style>
 </head>
 <body>
@@ -137,7 +134,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <circle cx="16" cy="16" r="12" stroke="rgba(233,193,118,.15)" stroke-width="3"/>
     <path d="M16 4 A12 12 0 0 1 28 16" stroke="#e9c176" stroke-width="3" stroke-linecap="round"/>
   </svg>
-  <p id="ov-msg" style="font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#e9c176">Guardando...</p>
+  <p id="ov-msg" style="font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#e9c176">Cargando...</p>
 </div>
 
 <!-- HEADER FIJO -->
@@ -169,9 +166,9 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
   <div style="display:flex;border-bottom:1px solid rgba(79,69,53,.13);padding:0 2px;overflow-x:auto;scrollbar-width:none">
     <button class="tab-btn on" id="tb-datos"    onclick="goTab(this,'t-datos')">Perfil</button>
     <button class="tab-btn"   id="tb-horarios" onclick="goTab(this,'t-horarios')">Horarios</button>
-    <button class="tab-btn"   id="tb-citas"    onclick="goTab(this,'t-citas')">Citas</button>
-    <button class="tab-btn"   id="tb-tienda"   onclick="goTab(this,'t-tienda')">Tienda</button>
-    <button class="tab-btn"   id="tb-cortes"   onclick="goTab(this,'t-cortes')">Cortes</button>
+    <button class="tab-btn" id="tb-citas" onclick="goTab(this,'t-citas')" style="position:relative">Citas<span id="badge-citas" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
+    <button class="tab-btn" id="tb-tienda" onclick="goTab(this,'t-tienda')" style="position:relative">Tienda<span id="badge-tienda" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
+    <button class="tab-btn" id="tb-cortes" onclick="goTab(this,'t-cortes')" style="position:relative">Cortes<span id="badge-cortes" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
   </div>
 </header>
 
@@ -179,6 +176,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
 <!-- ══════════════════════════ PERFIL ══════════════════════════ -->
 <div id="t-datos" class="tc on" style="padding:18px;gap:14px">
+
+  <div id="banner-nueva" style="display:none;background:rgba(126,207,168,.06);border:1px solid rgba(126,207,168,.25);padding:12px 14px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <span class="material-symbols-outlined" style="font-size:16px;color:#7ecfa8">auto_awesome</span>
+      <p style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7ecfa8;font-weight:700">Barbería nueva — perfil precargado</p>
+    </div>
+    <p style="font-size:11px;color:#9c8f7b;line-height:1.6">Hemos llenado los campos con los datos de tu registro. Revisa, agrega fotos y guarda para publicar tu perfil.</p>
+  </div>
+
   <div>
     <label class="lbl">Foto del local / negocio</label>
     <div class="fu" id="fu-local" style="width:100%;aspect-ratio:16/6">
@@ -192,86 +198,118 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
     <div class="upbar" id="upbar-local"><div class="upfill" id="upfill-local"></div></div>
   </div>
+
   <div><label class="lbl">Nombre de la barbería *</label><input class="inp" id="f-nombre" type="text" placeholder="The Atelier" oninput="syncHeader()"/></div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
     <div><label class="lbl">Ciudad *</label><input class="inp" id="f-ciudad" type="text" placeholder="Medellín"/></div>
     <div><label class="lbl">Departamento</label><input class="inp" id="f-depto" type="text" placeholder="Antioquia"/></div>
   </div>
   <div><label class="lbl">Dirección *</label><input class="inp" id="f-dir" type="text" placeholder="Calle 72 # 44-30"/></div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
     <div><label class="lbl">Teléfono / WhatsApp *</label><input class="inp" id="f-tel" type="tel" placeholder="+57 300 000 0000"/></div>
     <div><label class="lbl">Correo</label><input class="inp" id="f-email" type="email" placeholder="hola@barberia.com"/></div>
   </div>
   <div><label class="lbl">Propietario / Master Barber *</label><input class="inp" id="f-dueno" type="text" placeholder="Tu nombre completo"/></div>
+
   <div>
     <label class="lbl">Enlace Google Maps</label>
     <input class="inp" id="f-maps" type="url" placeholder="https://maps.google.com/..." oninput="updateMap()"/>
-    <div style="margin-top:6px;width:100%;height:130px;background:#161412;border:1px solid rgba(79,69,53,.2);position:relative;overflow:hidden">
-      <div id="map-ph" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+    <div style="margin-top:6px;width:100%;height:160px;background:#161412;border:1px solid rgba(79,69,53,.2);position:relative;overflow:hidden">
+      <div id="map-ph" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
         <span style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#2e2b27">Pega enlace de Maps</span>
       </div>
-      <iframe id="map-if" src="" width="100%" height="130" style="border:0;display:none;position:absolute;top:0;left:0" allowfullscreen loading="lazy"></iframe>
+      <div id="map-pin-wrap" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:4">
+        <div id="map-pin" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);display:flex;flex-direction:column;align-items:center;gap:0">
+          <div style="width:36px;height:36px;background:#e9c176;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;animation:pinPulse 1.4s ease-in-out infinite;box-shadow:0 0 0 0 rgba(233,193,118,.5)">
+            <span class="material-symbols-outlined" style="transform:rotate(45deg);font-size:18px;color:#412d00">content_cut</span>
+          </div>
+          <div style="width:2px;height:14px;background:#e9c176;margin-top:-1px;opacity:.7"></div>
+        </div>
+      </div>
+      <iframe id="map-if" src="" width="100%" height="160" style="border:0;display:none;position:absolute;top:0;left:0" allowfullscreen loading="lazy"></iframe>
+      <div id="map-btns" style="position:absolute;bottom:6px;right:6px;z-index:5;gap:5px;flex-direction:row;display:none">
+        <button id="btn-open-maps" onclick="abrirMapaFullscreen()" style="background:rgba(8,6,4,.88);border:1px solid rgba(233,193,118,.35);color:#e9c176;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;backdrop-filter:blur(6px)">
+          <span class="material-symbols-outlined" style="font-size:12px">open_in_new</span>Abrir
+        </button>
+      </div>
     </div>
-  </div>
- <div>
-  <label class="lbl">Plan</label>
-  <button type="button" id="btn-open-plan" onclick="abrirModalPlan()"
-    style="width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;
-    font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;text-align:left;
-    cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-    <span id="plan-btn-txt">Pro — $89.000/mes</span>
-    <span class="material-symbols-outlined" style="font-size:16px;color:#9c8f7b">expand_more</span>
-  </button>
-  <input type="hidden" id="f-plan" value="Pro"/>
-</div>
 
-<!-- MODAL PLAN -->
-<div id="modal-plan" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.92);backdrop-filter:blur(12px);align-items:flex-end;justify-content:center">
-  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;transform:translateY(0);animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
-    <p style="font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.45);text-align:center;margin-bottom:20px">Elige tu plan</p>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
-      <div class="plan-opt" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlan(this)"
-        style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:4px">Básico</p>
-            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1">$50.000<span style="font-size:11px;color:#9c8f7b">/mes</span></p>
-          </div>
-          <div style="text-align:right">
-            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Perfil · Citas<br>Horarios básicos</p>
-          </div>
+    <div id="map-fullscreen" style="display:none;position:fixed;inset:0;z-index:99999;background:#080604;flex-direction:column">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(8,6,4,.96);border-bottom:1px solid rgba(79,69,53,.2);flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="material-symbols-outlined" style="font-size:16px;color:#e9c176">location_on</span>
+          <p style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176" id="map-fs-titulo">Ubicación</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="irARuta()" style="background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;padding:7px 13px;cursor:pointer;display:flex;align-items:center;gap:5px">
+            <span class="material-symbols-outlined" style="font-size:12px">directions</span>Ruta
+          </button>
+          <button onclick="cerrarMapaFullscreen()" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:5px">
+            <span class="material-symbols-outlined" style="font-size:12px">close</span>Salir
+          </button>
         </div>
       </div>
-      <div class="plan-opt" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlan(this)"
-        style="padding:16px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.4);cursor:pointer;position:relative">
-        <div style="position:absolute;top:-1px;right:12px;background:#e9c176;padding:2px 9px;font-size:7px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#412d00">Popular</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#e9c176;margin-bottom:4px">Pro</p>
-            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e9c176">$89.000<span style="font-size:11px;color:rgba(233,193,118,.6)">/mes</span></p>
-          </div>
-          <div style="text-align:right">
-            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Básico +<br>Tienda · Cortes · Fotos</p>
-          </div>
-        </div>
-      </div>
-      <div class="plan-opt" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlan(this)"
-        style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#d4af7a;margin-bottom:4px">Élite</p>
-            <p style="font-family:'Noto Serif',serif;font-size:22px;color:#d4af7a">$149.000<span style="font-size:11px;color:rgba(212,175,122,.5)">/mes</span></p>
-          </div>
-          <div style="text-align:right">
-            <p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Pro +<br>Analytics · Prioridad</p>
-          </div>
-        </div>
-      </div>
+      <iframe id="map-fs-if" src="" style="flex:1;border:0;width:100%" allowfullscreen loading="lazy"></iframe>
     </div>
-    <button onclick="cerrarModalPlan()" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
   </div>
-</div>
- 
+
+  <div>
+    <label class="lbl">Plan</label>
+    <button type="button" id="btn-open-plan" onclick="abrirModalPlan()"
+      style="width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;
+      font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;text-align:left;
+      cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+      <span id="plan-btn-txt">Pro — $89.000/mes</span>
+      <span class="material-symbols-outlined" style="font-size:16px;color:#9c8f7b">expand_more</span>
+    </button>
+    <input type="hidden" id="f-plan" value="Pro"/>
+  </div>
+
+  <!-- MODAL PLAN -->
+  <div id="modal-plan" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.92);backdrop-filter:blur(12px);align-items:flex-end;justify-content:center">
+    <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;transform:translateY(0);animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+      <p style="font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.45);text-align:center;margin-bottom:20px">Elige tu plan</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div class="plan-opt" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlan(this)"
+          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:4px">Básico</p>
+              <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1">$50.000<span style="font-size:11px;color:#9c8f7b">/mes</span></p></div>
+            <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Perfil · Citas<br>Horarios básicos</p></div>
+          </div>
+        </div>
+        <div class="plan-opt" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlan(this)"
+          style="padding:16px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.4);cursor:pointer;position:relative">
+          <div style="position:absolute;top:-1px;right:12px;background:#e9c176;padding:2px 9px;font-size:7px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#412d00">Popular</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#e9c176;margin-bottom:4px">Pro</p>
+              <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e9c176">$89.000<span style="font-size:11px;color:rgba(233,193,118,.6)">/mes</span></p></div>
+            <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Básico +<br>Tienda · Cortes · Fotos</p></div>
+          </div>
+        </div>
+        <div class="plan-opt" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlan(this)"
+          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#d4af7a;margin-bottom:4px">Élite</p>
+              <p style="font-family:'Noto Serif',serif;font-size:22px;color:#d4af7a">$149.000<span style="font-size:11px;color:rgba(212,175,122,.5)">/mes</span></p></div>
+            <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Pro +<br>Analytics · Prioridad</p></div>
+          </div>
+        </div>
+        <div class="plan-opt" data-val="Prueba" data-txt="Prueba gratuita — 15 días" onclick="selPlan(this)"
+          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7ecfa8;margin-bottom:4px">Prueba</p>
+              <p style="font-family:'Noto Serif',serif;font-size:22px;color:#7ecfa8">Gratis<span style="font-size:11px;color:rgba(126,207,168,.5)"> 15 días</span></p></div>
+            <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todas las funciones<br>sin compromiso</p></div>
+          </div>
+        </div>
+      </div>
+      <button onclick="cerrarModalPlan()" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
+    </div>
+  </div>
+
   <div>
     <div style="display:flex;justify-content:space-between;margin-bottom:5px">
       <span style="font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b">Perfil completado</span>
@@ -285,20 +323,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 </div>
 
 <!-- ══════════════════════════ HORARIOS ══════════════════════════ -->
-<!-- FIX: Un solo div#t-horarios (el original tenía dos anidados) -->
 <div id="t-horarios" class="tc" style="padding:18px;gap:0">
-
-  <!-- HORARIOS ESPECIALES -->
   <p class="sec-lbl">Excepciones</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Horarios especiales</p>
   <p style="font-size:11px;color:#9c8f7b;margin-bottom:14px;line-height:1.65">Días en que abrirás tarde, cerrarás antes o no estarás disponible. Tus clientes lo verán al agendar.</p>
-
   <div style="background:#161412;border:1px solid rgba(233,193,118,.18);padding:14px;margin-bottom:14px">
     <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:#e9c176;margin-bottom:14px">+ Agregar excepción</p>
     <div style="display:flex;flex-direction:column;gap:10px">
       <div><label for="hesp-fecha" class="lbl">Fecha *</label><input type="date" id="hesp-fecha" class="inp" style="color:#e9c176"/></div>
-      <div>
-        <label for="hesp-tipo" class="lbl">Tipo *</label>
+      <div><label for="hesp-tipo" class="lbl">Tipo *</label>
         <select id="hesp-tipo" class="inp" onchange="toggleHespHoras()">
           <option value="cierre">🔴 Día cerrado — no disponible</option>
           <option value="tarde">🟡 Apertura tarde / cierre temprano</option>
@@ -312,24 +345,17 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       <div><label for="hesp-nota" class="lbl">Nota para el cliente</label><input class="inp" id="hesp-nota" type="text" placeholder="Ej: Feriado, evento privado, remodelación..."/></div>
     </div>
     <button class="btn-g" onclick="agregarHorarioEspecial()" style="width:100%;padding:13px;margin-top:14px">
-      <span class="material-symbols-outlined" style="font-size:14px" aria-hidden="true">event_busy</span>Guardar excepción
+      <span class="material-symbols-outlined" style="font-size:14px">event_busy</span>Guardar excepción
     </button>
   </div>
-
-  <!-- FIX: elementos #hesp-lista y #hesp-empty que renderHorariosEspeciales() necesita -->
   <div id="hesp-empty" style="display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:14px">
     <span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.12)">event_busy</span>
     <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin excepciones configuradas</p>
   </div>
   <div id="hesp-lista" style="margin-bottom:18px"></div>
-
-  <!-- HORARIO SEMANAL -->
   <p class="sec-lbl">Disponibilidad</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:8px;font-weight:400">Horario de trabajo</p>
   <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.65">Los días activos generan los slots que el cliente verá al agendar su cita.</p>
-  <div style="background:#161412;border:1px solid rgba(79,69,53,.15);padding:12px;margin-bottom:14px">
-   
-  </div>
   <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.18);padding:12px;margin-bottom:12px">
     <div style="display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:1px solid rgba(79,69,53,.1);margin-bottom:4px">
       <span style="width:28px"></span><span style="width:36px"></span>
@@ -356,26 +382,22 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
   <button class="btn-g" id="btn-hor" onclick="guardarHorarios()" style="width:100%;padding:15px">
     <span class="material-symbols-outlined" style="font-size:15px">event_available</span>Guardar Horario
   </button>
-</div><!-- fin #t-horarios -->
+</div>
 
 <!-- ══════════════════════════ CITAS ══════════════════════════ -->
 <div id="t-citas" class="tc" style="padding:18px;gap:0">
- <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
-  <p class="sec-lbl" style="margin-bottom:0">Agenda</p>
-  <button onclick="actualizarCitas()" id="btn-refresh"
-    style="display:flex;align-items:center;gap:5px;background:transparent;
-    border:1px solid rgba(233,193,118,.22);color:#e9c176;font-family:'Manrope',sans-serif;
-    font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
-    padding:5px 10px;transition:all .2s">
-    <span class="material-symbols-outlined" id="refresh-ico" style="font-size:14px">refresh</span>
-    Actualizar
-  </button>
-</div>
-<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:4px;font-weight:400">Mis Citas</p>
-<p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.6">
-  Actualización automática cada 2 min ·
-  <span id="ultima-actualizacion" style="color:rgba(233,193,118,.45)">—</span>
-</p>
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+    <p class="sec-lbl" style="margin-bottom:0">Agenda</p>
+    <button onclick="actualizarCitas()" id="btn-refresh"
+      style="display:flex;align-items:center;gap:5px;background:transparent;border:1px solid rgba(233,193,118,.22);color:#e9c176;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;padding:5px 10px;transition:all .2s">
+      <span class="material-symbols-outlined" id="refresh-ico" style="font-size:14px">refresh</span>Actualizar
+    </button>
+  </div>
+  <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:4px;font-weight:400">Mis Citas</p>
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.6">
+    Actualización automática cada 2 min ·
+    <span id="ultima-actualizacion" style="color:rgba(233,193,118,.45)">—</span>
+  </p>
   <div style="display:flex;gap:6px;margin-bottom:16px">
     <button id="fc-todas" onclick="filtrarCitas('todas',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;font-weight:700">Todas</button>
     <button id="fc-pend"  onclick="filtrarCitas('pendiente',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer">Pendientes</button>
@@ -399,12 +421,12 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════ TIENDA ══════════════════════════ -->
 <div id="t-tienda" class="tc" style="padding:18px;gap:0">
   <p class="sec-lbl" style="margin-bottom:3px">Catálogo</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Mi Tienda</p>
   <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.6">Los productos que publiques aparecen en la home del cliente.</p>
- 
-  <!-- ── CAROUSEL PRIMERO ── -->
   <div class="preview-sep" style="border-top:none;margin-top:0;padding-top:0">
     <div class="preview-lbl">Vista previa · publicados</div>
     <div id="prods-carousel-wrap" style="display:none">
@@ -428,13 +450,10 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin productos publicados aún</p>
     </div>
   </div>
- 
-  <!-- ── FORMULARIO NUEVO PRODUCTO ── -->
   <div style="background:#161412;border:1px solid rgba(233,193,118,.13);padding:16px;margin-top:4px;margin-bottom:18px">
     <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#e9c176;margin-bottom:14px">+ Nuevo producto</p>
     <div style="margin-bottom:12px">
       <label class="lbl">Foto del producto *</label>
-      <!-- zona clickeable sin input directo -->
       <div class="fu" id="fu-prod" style="width:100%;aspect-ratio:4/3" onclick="openPicker('prod')">
         <img id="img-prod" src="" alt=""/>
         <div class="ph">
@@ -472,14 +491,12 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </button>
   </div>
 </div>
- 
+
 <!-- ══════════════════════════ CORTES ══════════════════════════ -->
 <div id="t-cortes" class="tc" style="padding:18px;gap:0">
   <p class="sec-lbl" style="margin-bottom:3px">Portafolio</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Mis Cortes</p>
   <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.6">Las fotos de cortes que publiques aparecen en la home del cliente como tu portafolio.</p>
- 
-  <!-- ── CAROUSEL PRIMERO ── -->
   <div class="preview-sep" style="border-top:none;margin-top:0;padding-top:0">
     <div class="preview-lbl">Vista previa · publicados</div>
     <div id="cortes-carousel-wrap" style="display:none">
@@ -503,13 +520,10 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin cortes publicados aún</p>
     </div>
   </div>
- 
-  <!-- ── FORMULARIO NUEVO CORTE ── -->
   <div style="background:#161412;border:1px solid rgba(233,193,118,.13);padding:16px;margin-top:4px;margin-bottom:18px">
     <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#e9c176;margin-bottom:14px">+ Nuevo corte</p>
     <div style="margin-bottom:12px">
       <label class="lbl">Foto del corte *</label>
-      <!-- zona clickeable sin input directo -->
       <div class="fu" id="fu-corte" style="width:100%;aspect-ratio:4/3" onclick="openPicker('corte')">
         <img id="img-corte" src="" alt=""/>
         <div class="ph">
@@ -535,14 +549,13 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
         </div>
       </div>
       <div><label class="lbl">Descripción / tags</label><input class="inp" id="c-desc" type="text" placeholder="Piel, tijera, degradado suave..."/></div>
-<div><label class="lbl">Precio del servicio (COP)</label><input class="inp" id="c-precio" type="number" placeholder="45000" min="0"/></div>
+      <div><label class="lbl">Precio del servicio (COP)</label><input class="inp" id="c-precio" type="number" placeholder="45000" min="0"/></div>
     </div>
     <button class="btn-g" id="btn-corte" onclick="publicarCorte()" style="width:100%;padding:14px;margin-top:16px">
       <span class="material-symbols-outlined" style="font-size:15px">content_cut</span>Publicar corte en portafolio
     </button>
   </div>
 </div>
- 
 
 </main>
 
@@ -569,74 +582,48 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 /* ══════════════════════════════════════
    CONFIG
 ══════════════════════════════════════ */
-/* ══ CONFIG — sin sessionStorage, todo desde Sheet ══ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx7CbapDgNpBAOWjUF_f6z7XU60JIEnVXLDNFW89s8yjmrnpO4c8XdUsNNaa9PzIyxU/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbye7-Al_Q7G4JGGCzc2RyovFpCA8WoQsv-KK0IU-IZIqiYotXAPpXoK83Zwqkpvm2R8/exec";
 
-// BAR_ID: primero busca en URL (?bar=BAR-XXX), si no usa DEMO
-const _urlBar  = new URLSearchParams(location.search).get('bar');
+const _urlBar    = new URLSearchParams(location.search).get('bar');
 const _storedSes = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
-const BAR_ID   = _urlBar || _storedSes.barberia_id || "BAR-DEMO";
-const BAR_ID2  = _storedSes.barbero_id || "barbero-1";
-const sesion   = { barberia_id: BAR_ID, barbero_id: BAR_ID2 };
-let horariosEspeciales = [];
-const imgs = { avatar_url:'', avatar_file:null, local_url:'', local_file:null,
-               prod_url:'', prod_file:null, corte_url:'', corte_file:null };
+const BAR_ID     = _urlBar || _storedSes.barberia_id || "BAR-DEMO";
+const BAR_ID2    = _storedSes.barbero_id || "barbero-1";
+const sesion     = { barberia_id: BAR_ID, barbero_id: BAR_ID2, ..._storedSes };
 
+let horariosEspeciales = [];
+const imgs = {
+  avatar_url:'', avatar_file:null,
+  local_url:'',  local_file:null,
+  prod_url:'',   prod_file:null,
+  corte_url:'',  corte_file:null
+};
 let productos = [];
 let cortes    = [];
 
-/* ══ OPEN PICKER CON MODAL CÁMARA / GALERÍA ══ */
+/* ══ OPEN PICKER ══ */
 function openPicker(tipo) {
-  // Crear modal si no existe
   let modal = document.getElementById('_pick-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = '_pick-modal';
-    modal.style.cssText = `
-      position:fixed;inset:0;z-index:99999;
-      background:rgba(5,3,1,.88);backdrop-filter:blur(10px);
-      display:flex;align-items:flex-end;justify-content:center;
-      opacity:0;transition:opacity .22s;pointer-events:none`;
+    modal.style.cssText = `position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.88);backdrop-filter:blur(10px);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .22s;pointer-events:none`;
     modal.innerHTML = `
-      <div id="_pick-sheet" style="
-        width:100%;max-width:480px;
-        background:#111009;border-top:1px solid rgba(233,193,118,.18);
-        padding:20px 18px 34px;
-        transform:translateY(30px);transition:transform .28s cubic-bezier(.22,1,.36,1)">
-        <p style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;
-          color:rgba(233,193,118,.4);text-align:center;margin-bottom:18px">
-          Subir foto
-        </p>
+      <div id="_pick-sheet" style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.18);padding:20px 18px 34px;transform:translateY(30px);transition:transform .28s cubic-bezier(.22,1,.36,1)">
+        <p style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(233,193,118,.4);text-align:center;margin-bottom:18px">Subir foto</p>
         <div style="display:flex;gap:10px;margin-bottom:12px">
-          <button id="_pick-cam" style="
-            flex:1;padding:16px 10px;background:#1c1b1b;
-            border:1px solid rgba(233,193,118,.2);color:#e9c176;
-            font-family:'Manrope',sans-serif;cursor:pointer;
-            display:flex;flex-direction:column;align-items:center;gap:8px">
+          <button id="_pick-cam" style="flex:1;padding:16px 10px;background:#1c1b1b;border:1px solid rgba(233,193,118,.2);color:#e9c176;font-family:'Manrope',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
             <span class="material-symbols-outlined" style="font-size:26px">photo_camera</span>
             <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600">Cámara</span>
           </button>
-          <button id="_pick-gal" style="
-            flex:1;padding:16px 10px;background:#1c1b1b;
-            border:1px solid rgba(233,193,118,.2);color:#e9c176;
-            font-family:'Manrope',sans-serif;cursor:pointer;
-            display:flex;flex-direction:column;align-items:center;gap:8px">
+          <button id="_pick-gal" style="flex:1;padding:16px 10px;background:#1c1b1b;border:1px solid rgba(233,193,118,.2);color:#e9c176;font-family:'Manrope',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
             <span class="material-symbols-outlined" style="font-size:26px">photo_library</span>
             <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600">Galería</span>
           </button>
         </div>
-        <button id="_pick-cancel" style="
-          width:100%;padding:12px;background:transparent;
-          border:1px solid rgba(79,69,53,.25);color:#9c8f7b;
-          font-family:'Manrope',sans-serif;font-size:9px;
-          letter-spacing:.22em;text-transform:uppercase;cursor:pointer">
-          Cancelar
-        </button>
+        <button id="_pick-cancel" style="width:100%;padding:12px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
       </div>`;
     document.body.appendChild(modal);
   }
-
-  // Función para lanzar el input real
   function launchInput(capture) {
     closePModal();
     let inp = document.getElementById('_fp_' + tipo + (capture ? '_cam' : '_gal'));
@@ -647,42 +634,33 @@ function openPicker(tipo) {
       if (capture) inp.setAttribute('capture', 'environment');
       inp.style.cssText = 'position:fixed;top:-9999px;opacity:0;pointer-events:none';
       inp.onchange = () => {
-        if (tipo === 'prod')  onFotoProd(inp);
-        else                  onFotoCorte(inp);
+        if (tipo === 'prod') onFotoProd(inp);
+        else                 onFotoCorte(inp);
         inp.value = '';
       };
       document.body.appendChild(inp);
     }
-    inp.value = '';
-    inp.click();
+    inp.value = ''; inp.click();
   }
-
   function closePModal() {
     modal.style.opacity = '0';
     document.getElementById('_pick-sheet').style.transform = 'translateY(30px)';
     setTimeout(() => { modal.style.pointerEvents = 'none'; }, 240);
   }
-
-  // Eventos botones (reasignar cada vez para que tipo sea correcto)
   document.getElementById('_pick-cam').onclick    = () => launchInput(true);
   document.getElementById('_pick-gal').onclick    = () => launchInput(false);
   document.getElementById('_pick-cancel').onclick = closePModal;
   modal.onclick = e => { if (e.target === modal) closePModal(); };
-
-  // Mostrar modal
   modal.style.pointerEvents = 'all';
   modal.style.opacity = '1';
   document.getElementById('_pick-sheet').style.transform = 'translateY(0)';
 }
-/* ══════════════════════════════════════
-   ★ HELPER: normalizar URL de Drive
-══════════════════════════════════════ */
+
+/* ══ DRIVE URL ══ */
 function normDriveUrl(url) {
   if (!url || url.startsWith('data:')) return url;
-  if (url.includes('lh3.googleusercontent.com')) return url; // ya lista, no tocar
-  
-  // Extraer ID limpio — sin el =s600 al final
-  const m = url.match(/[?&]id=([^&=\s]+)/);
+  if (url.includes('lh3.googleusercontent.com')) return url;
+  const m  = url.match(/[?&]id=([^&=\s]+)/);
   const m2 = url.match(/\/d\/([^/?&=]+)/);
   const id = (m && m[1]) || (m2 && m2[1]);
   if (id) return "https://lh3.googleusercontent.com/d/" + id + "=s600";
@@ -694,13 +672,10 @@ function abrirLupaCorte(imgUrl, nombre) {
   if (!lupa) {
     lupa = document.createElement('div');
     lupa.id = '_lupa-modal';
-    lupa.style.cssText = `position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.96);
-      backdrop-filter:blur(16px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px`;
+    lupa.style.cssText = `position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.96);backdrop-filter:blur(16px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px`;
     lupa.innerHTML = `
       <div style="position:relative;width:100%;max-width:480px">
-        <button id="_lupa-close" style="position:absolute;top:-14px;right:-14px;width:36px;height:36px;
-          background:#e9c176;border:none;color:#412d00;font-size:20px;cursor:pointer;
-          display:flex;align-items:center;justify-content:center;z-index:5;border-radius:50%">&times;</button>
+        <button id="_lupa-close" style="position:absolute;top:-14px;right:-14px;width:36px;height:36px;background:#e9c176;border:none;color:#412d00;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;border-radius:50%">&times;</button>
         <img id="_lupa-img" src="" style="width:100%;max-height:80dvh;object-fit:contain;display:block"/>
         <p id="_lupa-name" style="font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;text-align:center;margin-top:12px;letter-spacing:.06em"></p>
       </div>`;
@@ -713,9 +688,7 @@ function abrirLupaCorte(imgUrl, nombre) {
   lupa.style.display = 'flex';
 }
 
-/* ══════════════════════════════════════
-   GAS HELPERS
-══════════════════════════════════════ */
+/* ══ GAS HELPERS ══ */
 async function gasGet(params) {
   const qs  = new URLSearchParams(params).toString();
   const res = await fetch(`${GAS_URL}?${qs}`);
@@ -723,17 +696,15 @@ async function gasGet(params) {
   const txt = await res.text();
   try { return JSON.parse(txt); } catch { return {}; }
 }
-
 async function gasPost(payload) {
   const res = await fetch(GAS_URL, {
-    method : 'POST',
-    redirect: 'follow',
-    body   : JSON.stringify(payload),
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    method:'POST', redirect:'follow',
+    body:JSON.stringify(payload),
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const txt = await res.text();
-  try { return JSON.parse(txt); } catch { return { ok: true }; }
+  try { return JSON.parse(txt); } catch { return { ok:true }; }
 }
 
 /* ══ SUBIR IMAGEN A DRIVE ══ */
@@ -742,67 +713,40 @@ async function subirImagenDrive(file, tipo, barId, upBarId, upFillId) {
   const fill = document.getElementById(upFillId);
   if (bar)  bar.classList.add('on');
   if (fill) fill.style.width = '10%';
-
   try {
     const base64 = await comprimirBase64File(file, 600, 0.62);
     if (fill) fill.style.width = '35%';
-
-    console.log(`[Atelier] Enviando imagen al GAS: tipo=${tipo}, size=${Math.round(base64.length/1024)}KB`);
-
     const res = await fetch(GAS_URL, {
-      method : 'POST',
-      redirect: 'follow',
-      body   : JSON.stringify({
-        accion     : 'subirImagen',
-        barberia_id: barId || BAR_ID,
-        tipo,
-        imagen     : base64,
-      }),
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      method:'POST', redirect:'follow',
+      body:JSON.stringify({ accion:'subirImagen', barberia_id:barId||BAR_ID, tipo, imagen:base64 }),
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
     });
-
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const txt = await res.text();
-    console.log(`[Atelier] Respuesta GAS:`, txt.slice(0, 200));
-
-    let json;
-    try { json = JSON.parse(txt); }
-    catch { throw new Error('Respuesta no es JSON: ' + txt.slice(0,100)); }
-
+    const txt  = await res.text();
+    const json = JSON.parse(txt);
     if (fill) fill.style.width = '100%';
     setTimeout(() => { if (bar) bar.classList.remove('on'); }, 900);
-
-    if (!json.ok || !json.url) {
-      throw new Error(json.error || 'GAS no retornó URL — revisa los permisos de Drive');
-    }
-    console.log(`[Atelier] ✓ URL recibida:`, json.url);
+    if (!json.ok || !json.url) throw new Error(json.error || 'GAS no retornó URL');
     return normDriveUrl(json.url);
-
   } catch(e) {
-    if (bar) bar.classList.remove('on');
+    if (bar)  bar.classList.remove('on');
     if (fill) fill.style.width = '0';
-    console.error(`[Atelier] ✗ Error subiendo imagen:`, e.message);
     throw e;
   }
 }
-
 function comprimirBase64File(file, maxW, q) {
   return new Promise((res, rej) => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        // ★ FIX: límite más agresivo para que el POST no falle
-        const MAX = Math.min(maxW, 600);
+        const MAX    = Math.min(maxW, 600);
         const scale  = Math.min(1, MAX / Math.max(img.width, img.height));
         const canvas = document.createElement('canvas');
-        canvas.width  = Math.round(img.width  * scale);
+        canvas.width  = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        const base64 = canvas.toDataURL('image/jpeg', 0.62);
-        // Log para debug — ver cuánto pesa
-        console.log(`[Atelier] Imagen comprimida: ${Math.round(base64.length/1024)}KB`);
-        res(base64);
+        res(canvas.toDataURL('image/jpeg', 0.62));
       };
       img.onerror = () => rej(new Error('img load error'));
       img.src = e.target.result;
@@ -814,26 +758,29 @@ function comprimirBase64File(file, maxW, q) {
 
 /* ══ HEADER ══ */
 function initHeader() {
-  const nombre = sesion.nombre || sesion.nombre_barberia || sesion.barberia_id || 'THE ATELIER';
+  const nombre = sesion.nombre_barberia || sesion.nombre || sesion.barberia_id || '—';
   document.getElementById('hdr-nombre').textContent = nombre;
   if (imgs.avatar_url) mostrarAvatar(imgs.avatar_url);
   syncPlanBadge();
-  if (sesion.codigo_acceso) document.getElementById('codigo-display').textContent = sesion.codigo_acceso;
+  if (sesion.codigo_acceso || sesion.codigo_acceso_cliente) {
+    document.getElementById('codigo-display').textContent =
+      sesion.codigo_acceso || sesion.codigo_acceso_cliente;
+  }
 }
-
 function syncHeader() {
-  const v = document.getElementById('f-nombre').value.trim() || 'THE ATELIER';
+  const v = document.getElementById('f-nombre').value.trim() || '—';
   document.getElementById('hdr-nombre').textContent = v;
 }
-
 function syncPlanBadge() {
   const plan = document.getElementById('f-plan')?.value || sesion.plan || 'Pro';
   const b    = document.getElementById('plan-badge');
   b.textContent = plan.toUpperCase();
   const p = plan.toLowerCase();
-  b.className = 'pbadge ' + (p.includes('lite') ? 'pb-elite' : p.includes('pro') ? 'pb-pro' : 'pb-basic');
+  b.className = 'pbadge ' +
+    (p.includes('lite') ? 'pb-elite' :
+     p.includes('pro')  ? 'pb-pro'   :
+     p.includes('prue') ? 'pb-prueba': 'pb-basic');
 }
-
 function mostrarAvatar(url) {
   if (!url) return;
   const img  = document.getElementById('av-img');
@@ -843,6 +790,16 @@ function mostrarAvatar(url) {
   img.classList.add('on');
   img.onerror = () => { if (img.src !== url) img.src = url; };
   if (icon) icon.style.display = 'none';
+}
+
+/* ══ HELPERS DE PRELLENADO ══ */
+function prellenarInputs(map) {
+  Object.entries(map).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el && val !== undefined && val !== null && String(val).trim() !== '') {
+      el.value = String(val).trim();
+    }
+  });
 }
 
 /* ══ UPLOAD HANDLERS ══ */
@@ -899,13 +856,55 @@ function goTabByName(id) {
 
 /* ══ MAPA ══ */
 function updateMap() {
-  const val = document.getElementById('f-maps').value.trim();
-  const ifr = document.getElementById('map-if');
-  const ph  = document.getElementById('map-ph');
-  if (!val) { ifr.style.display='none'; ph.style.display='flex'; return; }
+  const val  = document.getElementById('f-maps').value.trim();
+  const ifr  = document.getElementById('map-if');
+  const ph   = document.getElementById('map-ph');
+  const pin  = document.getElementById('map-pin-wrap');
+  const btns = document.getElementById('map-btns');
+  if (!val) {
+    ifr.style.display='none'; ph.style.display='flex';
+    if(pin)  pin.style.display='none';
+    if(btns) btns.style.display='none';
+    return;
+  }
   let src = val;
-  if (!val.includes('maps/embed')) src = `https://maps.google.com/maps?q=${encodeURIComponent(val)}&output=embed&hl=es`;
-  ifr.src = src; ifr.style.display='block'; ph.style.display='none';
+  if (val.includes('maps.app.goo.gl') || val.includes('goo.gl/maps')) {
+    src = `https://maps.google.com/maps?q=${encodeURIComponent(val)}&output=embed&hl=es`;
+  } else if (val.includes('google.com/maps') && !val.includes('embed')) {
+    const qMatch = val.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (qMatch) {
+      src = `https://www.google.com/maps?q=${qMatch[1]},${qMatch[2]}&output=embed&hl=es`;
+    } else {
+      src = `https://maps.google.com/maps?q=${encodeURIComponent(val)}&output=embed&hl=es`;
+    }
+  } else if (!val.includes('embed')) {
+    src = `https://maps.google.com/maps?q=${encodeURIComponent(val)}&output=embed&hl=es`;
+  }
+  ph.style.display='none';
+  ifr.style.cssText='border:0;position:absolute;top:0;left:0;width:100%;height:100%;display:block;z-index:2';
+  if(pin)  { pin.style.display='block'; pin.style.zIndex='3'; }
+  if(btns) { btns.style.display='flex'; btns.style.zIndex='5'; }
+  const tit = document.getElementById('map-fs-titulo');
+  if(tit) tit.textContent = document.getElementById('f-nombre')?.value?.trim() || 'Ubicación';
+  window._lastMapSrc = src;
+  window._lastMapUrl = val;
+  if (ifr.src !== src) ifr.src = src;
+}
+function abrirMapaFullscreen() {
+  const fs = document.getElementById('map-fullscreen');
+  const fi = document.getElementById('map-fs-if');
+  if(!fs||!fi) return;
+  fi.src = window._lastMapSrc || '';
+  fs.style.display='flex';
+}
+function cerrarMapaFullscreen() {
+  const fs = document.getElementById('map-fullscreen');
+  if(fs) fs.style.display='none';
+}
+function irARuta() {
+  const url = window._lastMapUrl || '';
+  if(!url) return;
+  window.open(url, '_blank');
 }
 
 /* ══ PROGRESO ══ */
@@ -932,43 +931,30 @@ async function guardarPerfil() {
   const btn = document.getElementById('btn-perfil');
   btn.disabled = true;
 
-  // Subir avatar si hay archivo nuevo seleccionado
   if (imgs.avatar_file) {
     toast('Subiendo foto de perfil a Drive...');
     try {
-      const urlNueva = await subirImagenDrive(
-        imgs.avatar_file, 'perfil_barbero', BAR_ID,
-        'upbar-local', 'upfill-local'   // reutiliza la barra visible
-      );
-      imgs.avatar_url  = urlNueva;   // ← guardar ANTES de limpiar el file
+      imgs.avatar_url  = await subirImagenDrive(imgs.avatar_file, 'perfil_barbero', BAR_ID, 'upbar-local', 'upfill-local');
       imgs.avatar_file = null;
       mostrarAvatar(imgs.avatar_url);
       toast('✓ Foto de perfil subida');
     } catch(e) {
       toast('⚠ Foto no subida — se guarda sin imagen', true);
       imgs.avatar_file = null;
-      // imgs.avatar_url queda como estaba (la anterior, si existía)
     }
   }
-
-  // Subir foto del local si hay archivo nuevo
   if (imgs.local_file) {
     toast('Subiendo foto del local a Drive...');
     try {
-      const urlNueva = await subirImagenDrive(
-        imgs.local_file, 'perfil_local', BAR_ID,
-        'upbar-local', 'upfill-local'
-      );
-      imgs.local_url  = urlNueva;    // ← guardar ANTES de limpiar
+      imgs.local_url  = await subirImagenDrive(imgs.local_file, 'perfil_local', BAR_ID, 'upbar-local', 'upfill-local');
       imgs.local_file = null;
       toast('✓ Foto del local subida');
     } catch(e) {
-      toast('⚠ Foto local no subida — continuando sin imagen', true);
+      toast('⚠ Foto local no subida', true);
       imgs.local_file = null;
     }
   }
 
-  // ★ FIX: leer sesión guardada como respaldo si imgs.xxx_url está vacío
   const fotoBarb  = imgs.avatar_url || sesion.foto_barbero_url || '';
   const fotoLocal = imgs.local_url  || sesion.foto_local_url   || '';
 
@@ -983,9 +969,9 @@ async function guardarPerfil() {
     direccion          : d,
     telefono           : t,
     email              : document.getElementById('f-email').value.trim(),
-    redes_sociales     : document.getElementById('f-redes').value.trim(),
-    foto_barbero_url   : fotoBarb,   // ← nunca llega vacío si ya había una
-    foto_local_url     : fotoLocal,  // ← ídem
+    redes_sociales     : '',
+    foto_barbero_url   : fotoBarb,
+    foto_local_url     : fotoLocal,
     maps_url           : document.getElementById('f-maps').value.trim(),
     plan               : document.getElementById('f-plan').value,
     activo             : true,
@@ -996,43 +982,21 @@ async function guardarPerfil() {
     const json = await gasPost(datos);
     hideOv();
     if (json.error) throw new Error(json.error);
-
-    // Actualizar imgs con lo que confirmó el servidor
-    if (json.foto_barbero_url) {
-      imgs.avatar_url = normDriveUrl(json.foto_barbero_url);
-      mostrarAvatar(imgs.avatar_url);
-    }
-    if (json.foto_local_url) {
+    if (json.foto_barbero_url) { imgs.avatar_url = normDriveUrl(json.foto_barbero_url); mostrarAvatar(imgs.avatar_url); }
+    if (json.foto_local_url)   {
       imgs.local_url = normDriveUrl(json.foto_local_url);
       document.getElementById('img-local').src = imgs.local_url;
       document.getElementById('fu-local').classList.add('loaded');
     }
-
-    // Persistir en sesión para sobrevivir recarga de tab
     Object.assign(sesion, {
-      nombre           : datos.nombre_barberia,
-      nombre_barberia  : datos.nombre_barberia,
-      dueno            : datos.nombre_dueno,
-      ciudad           : datos.ciudad,
-      depto            : datos.departamento,
-      direccion        : datos.direccion,
-      telefono         : datos.telefono,
-      email            : datos.email,
-      redes            : datos.redes_sociales,
-      foto_barbero_url : imgs.avatar_url,
-      foto_local_url   : imgs.local_url,
-      maps_url         : datos.maps_url,
-      plan             : datos.plan,
+      nombre:datos.nombre_barberia, nombre_barberia:datos.nombre_barberia,
+      dueno:datos.nombre_dueno, ciudad:datos.ciudad, depto:datos.departamento,
+      direccion:datos.direccion, telefono:datos.telefono, email:datos.email,
+      foto_barbero_url:imgs.avatar_url, foto_local_url:imgs.local_url,
+      maps_url:datos.maps_url, plan:datos.plan,
     });
-   // Dentro de guardarPerfil, reemplaza el sessionStorage.setItem por:
-Object.assign(sesion, {
-  nombre:datos.nombre_barberia, nombre_barberia:datos.nombre_barberia,
-  dueno:datos.nombre_dueno, ciudad:datos.ciudad, depto:datos.departamento,
-  direccion:datos.direccion, telefono:datos.telefono, email:datos.email,
-  redes:datos.redes_sociales, foto_barbero_url:imgs.avatar_url,
-  foto_local_url:imgs.local_url, maps_url:datos.maps_url, plan:datos.plan,
-});
-// ← sin sessionStorage.setItem
+    syncHeader();
+    document.getElementById('banner-nueva').style.display = 'none';
     toast('✓ Perfil guardado');
   } catch(e) {
     hideOv();
@@ -1048,7 +1012,6 @@ function toggleHespHoras() {
   const w = document.getElementById('hesp-horas-wrap');
   w.style.display = t === 'cierre' ? 'none' : 'grid';
 }
-
 function agregarHorarioEspecial() {
   const fecha = document.getElementById('hesp-fecha').value;
   const tipo  = document.getElementById('hesp-tipo').value;
@@ -1056,78 +1019,58 @@ function agregarHorarioEspecial() {
   const hi    = document.getElementById('hesp-hi').value;
   const hf    = document.getElementById('hesp-hf').value;
   if (!fecha) return toast('Selecciona la fecha', true);
-
-  const item = {
-    id         : 'HE-' + Date.now(),
-    fecha, tipo, nota,
-    hora_inicio: tipo !== 'cierre' ? hi : '',
-    hora_fin   : tipo !== 'cierre' ? hf : '',
-  };
+  const item = { id:'HE-'+Date.now(), fecha, tipo, nota, hora_inicio:tipo!=='cierre'?hi:'', hora_fin:tipo!=='cierre'?hf:'' };
   horariosEspeciales.push(item);
   renderHorariosEspeciales();
-
   document.getElementById('hesp-fecha').value = '';
   document.getElementById('hesp-nota').value  = '';
   document.getElementById('hesp-tipo').value  = 'cierre';
   toggleHespHoras();
-
   gasPost({ accion:'agregarHorarioEspecial', barberia_id:BAR_ID, ...item }).catch(() => {});
   toast('✓ Excepción guardada');
 }
-
 function eliminarHorarioEspecial(id) {
   horariosEspeciales = horariosEspeciales.filter(h => h.id !== id);
   renderHorariosEspeciales();
   gasPost({ accion:'eliminarHorarioEspecial', barberia_id:BAR_ID, id }).catch(() => {});
   toast('Excepción eliminada');
 }
-
 function renderHorariosEspeciales() {
-  const lista  = document.getElementById('hesp-lista');
-  const empty  = document.getElementById('hesp-empty');
+  const lista = document.getElementById('hesp-lista');
+  const empty = document.getElementById('hesp-empty');
   lista.innerHTML = '';
-
-  if (!horariosEspeciales.length) {
-    empty.style.display = 'flex';
-    return;
-  }
+  if (!horariosEspeciales.length) { empty.style.display='flex'; return; }
   empty.style.display = 'none';
-
   const meta = {
-    cierre  : { cls:'ht-cierre',  ico:'event_busy', lbl:'Cerrado'          },
-    tarde   : { cls:'ht-tarde',   ico:'schedule',   lbl:'Horario especial' },
-    especial: { cls:'ht-especial',ico:'stars',       lbl:'Evento especial'  },
+    cierre:  { cls:'ht-cierre',   ico:'event_busy', lbl:'Cerrado'          },
+    tarde:   { cls:'ht-tarde',    ico:'schedule',   lbl:'Horario especial' },
+    especial:{ cls:'ht-especial', ico:'stars',      lbl:'Evento especial'  },
   };
-
-  [...horariosEspeciales]
-    .sort((a,b) => a.fecha.localeCompare(b.fecha))
-    .forEach(h => {
-      const m  = meta[h.tipo] || meta.tarde;
-      const [Y,M,D] = h.fecha.split('-');
-      const fd = `${D}/${M}/${Y}`;
-      const horas = h.tipo !== 'cierre' && h.hora_inicio
-        ? `<span style="font-size:10px;color:#9c8f7b;margin-top:3px;display:block">${h.hora_inicio} – ${h.hora_fin}</span>`
-        : '';
-
-      const card = document.createElement('div');
-      card.className = 'hesp-card';
-      card.innerHTML = `
-        <div style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0">
-          <span class="material-symbols-outlined" style="font-size:18px;color:rgba(233,193,118,.4);flex-shrink:0;margin-top:1px">${m.ico}</span>
-          <div style="min-width:0">
-            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
-              <span style="font-size:11px;font-weight:600;color:#e5e2e1">${fd}</span>
-              <span class="hesp-tipo-c ${m.cls}">${m.lbl}</span>
-            </div>
-            ${horas}
-            ${h.nota ? `<p style="font-size:10px;color:#9c8f7b;margin-top:4px;line-height:1.4;word-break:break-word">${h.nota}</p>` : ''}
+  [...horariosEspeciales].sort((a,b) => a.fecha.localeCompare(b.fecha)).forEach(h => {
+    const m  = meta[h.tipo] || meta.tarde;
+    const [Y,M,D] = h.fecha.split('-');
+    const fd = `${D}/${M}/${Y}`;
+    const horas = h.tipo !== 'cierre' && h.hora_inicio
+      ? `<span style="font-size:10px;color:#9c8f7b;margin-top:3px;display:block">${h.hora_inicio} – ${h.hora_fin}</span>` : '';
+    const card = document.createElement('div');
+    card.className = 'hesp-card';
+    card.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0">
+        <span class="material-symbols-outlined" style="font-size:18px;color:rgba(233,193,118,.4);flex-shrink:0;margin-top:1px">${m.ico}</span>
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="font-size:11px;font-weight:600;color:#e5e2e1">${fd}</span>
+            <span class="hesp-tipo-c ${m.cls}">${m.lbl}</span>
           </div>
+          ${horas}
+          ${h.nota ? `<p style="font-size:10px;color:#9c8f7b;margin-top:4px;line-height:1.4;word-break:break-word">${h.nota}</p>` : ''}
         </div>
-        <button class="btn-r" onclick="eliminarHorarioEspecial('${h.id}')">
-          <span class="material-symbols-outlined" style="font-size:13px">delete</span>
-        </button>`;
-      lista.appendChild(card);
-    });
+      </div>
+      <button class="btn-r" onclick="eliminarHorarioEspecial('${h.id}')">
+        <span class="material-symbols-outlined" style="font-size:13px">delete</span>
+      </button>`;
+    lista.appendChild(card);
+  });
 }
 
 /* ══ HORARIOS SEMANALES ══ */
@@ -1135,7 +1078,6 @@ const DIAS = [
   {k:'lunes',l:'Lun',on:true},{k:'martes',l:'Mar',on:true},{k:'miercoles',l:'Mié',on:true},
   {k:'jueves',l:'Jue',on:true},{k:'viernes',l:'Vie',on:true},{k:'sabado',l:'Sáb',on:true},{k:'domingo',l:'Dom',on:false},
 ];
-
 function buildHorarios() {
   const cont = document.getElementById('hor-rows');
   DIAS.forEach(d => {
@@ -1205,108 +1147,131 @@ async function guardarHorarios() {
     if(json.error) throw new Error(json.error);
     toast(`✓ Horarios guardados · ${activos} días activos`);
   } catch(e) { hideOv(); toast(`Error: ${e.message}`,true); }
+  gasPost({ accion:'guardarHorarioTrabajo', barberia_id:BAR_ID, barbero_id:BAR_ID2, dias:JSON.stringify(dias) }).catch(()=>{});
   btn.disabled=false;
 }
 
-/* ══ CITAS ══ */
-let todasCitas=[]; let filtroActivo='todas';
+/* ══════════════════════════════════════
+   CITAS — HORA
+   Sheets guarda la hora como serial de fecha 1899-12-30THH:MM:SSZ (UTC).
+   El serial numérico 0.xxx × 24 = hora real local (lo que el barbero ingresó).
+   NO se aplica offset de zona — se leen los minutos UTC directamente.
+══════════════════════════════════════ */
+let todasCitas=[];
+let filtroActivo='todas';
 
-function normFecha(raw) {
-  if (!raw) return '—';
-  let s = String(raw).trim();
-  if (s.includes('T')) {
-    try {
-      const d = new Date(s);
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      const [y, m, dia] = local.toISOString().split('T')[0].split('-');
-      return `${dia}/${m}/${y}`;
-    } catch(e) { return s.split('T')[0]; }
-  }
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) return s;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    const [y, m, d] = s.split('-');
-    return `${d}/${m}/${y}`;
-  }
-  return s;
-}
-
+/**
+ * Convierte el valor raw de la columna hora de Sheets.
+ *  - "1899-12-30T14:56:16.000Z"  →  14h 56m UTC  →  redondear a 15:00
+ *    PERO el barber agendó 10:00 en Colombia (UTC-5), lo que en Sheets
+ *    queda almacenado como fracción del día = 10/24 = 0.4167
+ *    → 0.4167 × 24 × 3600 = 36000 s → 10:00
+ *    En ISO: 1899-12-30T10:00:00Z  →  getUTCHours() = 10  ✓
+ *
+ *  Si Sheets devuelve "10:00" como string, lo usamos directamente.
+ */
 function normHora(raw) {
-  if (!raw) return '—';
+  if (raw === null || raw === undefined) return '—';
   const s = String(raw).trim();
+  if (!s || s === '—') return '—';
+
   if (s.includes('T')) {
     try {
       const d = new Date(s);
-      return String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
-    } catch(e) { return s.split('T')[1]?.slice(0,5) || '—'; }
+      console.log('[normHora] raw:', s, '| getUTCHours:', d.getUTCHours(), '| getHours (local):', d.getHours());
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
   }
+
   if (/^\d{1,2}:\d{2}/.test(s)) {
     const parts = s.slice(0,5);
     return parts.length === 4 ? '0' + parts : parts;
   }
+
   return s;
 }
- 
-/* ── Helper: formatear precio ── */
-function fmtCOP(n) {
-  const num = Number(n);
-  if (!num || isNaN(num)) return null;
-  return '$' + num.toLocaleString('es-CO');
+
+/**
+ * Convierte fecha raw de Sheets.
+ * Si viene como ISO "2026-04-22T..." toma solo la parte de fecha sin convertir.
+ */
+function normFecha(raw) {
+  if (raw === null || raw === undefined) return '—';
+  if (raw instanceof Date) {
+    return String(raw.getDate()).padStart(2,'0')+'/'+
+           String(raw.getMonth()+1).padStart(2,'0')+'/'+
+           raw.getFullYear();
+  }
+  let s = String(raw).trim();
+  if (!s || s === '—') return '—';
+  if (s.includes('T')) {
+    const datePart = s.split('T')[0];
+    if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+      const [y,m,d] = datePart.split('-');
+      return `${d}/${m}/${y}`;
+    }
+  }
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) return s;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) { const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+  return s;
 }
- 
-/* ══════════════════════════════════════════════════════════════
-   FUNCIÓN PRINCIPAL — reemplaza la que tienes
-══════════════════════════════════════════════════════════════ */
+
+function fmtCOP(n) {
+  const num=Number(n); if(!num||isNaN(num)) return null;
+  return '$'+num.toLocaleString('es-CO');
+}
+
+/* ★ Arma el mensaje de WhatsApp para una cita */
+function buildWAMsg(cita) {
+  const barb = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
+  const dir  = sesion.direccion || '';
+  return encodeURIComponent(
+    `✅ *Cita Confirmada — ${barb}*\n\n` +
+    `👤 *Cliente:* ${cita.nombre}\n` +
+    `✂️ *Servicio:* ${cita.servicio}\n` +
+    `📅 *Fecha:* ${normFecha(cita.fecha)}\n` +
+    `🕐 *Hora:* ${normHora(cita.hora)}\n` +
+    (Number(cita.precio) > 0 ? `💰 *Precio:* $${Number(cita.precio).toLocaleString('es-CO')}\n` : '') +
+    (dir ? `📍 *Dirección:* ${dir}\n` : '') +
+    `\nTe esperamos. ¡Hasta pronto! 💈`
+  );
+}
+
 function renderCitas(lista) {
   const cont  = document.getElementById('citas-list');
   const empty = document.getElementById('citas-empty');
   cont.innerHTML = '';
- 
-  if (!lista.length) {
-    empty.style.display = 'block';
-    return;
-  }
+  if (!lista.length) { empty.style.display='block'; return; }
   empty.style.display = 'none';
- 
-  // Ordenar: pendientes primero, luego por fecha desc
-  const orden = { pendiente: 0, confirmada: 1, cancelada: 2 };
-  const sorted = [...lista].sort((a, b) => {
-    const eo = (orden[a.estado] ?? 9) - (orden[b.estado] ?? 9);
-    if (eo !== 0) return eo;
-    return String(b.fecha || '').localeCompare(String(a.fecha || ''));
+
+  const orden = { pendiente:0, confirmada:1, cancelada:2 };
+  const sorted = [...lista].sort((a,b) => {
+    const eo=(orden[a.estado]??9)-(orden[b.estado]??9);
+    if(eo!==0) return eo;
+    return String(b.fecha||'').localeCompare(String(a.fecha||''));
   });
- 
+
   sorted.forEach(c => {
-    const est     = c.estado || 'pendiente';
-    const fechaFmt = normFecha(c.fecha);
-    const horaFmt  = normHora(c.hora);
-    const precio   = fmtCOP(c.precio);
-    const notas    = (c.notas || '').trim();
-    
-    const servicio = c.servicio_nombre || c.servicio || c.servicio_id || 'Corte';
-const cliente  = c.nombre || c.cliente || c.cliente_id || 'Cliente';         // ★
-const telefono = (c.telefono || c.tel || '').trim();                          // ★ ya existía abajo, se unifica
-const barbero  = c.barbero_id || c.barbero || '—';
-const citaId   = c.cita_id || c.reserva_id || '';
- 
-    // Colores y texto por estado
+    const est       = c.estado || 'pendiente';
+    const fechaFmt  = normFecha(c.fecha);
+    const horaFmt   = normHora(c.hora);
+    const precio    = fmtCOP(c.precio);
+    const notas     = (c.notas||'').trim();
+    const servicio  = c.servicio_nombre || c.servicio || c.servicio_id || 'Corte';
+    const cliente   = c.nombre || c.cliente || c.cliente_id || 'Cliente';
+    const telefono  = (c.telefono || c.tel || '').trim();
+    const barbero   = c.barbero_id || c.barbero || '—';
+    const citaId    = c.cita_id || c.reserva_id || '';
+
     const cfg = {
-      pendiente : { bg: 'rgba(233,193,118,.06)', border: 'rgba(233,193,118,.28)', dot: '#e9c176',   txt: '#e9c176',   label: 'Pendiente',  ico: 'schedule'       },
-      confirmada: { bg: 'rgba(74,222,128,.05)',  border: 'rgba(74,222,128,.28)',  dot: '#4ade80',   txt: '#4ade80',   label: 'Confirmada', ico: 'check_circle'   },
-      cancelada : { bg: 'rgba(147,0,10,.06)',    border: 'rgba(147,0,10,.22)',    dot: '#e97676',   txt: '#e97676',   label: 'Cancelada',  ico: 'cancel'         },
-    }[est] || { bg:'rgba(79,69,53,.06)', border:'rgba(79,69,53,.22)', dot:'#9c8f7b', txt:'#9c8f7b', label: est, ico:'info' };
- 
+      pendiente : { bg:'rgba(233,193,118,.06)', border:'rgba(233,193,118,.28)', dot:'#e9c176', txt:'#e9c176', label:'Pendiente', ico:'schedule' },
+      confirmada: { bg:'rgba(74,222,128,.05)',  border:'rgba(74,222,128,.28)',  dot:'#4ade80', txt:'#4ade80', label:'Confirmada',ico:'check_circle' },
+      cancelada : { bg:'rgba(147,0,10,.06)',    border:'rgba(147,0,10,.22)',    dot:'#e97676', txt:'#e97676', label:'Cancelada', ico:'cancel' },
+    }[est] || { bg:'rgba(79,69,53,.06)', border:'rgba(79,69,53,.22)', dot:'#9c8f7b', txt:'#9c8f7b', label:est, ico:'info' };
+
     const card = document.createElement('div');
-    card.style.cssText = `
-      background:${cfg.bg};
-      border:1px solid ${cfg.border};
-      border-left:3px solid ${cfg.dot};
-      padding:0;
-      overflow:hidden;
-      transition:border-color .2s;
-    `;
- 
-    // ── HEADER de la card ──
+    card.style.cssText = `background:${cfg.bg};border:1px solid ${cfg.border};border-left:3px solid ${cfg.dot};padding:0;overflow:hidden;`;
+
     const header = `
       <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 10px">
         <div style="flex:1;min-width:0">
@@ -1316,11 +1281,10 @@ const citaId   = c.cita_id || c.reserva_id || '';
               <span class="material-symbols-outlined" style="font-size:9px">${cfg.ico}</span>${cfg.label}
             </span>
           </div>
-          <p style="font-size:10px;color:#9c8f7b;letter-spacing:.06em">${servicio}${precio ? ' · <span style="color:#e9c176;font-weight:700">' + precio + '</span>' : ''}</p>
+          <p style="font-size:10px;color:#9c8f7b;letter-spacing:.06em">${servicio}${precio?' · <span style="color:#e9c176;font-weight:700">'+precio+'</span>':''}</p>
         </div>
       </div>`;
- 
-    // ── FILA fecha / hora ──
+
     const filaFechaHora = `
       <div style="display:flex;gap:0;border-top:1px solid rgba(79,69,53,.12);border-bottom:1px solid rgba(79,69,53,.12)">
         <div style="flex:1;display:flex;align-items:center;gap:7px;padding:9px 14px;border-right:1px solid rgba(79,69,53,.12)">
@@ -1332,68 +1296,66 @@ const citaId   = c.cita_id || c.reserva_id || '';
         </div>
         <div style="flex:1;display:flex;align-items:center;gap:7px;padding:9px 14px">
           <span class="material-symbols-outlined" style="font-size:14px;color:#e9c176;flex-shrink:0">schedule</span>
-          <div>
+          <div style="flex:1;min-width:0">
             <p style="font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin-bottom:1px">Hora</p>
             <p style="font-size:12px;color:#e5e2e1;font-weight:600">${horaFmt}</p>
           </div>
         </div>
       </div>`;
- 
-    // ── DETALLES extra ──
-    const detalles = `
+
+    /* ★ Fila teléfono: número + botón WA al frente */
+    const waMsg    = telefono ? buildWAMsg(c) : '';
+    const telLimpio = telefono.replace(/\D/g,'');
+    const filaDetalles = `
       <div style="padding:10px 14px;display:flex;flex-direction:column;gap:6px">
         ${telefono ? `
-<div style="display:flex;align-items:center;gap:7px">
-  <span class="material-symbols-outlined" style="font-size:13px;color:#9c8f7b;flex-shrink:0">phone</span>
-  <a href="https://wa.me/${telefono.replace(/\D/g,'')}" target="_blank"
-    style="font-size:11px;color:#e9c176;text-decoration:none;letter-spacing:.04em;font-weight:600">${telefono}</a>
-</div>` : ''}
+          <div style="display:flex;align-items:center;gap:7px">
+            <span class="material-symbols-outlined" style="font-size:13px;color:#9c8f7b;flex-shrink:0">phone</span>
+            <span style="font-size:11px;color:#e5e2e1;letter-spacing:.04em;font-weight:600;flex:1">${telefono}</span>
+            <a href="https://wa.me/${telLimpio}?text=${waMsg}" target="_blank" class="btn-wa">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.126 1.527 5.866L.057 23.927l6.263-1.644A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.358-.213-3.722.976.993-3.63-.233-.373A9.818 9.818 0 1112 21.818z"/></svg>
+              Notificar
+            </a>
+          </div>` : ''}
         <div style="display:flex;align-items:center;gap:7px">
           <span class="material-symbols-outlined" style="font-size:13px;color:#9c8f7b;flex-shrink:0">content_cut</span>
           <p style="font-size:11px;color:#9c8f7b">Barbero: <span style="color:#e5e2e1">${barbero}</span></p>
         </div>
         ${notas ? `
-        <div style="display:flex;align-items:flex-start;gap:7px;background:#161412;border:1px solid rgba(79,69,53,.2);padding:8px 10px;margin-top:2px">
-          <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.35);flex-shrink:0;margin-top:1px">sticky_note_2</span>
-          <p style="font-size:10px;color:#9c8f7b;line-height:1.5;word-break:break-word">${notas}</p>
-        </div>` : ''}
+          <div style="display:flex;align-items:flex-start;gap:7px;background:#161412;border:1px solid rgba(79,69,53,.2);padding:8px 10px;margin-top:2px">
+            <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.35);flex-shrink:0;margin-top:1px">sticky_note_2</span>
+            <p style="font-size:10px;color:#9c8f7b;line-height:1.5;word-break:break-word">${notas}</p>
+          </div>` : ''}
       </div>`;
- 
-    // ── ACCIONES ──
-    const acciones = est === 'pendiente' ? `
-      <div style="display:flex;gap:0;border-top:1px solid rgba(79,69,53,.14)">
-        <button onclick="accionCita('${citaId}','confirmada')"
-          style="flex:1;padding:12px 8px;background:#e9c176;border:none;border-right:1px solid rgba(79,69,53,.14);
-          color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;
-          text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px">
-          <span class="material-symbols-outlined" style="font-size:12px">check_circle</span>Confirmar
-        </button>
-        <button onclick="accionCita('${citaId}','cancelada')"
-          style="flex:1;padding:12px 8px;background:transparent;border:none;
-          color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;
-          text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px">
-          <span class="material-symbols-outlined" style="font-size:12px">cancel</span>Cancelar
-        </button>
-      </div>` : est === 'confirmada' ? `
-      <div style="padding:10px 14px;border-top:1px solid rgba(74,222,128,.1);display:flex;align-items:center;gap:6px">
-        <span class="material-symbols-outlined" style="font-size:13px;color:rgba(74,222,128,.5)">verified</span>
-        <p style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(74,222,128,.5)">Cita confirmada</p>
-        <button onclick="accionCita('${citaId}','cancelada')"
-          style="margin-left:auto;background:transparent;border:1px solid rgba(147,0,10,.25);color:#e97676;
-          font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;
-          cursor:pointer;padding:5px 10px">Cancelar</button>
-      </div>` : `
-      <div style="padding:10px 14px;border-top:1px solid rgba(147,0,10,.12);display:flex;align-items:center;gap:6px">
-        <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,118,118,.35)">cancel</span>
-        <p style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,118,118,.35)">Cancelada</p>
-      </div>`;
- 
-    card.innerHTML = header + filaFechaHora + detalles + acciones;
+
+    /* ★ Acciones: solo confirmar/cancelar — sin auto-abrir WhatsApp */
+    const acciones = est === 'pendiente'
+      ? `<div style="display:flex;gap:0;border-top:1px solid rgba(79,69,53,.14)">
+          <button onclick="accionCita('${citaId}','confirmada')" style="flex:1;padding:12px 8px;background:#e9c176;border:none;border-right:1px solid rgba(79,69,53,.14);color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px">
+            <span class="material-symbols-outlined" style="font-size:12px">check_circle</span>Confirmar
+          </button>
+          <button onclick="accionCita('${citaId}','cancelada')" style="flex:1;padding:12px 8px;background:transparent;border:none;color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px">
+            <span class="material-symbols-outlined" style="font-size:12px">cancel</span>Cancelar
+          </button>
+        </div>`
+      : est === 'confirmada'
+      ? `<div style="padding:10px 14px;border-top:1px solid rgba(74,222,128,.1);display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-outlined" style="font-size:13px;color:rgba(74,222,128,.5)">verified</span>
+          <p style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(74,222,128,.5)">Cita confirmada</p>
+          <button onclick="accionCita('${citaId}','cancelada')" style="margin-left:auto;background:transparent;border:1px solid rgba(147,0,10,.25);color:#e97676;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:5px 10px">Cancelar</button>
+        </div>`
+      : `<div style="padding:10px 14px;border-top:1px solid rgba(147,0,10,.12);display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,118,118,.35)">cancel</span>
+          <p style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,118,118,.35)">Cancelada</p>
+        </div>`;
+
+    card.innerHTML = header + filaFechaHora + filaDetalles + acciones;
     cont.appendChild(card);
   });
+  actualizarBadges();
 }
 
-function filtrarCitas(filtro,btn) {
+function filtrarCitas(filtro, btn) {
   filtroActivo=filtro;
   ['fc-todas','fc-pend','fc-conf'].forEach(id=>{
     const b=document.getElementById(id);
@@ -1403,88 +1365,67 @@ function filtrarCitas(filtro,btn) {
   renderCitas(filtro==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtro));
 }
 
+/* ★ accionCita — solo guarda en Sheet, NO abre WhatsApp */
 async function accionCita(id, estado) {
-  // Actualizar localmente de inmediato
-  todasCitas = todasCitas.map(c => c.cita_id === id ? {...c, estado} : c);
-  renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
-  toast(estado === 'confirmada' ? '✓ Cita confirmada' : 'Cita cancelada');
-  // Guardar en Sheet — usa acción actualizarEstadoCita que busca por reserva_id / cita_id
+  todasCitas = todasCitas.map(c => c.cita_id===id ? {...c, estado} : c);
+  renderCitas(filtroActivo==='todas' ? todasCitas : todasCitas.filter(c=>c.estado===filtroActivo));
+  toast(estado==='confirmada' ? '✓ Cita confirmada' : 'Cita cancelada');
+
   try {
-    const res = await gasPost({
-      accion      : 'actualizarEstadoCita',
-      reserva_id  : id,       // columna reserva_id en la hoja Reservas
-      cita_id     : id,       // por si el GAS usa cita_id
-      barberia_id : BAR_ID,
-      estado,
-    });
-    if (res.error) toast('GAS: ' + res.error, true);
+    const res = await gasPost({ accion:'actualizarEstadoCita', reserva_id:id, cita_id:id, barberia_id:BAR_ID, estado });
+    if (res.error) toast('GAS: '+res.error, true);
   } catch(e) {
     toast('No se pudo sincronizar con Sheet', true);
   }
 }
 
 function copiarCodigo() {
-  const cod=sesion.codigo_acceso||'';
-  if(!cod) return toast('Sin código registrado',true);
+  const cod = sesion.codigo_acceso || sesion.codigo_acceso_cliente || document.getElementById('codigo-display').textContent;
+  if (!cod || cod === '—') return toast('Sin código registrado', true);
   navigator.clipboard.writeText(cod).then(()=>toast('✓ Código copiado')).catch(()=>toast('No se pudo copiar',true));
 }
 
 let _refreshInterval = null;
-
-async function cargarCitas(silencioso = false) {
-  const ico = document.getElementById('refresh-ico');
-  const btn = document.getElementById('btn-refresh');
-  if (!silencioso) {
-    if (ico) ico.style.animation = 'rot 1s linear infinite';
-    if (btn) btn.style.opacity = '.5';
-  }
+async function cargarCitas(silencioso=false) {
+  const ico=document.getElementById('refresh-ico');
+  const btn=document.getElementById('btn-refresh');
+  if(!silencioso){ if(ico) ico.style.animation='rot 1s linear infinite'; if(btn) btn.style.opacity='.5'; }
   try {
-    const json = await gasGet({ accion: 'leerCitas', barberia_id: BAR_ID });
-    // Soporta citas[] o data[] o array directo
-    const raw = json.citas || json.data || (Array.isArray(json) ? json : []);
-    todasCitas = raw.map(c => ({
-      cita_id   : c.cita_id    || c.reserva_id || '',
-      barberia_id: c.barberia_id || BAR_ID,
-      nombre    : c.nombre     || c.cliente    || c.cliente_id || 'Cliente',
-      telefono  : c.telefono   || c.tel        || '',
-      barbero_id: c.barbero_id || c.barbero    || BAR_ID2,
-      servicio  : c.servicio_nombre || c.servicio || c.servicio_id || 'Corte',
-      fecha     : c.fecha      || '',
-      hora      : c.hora       || '',
-      duracion  : c.duracion_min || c.duracion || '',
-      estado    : c.estado     || 'pendiente',
-      precio    : c.precio     || c.servicio_precio || 0,
-      notas     : c.notas      || '',
-      _fechaDisplay: normFecha(c.fecha),
-      _horaDisplay : normHora(c.hora),
+    const json=await gasGet({ accion:'leerCitas', barberia_id:BAR_ID });
+    const raw=json.citas||json.data||(Array.isArray(json)?json:[]);
+    todasCitas = raw.map(c=>({
+      cita_id    : String(c.cita_id    || c.reserva_id || ''),
+      barberia_id: String(c.barberia_id|| BAR_ID),
+      nombre     : String(c.nombre     || c.cliente    || c.cliente_id || 'Cliente'),
+      telefono   : String(c.telefono   || c.tel        || ''),
+      barbero_id : String(c.barbero_id || c.barbero    || BAR_ID2),
+      servicio   : String(c.servicio_nombre || c.servicio || c.servicio_id || 'Corte'),
+      fecha      : c.fecha  || '',
+      hora       : c.hora   || '',
+      duracion   : c.duracion_min || c.duracion || '',
+      estado     : String(c.estado || 'pendiente'),
+      precio     : c.precio || c.servicio_precio || 0,
+      notas      : String(c.notas || ''),
     }));
-    renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
-    const ahora = new Date();
-    const el = document.getElementById('ultima-actualizacion');
-    if (el) el.textContent = `última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
-    if (!silencioso) toast('✓ ' + todasCitas.length + ' citas cargadas');
+    renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
+    const ahora=new Date();
+    const el=document.getElementById('ultima-actualizacion');
+    if(el) el.textContent=`última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    if(!silencioso) toast('✓ '+todasCitas.length+' citas cargadas');
   } catch(e) {
-    if (!silencioso) toast('Error cargando citas: ' + e.message, true);
+    if(!silencioso) toast('Error cargando citas: '+e.message,true);
     renderCitas([]);
   } finally {
-    if (ico) ico.style.animation = '';
-    if (btn) btn.style.opacity = '1';
+    if(ico) ico.style.animation='';
+    if(btn) btn.style.opacity='1';
   }
 }
-// ★ Botón manual
-function actualizarCitas() {
-  cargarCitas(false);
-}
-
-// ★ Auto-refresh cada 2 minutos
+function actualizarCitas() { cargarCitas(false); }
 function iniciarAutoRefresh() {
-  if (_refreshInterval) clearInterval(_refreshInterval);
-  _refreshInterval = setInterval(() => {
-    // Solo refresca si la pestaña Citas está visible
-    if (document.getElementById('t-citas')?.classList.contains('on')) {
-      cargarCitas(true);
-    }
-  }, 2 * 60 * 1000);
+  if(_refreshInterval) clearInterval(_refreshInterval);
+  _refreshInterval=setInterval(()=>{
+    if(document.getElementById('t-citas')?.classList.contains('on')) cargarCitas(true);
+  }, 2*60*1000);
 }
 
 /* ══ CAROUSEL ENGINE ══ */
@@ -1494,8 +1435,7 @@ function carMove(type,dir) {
   const st=carState[type];
   const track=document.getElementById(`${type}-car-track`);
   const total=st.items.length;
-  const vis=2;
-  const max=Math.max(0,total-vis);
+  const max=Math.max(0,total-1);
   st.idx=Math.min(max,Math.max(0,st.idx+dir));
   const slideW=track.children[0]?.offsetWidth||0;
   track.style.transform=`translateX(-${st.idx*(slideW+10)}px)`;
@@ -1505,376 +1445,273 @@ function carMove(type,dir) {
 }
 
 function buildCarousel(type, items) {
-  const st    = carState[type];
-  st.items    = items; st.idx = 0;
-  const track   = document.getElementById(`${type}-car-track`);
-  const dotsEl  = document.getElementById(`${type}-car-dots`);
-  const wrapEl  = document.getElementById(`${type}s-carousel-wrap`);
-  const countEl = document.getElementById(`${type}-count-badge`);
-  const emptyEl = document.getElementById(`${type}s-empty`);
-  track.innerHTML = ''; dotsEl.innerHTML = '';
-
-  if (!items.length) {
-    wrapEl.style.display = 'none';
-    emptyEl.style.display = 'flex';
-    return;
-  }
-  wrapEl.style.display = 'block';
-  emptyEl.style.display = 'none';
-  countEl.textContent = `${items.length} ${type === 'prod' ? 'productos' : 'cortes'}`;
-
-  items.forEach((item, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'c-slide';
-
-    if (type === 'prod') {
-      const precio  = Number(item.precio).toLocaleString('es-CO');
-      const imgUrl  = normDriveUrl(item.imagen_url, 400);
-      slide.innerHTML = `
-        <div class="prod-card" style="position:relative">
-          <div style="aspect-ratio:4/3;overflow:hidden;background:#161412;position:relative">
-            <img src="${imgUrl}" alt="${item.nombre}"
-              style="width:100%;height:100%;object-fit:cover"
-              onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
-            ${item.destacado ? `<div style="position:absolute;top:5px;left:5px;background:#e9c176;padding:2px 6px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00">★</div>` : ''}
-            <button onclick="eliminarProducto('${item.producto_id}')"
-              style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(8,6,4,.8);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">&times;</button>
-          </div>
-          <div style="padding:8px">
-            <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;margin-bottom:2px">${item.categoria}</p>
-            <p style="font-family:'Noto Serif',serif;font-size:12px;color:#e5e2e1;margin-bottom:4px;line-height:1.2">${item.nombre}</p>
-            <p style="font-size:13px;font-weight:700;color:#e9c176">$${precio}</p>
-            ${item.stock ? `<p style="font-size:8px;color:#9c8f7b;margin-top:2px">Stock: ${item.stock}</p>` : ''}
-          </div>
-        </div>`;
+  const st=carState[type]; st.items=items; st.idx=0;
+  const track=document.getElementById(`${type}-car-track`);
+  const dotsEl=document.getElementById(`${type}-car-dots`);
+  const wrapEl=document.getElementById(`${type}s-carousel-wrap`);
+  const countEl=document.getElementById(`${type}-count-badge`);
+  const emptyEl=document.getElementById(`${type}s-empty`);
+  track.innerHTML=''; dotsEl.innerHTML='';
+  if(!items.length){ wrapEl.style.display='none'; emptyEl.style.display='flex'; return; }
+  wrapEl.style.display='block'; emptyEl.style.display='none';
+  countEl.textContent=`${items.length} ${type==='prod'?'productos':'cortes'}`;
+  items.forEach((item,i)=>{
+    const slide=document.createElement('div'); slide.className='c-slide';
+    if(type==='prod'){
+      const precio=Number(item.precio).toLocaleString('es-CO');
+      const imgUrl=normDriveUrl(item.imagen_url);
+      slide.innerHTML=`<div class="prod-card" style="position:relative">
+        <div style="aspect-ratio:4/3;overflow:hidden;background:#161412;position:relative">
+          <img src="${imgUrl}" alt="${item.nombre}" style="width:100%;height:100%;object-fit:cover"
+            onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
+          ${item.destacado?`<div style="position:absolute;top:5px;left:5px;background:#e9c176;padding:2px 6px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00">★</div>`:''}
+          <button onclick="eliminarProducto('${item.producto_id}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(8,6,4,.8);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">&times;</button>
+        </div>
+        <div style="padding:8px">
+          <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;margin-bottom:2px">${item.categoria}</p>
+          <p style="font-family:'Noto Serif',serif;font-size:12px;color:#e5e2e1;margin-bottom:4px;line-height:1.2">${item.nombre}</p>
+          <p style="font-size:13px;font-weight:700;color:#e9c176">$${precio}</p>
+          ${item.stock?`<p style="font-size:8px;color:#9c8f7b;margin-top:2px">Stock: ${item.stock}</p>`:''}
+        </div></div>`;
     } else {
-      const imgUrl  = normDriveUrl(item.imagen_url, 600);
-      const cid     = item.corte_id;
-      const descTxt = item.descripcion
-        ? `<p class="dorso-desc">${item.descripcion}</p>` : '';
-      slide.innerHTML = `
-        <div style="position:relative;border:1px solid rgba(79,69,53,.22)">
-          <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4">
-            <div class="corte-3d-inner" id="inner-${cid}">
-              <div class="corte-face corte-face-front">
-                <img src="${imgUrl}" alt="${item.nombre}"
-                  onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
-                ${item.destacado ? `<div class="corte-dest-badge">★ Dest.</div>` : ''}
-                <!-- CONTROLES DENTRO arriba-derecha -->
-                <div style="position:absolute;top:8px;right:8px;z-index:10;display:flex;flex-direction:column;gap:5px;pointer-events:all">
-                  <!-- lupa -->
-                  <button onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado"
-                    style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);
-                    color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
-                    <span class="material-symbols-outlined" style="font-size:16px">zoom_in</span>
-                  </button>
-                  <!-- eliminar -->
-                  <button onclick="eliminarCorte('${cid}')"
-                    style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(255,255,255,.1);
-                    color:#9c8f7b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)">&times;</button>
-                </div>
-                <!-- hint giro -->
-                <div class="corte-3d-hint" id="hint-${cid}">
-                  <span style="font-size:11px">↔</span>Girar
-                </div>
-                <!-- info abajo -->
-                <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px">
-                  <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
-                  <p style="font-family:'Noto Serif',serif;font-size:13px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
-                  ${item.precio > 0 ? `<p style="font-size:14px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
-                </div>
-                <!-- CONTROLES GIRO dentro imagen abajo-centro -->
-                <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:10;
-                  display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);
-                  border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all">
-                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)">◀</button>
-                  <div class="ctrl-sep"></div>
-                  <span class="rot-deg" id="deg-${cid}">0°</span>
-                  <div class="ctrl-sep"></div>
-                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)">▶</button>
-                  <div class="ctrl-sep"></div>
-                  <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" style="font-size:10px">↺</button>
-                </div>
+      const imgUrl=normDriveUrl(item.imagen_url);
+      const cid=item.corte_id;
+      const descTxt=item.descripcion?`<p class="dorso-desc">${item.descripcion}</p>`:'';
+      slide.innerHTML=`<div style="position:relative;border:1px solid rgba(79,69,53,.22)">
+        <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4">
+          <div class="corte-3d-inner" id="inner-${cid}">
+            <div class="corte-face corte-face-front">
+              <img src="${imgUrl}" alt="${item.nombre}" onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
+              ${item.destacado?`<div class="corte-dest-badge">★ Dest.</div>`:''}
+              <div style="position:absolute;top:8px;right:8px;z-index:10;display:flex;flex-direction:column;gap:5px;pointer-events:all">
+                <button onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+                  <span class="material-symbols-outlined" style="font-size:16px">zoom_in</span></button>
+                <button onclick="eliminarCorte('${cid}')" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)">&times;</button>
               </div>
-              <div class="corte-face corte-face-back">
-                <div class="dorso-label">The Atelier · Portafolio</div>
-                <div class="dorso-deco"></div>
-                <p class="dorso-name">${item.nombre}</p>
-                <p class="dorso-estilo">${item.estilo||'Corte'}</p>
-                ${item.precio > 0 ? `<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>` : ''}
-                ${descTxt}
-                <div class="dorso-deco"></div>
-                <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
-                  <span style="width:5px;height:5px;background:#e9c176;border-radius:50%;display:inline-block"></span>
-                  <span style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.4)">Barbería exclusiva</span>
-                </div>
+              <div class="corte-3d-hint" id="hint-${cid}"><span style="font-size:11px">↔</span>Girar</div>
+              <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px">
+                <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
+                <p style="font-family:'Noto Serif',serif;font-size:13px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
+                ${item.precio>0?`<p style="font-size:14px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
+              </div>
+              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all">
+                <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)">◀</button>
+                <div class="ctrl-sep"></div>
+                <span class="rot-deg" id="deg-${cid}">0°</span>
+                <div class="ctrl-sep"></div>
+                <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)">▶</button>
+                <div class="ctrl-sep"></div>
+                <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" style="font-size:10px">↺</button>
+              </div>
+            </div>
+            <div class="corte-face corte-face-back">
+              <div class="dorso-label">The Atelier · Portafolio</div>
+              <div class="dorso-deco"></div>
+              <p class="dorso-name">${item.nombre}</p>
+              <p class="dorso-estilo">${item.estilo||'Corte'}</p>
+              ${item.precio>0?`<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
+              ${descTxt}
+              <div class="dorso-deco"></div>
+              <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
+                <span style="width:5px;height:5px;background:#e9c176;border-radius:50%;display:inline-block"></span>
+                <span style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.4)">Barbería exclusiva</span>
               </div>
             </div>
           </div>
-        </div>`;
+        </div></div>`;
       requestAnimationFrame(() => init3DCorte(cid));
     }
-
     track.appendChild(slide);
-    const dot = document.createElement('div');
-    dot.className = 'car-dot' + (i === 0 ? ' on' : '');
-    dot.onclick = () => { const prev = st.idx; st.idx = i; carMove(type, st.idx - prev); };
+    const dot=document.createElement('div');
+    dot.className='car-dot'+(i===0?' on':'');
+    dot.onclick=()=>{ const prev=st.idx; st.idx=i; carMove(type,st.idx-prev); };
     dotsEl.appendChild(dot);
   });
-
-  document.getElementById(`${type}-car-prev`).disabled = true;
-  document.getElementById(`${type}-car-next`).disabled = items.length <= 2;
+  document.getElementById(`${type}-car-prev`).disabled=true;
+  document.getElementById(`${type}-car-next`).disabled=items.length<=2;
 }
 
-/* ══════════════════════════════════════
-   MOTOR 3D CORTES — drag/swipe + botones
-══════════════════════════════════════ */
+/* ══ 3D CORTES ══ */
 const corte3DState = {};
-
 function init3DCorte(cid) {
-  const scene = document.getElementById('scene-'+cid);
-  const inner = document.getElementById('inner-'+cid);
-  if (!scene || !inner) return;
-  corte3DState[cid] = { angle:0, dragging:false, lastX:0, vel:0, raf:null };
-
-  function applyAngle(a, useSnap) {
-    a = Math.max(-180, Math.min(180, a));
-    corte3DState[cid].angle = a;
-    inner.classList.toggle('snap', !!useSnap);
-    inner.style.transform = 'rotateY('+a+'deg)';
-    var d = document.getElementById('deg-'+cid);
-    if (d) d.textContent = Math.round(a)+'°';
+  const scene=document.getElementById('scene-'+cid);
+  const inner=document.getElementById('inner-'+cid);
+  if(!scene||!inner) return;
+  corte3DState[cid]={angle:0,dragging:false,lastX:0,vel:0,raf:null};
+  function applyAngle(a,useSnap){
+    a=Math.max(-180,Math.min(180,a)); corte3DState[cid].angle=a;
+    inner.classList.toggle('snap',!!useSnap); inner.style.transform='rotateY('+a+'deg)';
+    var d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(a)+'°';
   }
-
-  scene.addEventListener('pointerdown', function(e) {
-    var st = corte3DState[cid];
-    st.dragging = true; st.lastX = e.clientX; st.vel = 0;
-    if (st.raf) cancelAnimationFrame(st.raf);
-    inner.classList.remove('snap');
-    scene.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  }, {passive:false});
-
-  scene.addEventListener('pointermove', function(e) {
-    var st = corte3DState[cid];
-    if (!st.dragging) return;
-    var dx = e.clientX - st.lastX;
-    st.vel = dx; st.lastX = e.clientX;
-    applyAngle(st.angle + dx * 0.55, false);
-    e.preventDefault();
-  }, {passive:false});
-
-  function endDrag() {
-    var st = corte3DState[cid];
-    if (!st.dragging) return;
-    st.dragging = false;
-    var vel = st.vel * 0.5;
-    function inertia() {
-      if (Math.abs(vel) < 0.25) return;
-      applyAngle(st.angle + vel, false);
-      vel *= 0.86;
-      st.raf = requestAnimationFrame(inertia);
-    }
+  scene.addEventListener('pointerdown',function(e){
+    var st=corte3DState[cid]; st.dragging=true; st.lastX=e.clientX; st.vel=0;
+    if(st.raf) cancelAnimationFrame(st.raf);
+    inner.classList.remove('snap'); scene.setPointerCapture(e.pointerId); e.preventDefault();
+  },{passive:false});
+  scene.addEventListener('pointermove',function(e){
+    var st=corte3DState[cid]; if(!st.dragging) return;
+    var dx=e.clientX-st.lastX; st.vel=dx; st.lastX=e.clientX;
+    applyAngle(st.angle+dx*0.55,false); e.preventDefault();
+  },{passive:false});
+  function endDrag(){
+    var st=corte3DState[cid]; if(!st.dragging) return; st.dragging=false;
+    var vel=st.vel*0.5;
+    function inertia(){ if(Math.abs(vel)<0.25) return; applyAngle(st.angle+vel,false); vel*=0.86; st.raf=requestAnimationFrame(inertia); }
     inertia();
   }
-  scene.addEventListener('pointerup', endDrag);
-  scene.addEventListener('pointercancel', endDrag);
+  scene.addEventListener('pointerup',endDrag); scene.addEventListener('pointercancel',endDrag);
 }
-
-function rotarCorte(cid, delta) {
-  var st = corte3DState[cid]; if (!st) return;
-  var inner = document.getElementById('inner-'+cid);
-  if (st.raf) cancelAnimationFrame(st.raf);
-  st.angle = Math.max(-180, Math.min(180, st.angle + delta));
-  inner.classList.add('snap');
-  inner.style.transform = 'rotateY('+st.angle+'deg)';
-  var d = document.getElementById('deg-'+cid);
-  if (d) d.textContent = Math.round(st.angle)+'°';
+function rotarCorte(cid,delta){
+  var st=corte3DState[cid]; if(!st) return;
+  var inner=document.getElementById('inner-'+cid);
+  if(st.raf) cancelAnimationFrame(st.raf);
+  st.angle=Math.max(-180,Math.min(180,st.angle+delta));
+  inner.classList.add('snap'); inner.style.transform='rotateY('+st.angle+'deg)';
+  var d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(st.angle)+'°';
 }
-
-function resetCorte(cid) {
-  var st = corte3DState[cid]; if (!st) return;
-  var inner = document.getElementById('inner-'+cid);
-  if (st.raf) cancelAnimationFrame(st.raf);
-  st.angle = 0;
-  inner.classList.add('snap');
-  inner.style.transform = 'rotateY(0deg)';
-  var d = document.getElementById('deg-'+cid);
-  if (d) d.textContent = '0°';
+function resetCorte(cid){
+  var st=corte3DState[cid]; if(!st) return;
+  var inner=document.getElementById('inner-'+cid);
+  if(st.raf) cancelAnimationFrame(st.raf);
+  st.angle=0; inner.classList.add('snap'); inner.style.transform='rotateY(0deg)';
+  var d=document.getElementById('deg-'+cid); if(d) d.textContent='0°';
 }
 
 /* ══ PUBLICAR PRODUCTO ══ */
 async function publicarProducto() {
-  const nombre = document.getElementById('p-nombre').value.trim();
-  const precio = document.getElementById('p-precio').value.trim();
-  if (!imgs.prod_file && !imgs.prod_url) return toast('Sube la foto del producto', true);
-  if (!nombre) return toast('El nombre es obligatorio', true);
-  if (!precio) return toast('El precio es obligatorio', true);
-
-  const btn = document.getElementById('btn-prod'); btn.disabled = true;
-
-  if (imgs.prod_file) {
+  const nombre=document.getElementById('p-nombre').value.trim();
+  const precio=document.getElementById('p-precio').value.trim();
+  if(!imgs.prod_file&&!imgs.prod_url) return toast('Sube la foto del producto',true);
+  if(!nombre) return toast('El nombre es obligatorio',true);
+  if(!precio) return toast('El precio es obligatorio',true);
+  const btn=document.getElementById('btn-prod'); btn.disabled=true;
+  if(imgs.prod_file){
     toast('Subiendo foto del producto...');
-    try {
-      imgs.prod_url  = await subirImagenDrive(imgs.prod_file, 'prod', BAR_ID, 'upbar-prod', 'upfill-prod');
-      imgs.prod_file = null;
-      toast('✓ Foto subida');
-    } catch(e) {
-      toast('⚠ No se pudo subir la foto — verifica la conexión al servidor', true);
-      btn.disabled = false; return;
-    }
+    try{ imgs.prod_url=await subirImagenDrive(imgs.prod_file,'prod',BAR_ID,'upbar-prod','upfill-prod'); imgs.prod_file=null; toast('✓ Foto subida'); }
+    catch(e){ toast('⚠ No se pudo subir la foto',true); btn.disabled=false; return; }
   }
-
-  const prod = {
-    accion           : 'agregarProducto',
-    producto_id      : 'PRD-' + Math.random().toString(36).toUpperCase().slice(2,8),
-    barberia_id      : BAR_ID,
-    imagen_url       : imgs.prod_url,
-    nombre,
-    precio           : Number(precio),
-    categoria        : document.getElementById('p-cat').value,
-    descripcion      : document.getElementById('p-desc').value.trim(),
-    stock            : Number(document.getElementById('p-stock').value) || 0,
-    destacado        : document.getElementById('p-dest').value === 'si',
-    fecha_publicacion: new Date().toISOString().split('T')[0],
-    activo           : true,
+  const prod={
+    accion:'agregarProducto', producto_id:'PRD-'+Math.random().toString(36).toUpperCase().slice(2,8),
+    barberia_id:BAR_ID, imagen_url:imgs.prod_url, nombre, precio:Number(precio),
+    categoria:document.getElementById('p-cat').value,
+    descripcion:document.getElementById('p-desc').value.trim(),
+    stock:Number(document.getElementById('p-stock').value)||0,
+    destacado:document.getElementById('p-dest').value==='si',
+    fecha_publicacion:new Date().toISOString().split('T')[0], activo:true,
   };
-
   showOv('Publicando producto...');
-  try {
-    const json = await gasPost(prod);
-    hideOv();
-    if (json.error) throw new Error(json.error);
-    if (json.producto_id) prod.producto_id = json.producto_id;
-    toast('✓ Producto publicado · foto en Drive, datos en Sheet');
-  } catch(e) { hideOv(); toast('Error: ' + e.message, true); btn.disabled = false; return; }
-
+  try{
+    const json=await gasPost(prod); hideOv();
+    if(json.error) throw new Error(json.error);
+    if(json.producto_id) prod.producto_id=json.producto_id;
+    toast('✓ Producto publicado');
+  }catch(e){ hideOv(); toast('Error: '+e.message,true); btn.disabled=false; return; }
   await recargarProductos();
-
-  imgs.prod_url = ''; imgs.prod_file = null;
-  ['p-nombre','p-precio','p-desc','p-stock'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('img-prod').src = '';
+  imgs.prod_url=''; imgs.prod_file=null;
+  ['p-nombre','p-precio','p-desc','p-stock'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('img-prod').src='';
   document.getElementById('fu-prod').classList.remove('loaded');
-  btn.disabled = false;
+  btn.disabled=false;
 }
-
 async function recargarProductos() {
-  try {
-    const jp = await gasGet({ accion:'leerProductos', barberia_id:BAR_ID });
-    if (jp.productos?.length) {
-      productos = jp.productos.map(p => ({
-        producto_id: p.producto_id, barberia_id: p.barberia_id,
-        imagen_url: normDriveUrl(p.imagen_url),
-        nombre: p.nombre, precio: Number(p.precio),
-        categoria: p.categoria, descripcion: p.descripcion,
-        stock: Number(p.stock) || 0,
-        destacado: p.destacado === true || String(p.destacado).toLowerCase() === 'true',
-        fecha_publicacion: p.fecha_publicacion, activo: true,
+  try{
+    const jp=await gasGet({ accion:'leerProductos', barberia_id:BAR_ID });
+    if(jp.productos?.length){
+      productos=jp.productos.map(p=>({
+        producto_id:p.producto_id, barberia_id:p.barberia_id,
+        imagen_url:normDriveUrl(p.imagen_url),
+        nombre:p.nombre, precio:Number(p.precio),
+        categoria:p.categoria, descripcion:p.descripcion,
+        stock:Number(p.stock)||0,
+        destacado:p.destacado===true||String(p.destacado).toLowerCase()==='true',
+        fecha_publicacion:p.fecha_publicacion, activo:true,
       }));
-      buildCarousel('prod', productos);
+      buildCarousel('prod',productos);
     }
-  } catch(e) {}
+  }catch(e){}
+  actualizarBadges();
+}
+function eliminarProducto(id){
+  if(!confirm('¿Eliminar este producto?')) return;
+  productos=productos.filter(p=>p.producto_id!==id);
+  buildCarousel('prod',productos);
+  toast('Producto eliminado');
+  gasPost({accion:'eliminarProducto',producto_id:id,barberia_id:BAR_ID}).catch(()=>{});
 }
 
-function eliminarProducto(id) {
-  if (!confirm('¿Eliminar este producto?')) return;
-  productos = productos.filter(p => p.producto_id !== id);
-  buildCarousel('prod', productos);
-  toast('Producto eliminado');
-  gasPost({accion:'eliminarProducto', producto_id:id, barberia_id:BAR_ID}).catch(() => {});
+function actualizarBadges() {
+  const pend = todasCitas.filter(c=>c.estado==='pendiente').length;
+  const bc = document.getElementById('badge-citas');
+  if(bc){ bc.textContent=pend; bc.style.display=pend>0?'inline-block':'none'; }
+  const bp = document.getElementById('badge-tienda');
+  if(bp){ bp.textContent=productos.length; bp.style.display=productos.length>0?'inline-block':'none'; }
+  const bco = document.getElementById('badge-cortes');
+  if(bco){ bco.textContent=cortes.length; bco.style.display=cortes.length>0?'inline-block':'none'; }
 }
 
 /* ══ PUBLICAR CORTE ══ */
 async function publicarCorte() {
-  const nombre = document.getElementById('c-nombre').value.trim();
-  if (!imgs.corte_file && !imgs.corte_url) return toast('Sube la foto del corte', true);
-  if (!nombre) return toast('El nombre del estilo es obligatorio', true);
-
-  const btn = document.getElementById('btn-corte'); btn.disabled = true;
-
-  if (imgs.corte_file) {
+  const nombre=document.getElementById('c-nombre').value.trim();
+  if(!imgs.corte_file&&!imgs.corte_url) return toast('Sube la foto del corte',true);
+  if(!nombre) return toast('El nombre del estilo es obligatorio',true);
+  const btn=document.getElementById('btn-corte'); btn.disabled=true;
+  if(imgs.corte_file){
     toast('Subiendo foto del corte...');
-    try {
-      imgs.corte_url  = await subirImagenDrive(imgs.corte_file, 'corte', BAR_ID, 'upbar-corte', 'upfill-corte');
-      imgs.corte_file = null;
-      toast('✓ Foto de corte subida');
-    } catch(e) {
-      toast('⚠ No se pudo subir la foto — verifica la conexión al servidor', true);
-      btn.disabled = false; return;
-    }
+    try{ imgs.corte_url=await subirImagenDrive(imgs.corte_file,'corte',BAR_ID,'upbar-corte','upfill-corte'); imgs.corte_file=null; toast('✓ Foto de corte subida'); }
+    catch(e){ toast('⚠ No se pudo subir la foto',true); btn.disabled=false; return; }
   }
-
-  const corte = {
-    accion           : 'agregarCorte',
-    corte_id         : 'COR-' + Math.random().toString(36).toUpperCase().slice(2,8),
-    barberia_id      : BAR_ID,
-    barbero_id       : BAR_ID2,
-    imagen_url       : imgs.corte_url,
-    nombre,
-    estilo           : document.getElementById('c-estilo').value,
-    descripcion      : document.getElementById('c-desc').value.trim(),
-   precio           : parseFloat(String(document.getElementById('c-precio')?.value || '0').replace(/[^0-9.]/g, '')) || 0,
-   destacado        : document.getElementById('c-dest').value === 'si',
-    fecha_publicacion: new Date().toISOString().split('T')[0],
-    activo           : true,
+  const corte={
+    accion:'agregarCorte', corte_id:'COR-'+Math.random().toString(36).toUpperCase().slice(2,8),
+    barberia_id:BAR_ID, barbero_id:BAR_ID2, imagen_url:imgs.corte_url, nombre,
+    estilo:document.getElementById('c-estilo').value,
+    descripcion:document.getElementById('c-desc').value.trim(),
+    precio:parseFloat(String(document.getElementById('c-precio')?.value||'0').replace(/[^0-9.]/g,''))||0,
+    destacado:document.getElementById('c-dest').value==='si',
+    fecha_publicacion:new Date().toISOString().split('T')[0], activo:true,
   };
-
   showOv('Publicando corte...');
-  try {
-    const json = await gasPost(corte);
-    hideOv();
-    if (json.error) throw new Error(json.error);
-    if (json.corte_id) corte.corte_id = json.corte_id;
-    toast('✓ Corte publicado · foto en Drive, datos en Sheet');
-  } catch(e) { hideOv(); toast('Error: ' + e.message, true); btn.disabled = false; return; }
-
+  try{
+    const json=await gasPost(corte); hideOv();
+    if(json.error) throw new Error(json.error);
+    if(json.corte_id) corte.corte_id=json.corte_id;
+    toast('✓ Corte publicado');
+  }catch(e){ hideOv(); toast('Error: '+e.message,true); btn.disabled=false; return; }
   await recargarCortes();
-
-  imgs.corte_url = ''; imgs.corte_file = null;
-  ['c-nombre','c-desc'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('img-corte').src = '';
+  imgs.corte_url=''; imgs.corte_file=null;
+  ['c-nombre','c-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('img-corte').src='';
   document.getElementById('fu-corte').classList.remove('loaded');
-  btn.disabled = false;
+  btn.disabled=false;
 }
-
 async function recargarCortes() {
-  try {
-    const jc = await gasGet({ accion:'leerCortes', barberia_id:BAR_ID });
-    if (jc.cortes?.length) {
-      cortes = jc.cortes.map(c => ({
-  corte_id         : c.corte_id,
-  barberia_id      : c.barberia_id,
-  barbero_id       : c.barbero_id,
-  imagen_url       : normDriveUrl(c.imagen_url),
-  nombre           : c.nombre,
-  estilo           : c.estilo,
-  descripcion      : c.descripcion,
-  destacado        : c.destacado === true || String(c.destacado).toLowerCase() === 'true' || false,
-  fecha_publicacion: c.fecha_publicacion,
-  precio           : parseFloat(String(c.precio || '0').replace(/[^0-9.]/g, '')) || 0, // ★
-  activo           : true,
-}));
-      buildCarousel('corte', cortes);
-      toast('✓ ' + cortes.length + ' cortes cargados');
-    } else {
-      buildCarousel('corte', []);
-    }
-  } catch(e) {
-    toast('Error cargando cortes: ' + e.message, true);
-  }
+  try{
+    const jc=await gasGet({ accion:'leerCortes', barberia_id:BAR_ID });
+    if(jc.cortes?.length){
+      cortes=jc.cortes.map(c=>({
+        corte_id:c.corte_id, barberia_id:c.barberia_id, barbero_id:c.barbero_id,
+        imagen_url:normDriveUrl(c.imagen_url),
+        nombre:c.nombre, estilo:c.estilo, descripcion:c.descripcion,
+        destacado:c.destacado===true||String(c.destacado).toLowerCase()==='true'||false,
+        fecha_publicacion:c.fecha_publicacion,
+        precio:parseFloat(String(c.precio||'0').replace(/[^0-9.]/g,''))||0,
+        activo:true,
+      }));
+      buildCarousel('corte',cortes);
+    } else { buildCarousel('corte',[]); }
+  }catch(e){ toast('Error cargando cortes: '+e.message,true); }
+  actualizarBadges();
 }
-
-function eliminarCorte(id) {
-  if (!confirm('¿Eliminar este corte?')) return;
-  cortes = cortes.filter(c => c.corte_id !== id);
-  buildCarousel('corte', cortes);
+function eliminarCorte(id){
+  if(!confirm('¿Eliminar este corte?')) return;
+  cortes=cortes.filter(c=>c.corte_id!==id);
+  buildCarousel('corte',cortes);
   toast('Corte eliminado');
-  gasPost({accion:'eliminarCorte', corte_id:id, barberia_id:BAR_ID}).catch(() => {});
+  gasPost({accion:'eliminarCorte',corte_id:id,barberia_id:BAR_ID}).catch(()=>{});
 }
 
 /* ══ OV / TOAST ══ */
-function showOv(m){document.getElementById('ov-msg').textContent=m; document.getElementById('ov').classList.add('on');}
-function hideOv(){document.getElementById('ov').classList.remove('on');}
+function showOv(m){ document.getElementById('ov-msg').textContent=m; document.getElementById('ov').classList.add('on'); }
+function hideOv(){ document.getElementById('ov').classList.remove('on'); }
 let _tt;
 function toast(msg,err=false){
   const t=document.getElementById('toast');
@@ -1882,25 +1719,25 @@ function toast(msg,err=false){
   clearTimeout(_tt); _tt=setTimeout(()=>t.className='',3200);
 }
 
-function abrirModalPlan() {
-  const m = document.getElementById('modal-plan');
-  m.style.display = 'flex';
-  const cur = document.getElementById('f-plan').value;
-  document.querySelectorAll('.plan-opt').forEach(o => {
-    const sel = o.dataset.val === cur;
-    o.style.borderColor = sel ? 'rgba(233,193,118,.6)' : (o.dataset.val === 'Pro' ? 'rgba(233,193,118,.4)' : 'rgba(79,69,53,.3)');
+/* ══ PLAN MODAL ══ */
+function abrirModalPlan(){
+  const m=document.getElementById('modal-plan'); m.style.display='flex';
+  const cur=document.getElementById('f-plan').value;
+  document.querySelectorAll('.plan-opt').forEach(o=>{
+    const sel=o.dataset.val===cur;
+    o.style.borderColor=sel?'rgba(233,193,118,.6)':(o.dataset.val==='Pro'?'rgba(233,193,118,.4)':'rgba(79,69,53,.3)');
   });
 }
-function cerrarModalPlan() { document.getElementById('modal-plan').style.display = 'none'; }
-function selPlan(el) {
-  document.getElementById('f-plan').value = el.dataset.val;
-  document.getElementById('plan-btn-txt').textContent = el.dataset.txt;
+function cerrarModalPlan(){ document.getElementById('modal-plan').style.display='none'; }
+function selPlan(el){
+  document.getElementById('f-plan').value=el.dataset.val;
+  document.getElementById('plan-btn-txt').textContent=el.dataset.txt;
   syncPlanBadge(); cerrarModalPlan();
 }
 
-
-
-/* ══ INIT ══ */
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
 async function init() {
   buildHorarios(); updateSlots();
   initHeader(); calcProg();
@@ -1909,69 +1746,146 @@ async function init() {
   renderCitas([]);
   renderHorariosEspeciales();
 
-  showOv('Cargando datos...');
+  showOv('Cargando datos de la barbería...');
 
-  // ── PERFIL ──
+  let perfilGuardado = false;
   try {
     const json = await gasGet({ accion:'leerPerfil', barberia_id:BAR_ID });
-    if (json.perfil) {
-      const p = json.perfil;
-      const mp = {
-        'f-nombre':p.nombre_barberia, 'f-ciudad':p.ciudad,   'f-depto':p.departamento,
-        'f-dir':p.direccion,          'f-tel':p.telefono,     'f-email':p.email,
-        'f-dueno':p.nombre_dueno,     'f-redes':p.redes_sociales,
-        'f-maps':p.maps_url,          'f-plan':p.plan,
-      };
-      Object.entries(mp).forEach(([id,val]) => { const el=document.getElementById(id); if(el&&val) el.value=val; });
-
+    const p    = json.perfil;
+    if (p && p.nombre_barberia) {
+      prellenarInputs({
+        'f-nombre': p.nombre_barberia,
+        'f-ciudad': p.ciudad,
+        'f-depto':  p.departamento,
+        'f-dir':    p.direccion,
+        'f-tel':    p.telefono,
+        'f-email':  p.email,
+        'f-dueno':  p.nombre_dueno,
+        'f-maps':   p.maps_url,
+        'f-plan':   p.plan,
+      });
       if (p.foto_barbero_url) { imgs.avatar_url = normDriveUrl(p.foto_barbero_url); mostrarAvatar(imgs.avatar_url); }
-      if (p.foto_local_url)   { imgs.local_url  = normDriveUrl(p.foto_local_url);
+      if (p.foto_local_url) {
+        imgs.local_url = normDriveUrl(p.foto_local_url);
         document.getElementById('img-local').src = imgs.local_url;
         document.getElementById('fu-local').classList.add('loaded');
       }
-      if (p.codigo_acceso) document.getElementById('codigo-display').textContent = p.codigo_acceso;
-
-      // Copia a memoria (no a storage)
-      Object.assign(sesion, { nombre:p.nombre_barberia, nombre_barberia:p.nombre_barberia,
-        dueno:p.nombre_dueno, ciudad:p.ciudad, telefono:p.telefono,
-        email:p.email, redes:p.redes_sociales, plan:p.plan,
+      if (p.codigo_acceso) { document.getElementById('codigo-display').textContent = p.codigo_acceso; sesion.codigo_acceso = p.codigo_acceso; }
+      const planPrecios = { 'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días' };
+      if (p.plan) { const txtEl = document.getElementById('plan-btn-txt'); if (txtEl) txtEl.textContent = p.plan + ' — ' + (planPrecios[p.plan] || ''); }
+      Object.assign(sesion, {
+        nombre:p.nombre_barberia, nombre_barberia:p.nombre_barberia,
+        dueno:p.nombre_dueno, ciudad:p.ciudad, departamento:p.departamento,
+        direccion:p.direccion, telefono:p.telefono, email:p.email,
         foto_barbero_url:imgs.avatar_url, foto_local_url:imgs.local_url,
-        codigo_acceso:p.codigo_acceso });
-
-      syncHeader(); syncPlanBadge(); calcProg();
-      if (p.maps_url) updateMap();
-      toast('✓ ' + (p.nombre_barberia||'Barbería') + ' cargada');
-    }
-  } catch(e) { toast('Sin conexión — modo offline', true); }
-
-  // ── HORARIOS ──
-  try {
-    const jh = await gasGet({ accion:'leerHorarios', barberia_id:BAR_ID });
-    if (jh.horarios?.length) {
-      jh.horarios.forEach(h => {
-        const chk=document.getElementById('d-'+h.dia_semana);
-        const hi=document.getElementById('hi-'+h.dia_semana);
-        const hf=document.getElementById('hf-'+h.dia_semana);
-        const iv=document.getElementById('iv-'+h.dia_semana);
-        if(chk){ chk.checked = h.activo===true||String(h.activo).toLowerCase()==='true'; togDia(h.dia_semana); }
-        if(hi&&h.hora_inicio) hi.value=h.hora_inicio;
-        if(hf&&h.hora_fin)    hf.value=h.hora_fin;
-        if(iv&&h.intervalo_min) iv.value=String(h.intervalo_min);
+        maps_url:p.maps_url, plan:p.plan,
       });
-      updateSlots();
+      perfilGuardado = true;
+      toast('✓ ' + p.nombre_barberia + ' · perfil cargado');
     }
   } catch(e) {}
 
-  // ── CORTES, PRODUCTOS, CITAS, HORARIOS ESPECIALES ──
+  if (!perfilGuardado) {
+    try {
+      const json = await gasGet({ accion:'leerDatosRegistro', barberia_id:BAR_ID });
+      const r    = json.barberia || json.datos || json.perfil || null;
+      if (r) {
+        prellenarInputs({
+          'f-nombre': r.nombre_barberia || r.nombre,
+          'f-ciudad': r.ciudad,
+          'f-depto':  r.departamento,
+          'f-dir':    r.direccion || '',
+          'f-tel':    r.dueno_telefono || r.telefono,
+          'f-email':  r.dueno_email    || r.email,
+          'f-dueno':  r.dueno_nombre   || r.nombre_dueno,
+          'f-plan':   r.plan,
+        });
+        const codigoEl = document.getElementById('codigo-display');
+        if (r.codigo_acceso_cliente && codigoEl) { codigoEl.textContent = r.codigo_acceso_cliente; sesion.codigo_acceso = r.codigo_acceso_cliente; sesion.codigo_acceso_cliente = r.codigo_acceso_cliente; }
+        const planPrecios = { 'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días' };
+        if (r.plan) { const txtEl = document.getElementById('plan-btn-txt'); if (txtEl) txtEl.textContent = r.plan + ' — ' + (planPrecios[r.plan] || ''); }
+        Object.assign(sesion, {
+          nombre:r.nombre_barberia||r.nombre, nombre_barberia:r.nombre_barberia||r.nombre,
+          dueno:r.dueno_nombre||r.nombre_dueno, ciudad:r.ciudad,
+          departamento:r.departamento, telefono:r.dueno_telefono||r.telefono,
+          email:r.dueno_email||r.email, plan:r.plan, estado:r.estado,
+        });
+        document.getElementById('banner-nueva').style.display = 'block';
+        toast('Bienvenido · Completa tu perfil para publicarte');
+      } else {
+        toast('Modo demo — ' + BAR_ID);
+      }
+    } catch(e) { toast('Sin conexión — modo offline', true); }
+  }
+
+  syncHeader(); syncPlanBadge(); calcProg();
+  if (document.getElementById('f-maps')?.value) updateMap();
+
+   try {
+    const jh = await gasGet({ accion:'leerHorarios', barberia_id:BAR_ID });
+    const horRows = jh.horarios || jh.data || [];
+    if (horRows.length) {
+      horRows.forEach(h => {
+        // normalizar la clave del día (puede venir con tilde: miércoles, sábado)
+        const diaKey = (h.dia_semana || h.dia || '')
+          .toLowerCase().trim()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+        const chk = document.getElementById('d-' + diaKey);
+        const hi  = document.getElementById('hi-' + diaKey);
+        const hf  = document.getElementById('hf-' + diaKey);
+        const iv  = document.getElementById('iv-' + diaKey);
+
+        if (!chk) return; // día no reconocido, ignorar
+
+        const activo = h.activo === true || String(h.activo).toLowerCase() === 'true';
+        chk.checked = activo;
+        togDia(diaKey);
+
+        // helper: extrae HH:MM de cualquier formato que venga de Sheets
+        function extractHM(raw) {
+          const s = String(raw || '').trim();
+          if (!s) return null;
+          if (s.includes('T')) {
+            try {
+              const d = new Date(s);
+              return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+            } catch(e) { return (s.split('T')[1] || '').slice(0,5) || null; }
+          }
+          if (/^\d{1,2}:\d{2}/.test(s)) {
+            const p = s.slice(0,5);
+            return p.length === 4 ? '0' + p : p;
+          }
+          return null;
+        }
+
+        const hiVal = extractHM(h.hora_inicio);
+        const hfVal = extractHM(h.hora_fin);
+        if (hi && hiVal) hi.value = hiVal;
+        if (hf && hfVal) hf.value = hfVal;
+
+        if (iv && h.intervalo_min) {
+          const ivStr = String(parseInt(h.intervalo_min) || 30);
+          // buscar la option que coincida, si no existe dejar la actual
+          const opt = iv.querySelector(`option[value="${ivStr}"]`);
+          if (opt) iv.value = ivStr;
+        }
+      });
+      updateSlots();
+      toast('✓ Horarios cargados desde Sheet');
+    }
+  } catch(e) { console.warn('[horarios]', e); }
+ 
+
   await recargarCortes();
   await recargarProductos();
   await cargarCitas(false);
-iniciarAutoRefresh();
+  iniciarAutoRefresh();
 
   try {
     const jhe = await gasGet({ accion:'leerHorariosEspeciales', barberia_id:BAR_ID });
     if (jhe.horariosEspeciales?.length) {
-      horariosEspeciales = jhe.horariosEspeciales.map(h => ({
+      horariosEspeciales = jhe.horariosEspeciales.map(h=>({
         id:h.hesp_id, fecha:h.fecha, tipo:h.tipo,
         hora_inicio:h.hora_inicio, hora_fin:h.hora_fin, nota:h.nota,
       }));
@@ -1983,5 +1897,6 @@ iniciarAutoRefresh();
 }
 init();
 </script>
+
 </body>
 </html>
