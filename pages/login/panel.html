@@ -1667,9 +1667,17 @@ function iniciarAutoRefresh() {
     const enCitas  = document.getElementById('t-citas')?.classList.contains('on');
     const enCortes = document.getElementById('t-cortes')?.classList.contains('on');
     const enTienda = document.getElementById('t-tienda')?.classList.contains('on');
-    if (enCitas)  cargarCitas(true);
+
+    // ★ SIEMPRE verificar citas nuevas para notificaciones,
+    //   sin importar en qué tab está el usuario
+    await cargarCitas(true);
+
+    // Solo recargar tienda/cortes si esa tab está activa
     if (enCortes) recargarCortes();
     if (enTienda) recargarProductos();
+
+    // Si no está en la tab de citas, actualizar el badge sin re-renderizar
+    if (!enCitas) actualizarBadges();
   }, 10 * 1000);
 }
 
