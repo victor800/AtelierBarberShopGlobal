@@ -318,6 +318,73 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
     <div class="pbar"><div class="pfill" id="prog-fill" style="width:0%"></div></div>
   </div>
+
+
+  <!-- ══ URL PÚBLICA + QR — dentro del formulario de Perfil ══ -->
+<!-- Pegar ANTES del botón "Guardar Perfil" en t-datos -->
+
+<div id="sec-url-publica" style="background:#161412;border:1px solid rgba(233,193,118,.18);padding:0;overflow:hidden">
+
+  <!-- Encabezado -->
+  <div style="background:rgba(233,193,118,.06);border-bottom:1px solid rgba(233,193,118,.14);padding:11px 14px;display:flex;align-items:center;gap:8px">
+    <span class="material-symbols-outlined" style="font-size:15px;color:rgba(233,193,118,.7)">link</span>
+    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.65);font-weight:700">Tu perfil público</p>
+  </div>
+
+  <div style="padding:14px">
+
+    <!-- URL display + botón copiar -->
+    <div style="background:#0e0c08;border:1px solid rgba(79,69,53,.28);padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span class="material-symbols-outlined" style="font-size:14px;color:rgba(233,193,118,.35);flex-shrink:0">public</span>
+      <p id="url-publica-txt" style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;letter-spacing:.04em;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">—</p>
+      <button onclick="copiarUrlPublica()" id="btn-copy-url"
+        style="flex-shrink:0;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap">
+        <span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar
+      </button>
+    </div>
+
+    <!-- Fila: QR + acciones -->
+    <div style="display:flex;gap:12px;align-items:flex-start">
+
+      <!-- QR canvas -->
+      <div style="flex-shrink:0;background:#0e0c08;border:1px solid rgba(79,69,53,.22);padding:8px;display:flex;align-items:center;justify-content:center;width:110px;height:110px;position:relative">
+        <canvas id="qr-canvas" width="94" height="94" style="display:none;image-rendering:pixelated"></canvas>
+        <div id="qr-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <span class="material-symbols-outlined" style="font-size:26px;color:rgba(233,193,118,.12)">qr_code_2</span>
+          <p style="font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(156,143,123,.22)">QR</p>
+        </div>
+      </div>
+
+      <!-- Info + botones acción -->
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
+        <p style="font-size:10px;color:#9c8f7b;line-height:1.6">Comparte este código QR o la URL directa con tus clientes — acceden a tu perfil sin necesidad de login.</p>
+
+        <!-- Botón compartir (Web Share API) / fallback copiar -->
+        <button onclick="compartirPerfil()" id="btn-share-url"
+          style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s">
+          <span class="material-symbols-outlined" style="font-size:13px">share</span>Compartir perfil
+        </button>
+
+        <!-- Descargar QR -->
+        <button onclick="descargarQR()" id="btn-dl-qr"
+          style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s"
+          onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'"
+          onmouseout="this.style.borderColor='rgba(79,69,53,.35)';this.style.color='#9c8f7b'">
+          <span class="material-symbols-outlined" style="font-size:13px">download</span>Descargar QR
+        </button>
+      </div>
+    </div>
+
+    <!-- Nota informativa -->
+    <div style="display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:9px 10px;background:rgba(233,193,118,.04);border:1px solid rgba(79,69,53,.18)">
+      <span class="material-symbols-outlined" style="font-size:12px;color:rgba(233,193,118,.3);flex-shrink:0;margin-top:1px">info</span>
+      <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;line-height:1.65">El QR y la URL apuntan directamente a tu perfil. Tu cliente agenda sin necesidad de registrarse.</p>
+    </div>
+  </div>
+</div>
+
+
+
   <button class="btn-g" id="btn-perfil" onclick="guardarPerfil()" style="width:100%;padding:15px">
     <span class="material-symbols-outlined" style="font-size:15px">save</span>Guardar Perfil
   </button>
@@ -1982,6 +2049,7 @@ async function init() {
   }
 
   syncHeader(); syncPlanBadge(); calcProg();
+  initUrlPublica();
   if (document.getElementById('f-maps')?.value) updateMap();
 
    try {
@@ -2400,6 +2468,178 @@ async function renderDashboard() {
   renderWalkIns();
 }
 
+/* ══════════════════════════════════════
+   URL PÚBLICA + QR
+   Agrega estas funciones al bloque <script> de panel.html
+   Llama initUrlPublica() al final de init(), después de syncHeader()
+══════════════════════════════════════ */
+
+/* ── URL del perfil público del cliente ── */
+function getUrlPublica() {
+  // home.html lee el parámetro ?id= según el código que ya tienes
+  const base = 'https://globalbarber.vercel.app/pages/login/home.html';
+  return base + '?id=' + encodeURIComponent(BAR_ID);
+}
+
+/* ── Actualiza el texto de la URL en el panel ── */
+function renderUrlPublica() {
+  const url = getUrlPublica();
+  const el  = document.getElementById('url-publica-txt');
+  if (el) el.textContent = url;
+}
+
+/* ── Genera el QR usando la API pública de QR Server (sin librería externa) ── */
+function generarQR() {
+  const url      = getUrlPublica();
+  const canvas   = document.getElementById('qr-canvas');
+  const ph       = document.getElementById('qr-placeholder');
+  if (!canvas) return;
+
+  // Usar QR Server API: devuelve imagen PNG del QR
+  const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=94x94&format=png&color=e9c176&bgcolor=0e0c08&data='
+    + encodeURIComponent(url);
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, 94, 94);
+    canvas.style.display = 'block';
+    if (ph) ph.style.display = 'none';
+    // Habilitar botón descargar
+    const dlBtn = document.getElementById('btn-dl-qr');
+    if (dlBtn) dlBtn.disabled = false;
+  };
+  img.onerror = () => {
+    // Fallback: mostrar texto si la API falla
+    if (ph) {
+      ph.innerHTML = '<p style="font-size:8px;color:rgba(233,193,118,.3);letter-spacing:.08em;text-align:center;padding:4px">QR no disponible sin conexión</p>';
+    }
+  };
+  img.src = qrApiUrl;
+  // Guardar la URL de la API para poder descargar después
+  canvas._qrApiUrl = qrApiUrl;
+}
+
+/* ── Copiar URL al portapapeles ── */
+function copiarUrlPublica() {
+  const url = getUrlPublica();
+  const btn = document.getElementById('btn-copy-url');
+  navigator.clipboard.writeText(url)
+    .then(() => {
+      toast('✓ URL copiada al portapapeles');
+      if (btn) {
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px">check</span>Copiado';
+        btn.style.borderColor = 'rgba(233,193,118,.5)';
+        btn.style.color = '#e9c176';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar';
+          btn.style.borderColor = 'rgba(79,69,53,.35)';
+          btn.style.color = '#9c8f7b';
+        }, 2200);
+      }
+    })
+    .catch(() => {
+      // Fallback para dispositivos sin clipboard API
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.cssText = 'position:fixed;top:-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      toast('✓ URL copiada');
+    });
+}
+
+/* ── Compartir con Web Share API (nativo en móvil) ── */
+async function compartirPerfil() {
+  const url    = getUrlPublica();
+  const nombre = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: nombre + ' · Agenda tu cita',
+        text : 'Agenda tu corte en ' + nombre + ' — reserva en línea, sin filas.',
+        url  : url,
+      });
+    } catch(e) {
+      // El usuario canceló el share nativo — no es error real
+      if (e.name !== 'AbortError') copiarUrlPublica();
+    }
+  } else {
+    // Fallback desktop: copiar
+    copiarUrlPublica();
+    toast('✓ URL copiada — pégala donde quieras compartir');
+  }
+}
+
+/* ── Descargar el QR como imagen PNG ── */
+function descargarQR() {
+  const canvas = document.getElementById('qr-canvas');
+  const nombre = (sesion.nombre_barberia || sesion.nombre || 'atelier')
+    .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+  if (canvas && canvas.style.display !== 'none') {
+    // Crear canvas grande (400px) para descarga de calidad
+    const SIZE   = 400;
+    const MARGIN = 30;
+    const big    = document.createElement('canvas');
+    big.width    = SIZE;
+    big.height   = SIZE + 70; // espacio para texto debajo
+
+    const ctx = big.getContext('2d');
+
+    // Fondo oscuro
+    ctx.fillStyle = '#0e0c08';
+    ctx.fillRect(0, 0, big.width, big.height);
+
+    // Borde dorado
+    ctx.strokeStyle = 'rgba(233,193,118,0.35)';
+    ctx.lineWidth   = 2;
+    ctx.strokeRect(1, 1, big.width - 2, big.height - 2);
+
+    // QR — escalar el canvas pequeño (94px) a la zona central (340px)
+    ctx.drawImage(canvas, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
+
+    // Nombre de la barbería debajo
+    const barbNombre = sesion.nombre_barberia || sesion.nombre || 'THE ATELIER';
+    ctx.fillStyle = '#e9c176';
+    ctx.font      = 'bold 16px Manrope, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(barbNombre.toUpperCase(), SIZE / 2, SIZE + 30);
+
+    // URL pequeña
+    ctx.fillStyle = 'rgba(156,143,123,0.6)';
+    ctx.font      = '10px Manrope, sans-serif';
+    ctx.fillText('Escanea para agendar tu cita', SIZE / 2, SIZE + 52);
+
+    // Descargar
+    const a    = document.createElement('a');
+    a.download = 'qr-' + nombre + '.png';
+    a.href     = big.toDataURL('image/png');
+    a.click();
+    toast('✓ QR descargado');
+  } else {
+    // Si el canvas no está listo, descargar directo de la API
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&color=e9c176&bgcolor=0e0c08&data='
+      + encodeURIComponent(getUrlPublica());
+    const a = document.createElement('a');
+    a.href     = qrUrl;
+    a.download = 'qr-' + nombre + '.png';
+    a.target   = '_blank';
+    a.click();
+    toast('✓ Descargando QR...');
+  }
+}
+
+/* ── Init — llamar desde init() después de syncHeader() ── */
+function initUrlPublica() {
+  renderUrlPublica();
+  generarQR();
+}
 
 
 
