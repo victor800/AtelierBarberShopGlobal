@@ -152,7 +152,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <div style="display:flex;align-items:center;gap:9px;flex-shrink:0">
       <span id="plan-badge" class="pbadge pb-pro">PRO</span>
 
-      <button onclick="cerrarSesion()" title="Cerrar sesión"
+     <button onclick="abrirModalSalir()" title="Cerrar sesión"
   style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 8px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;transition:all .2s"
   onmouseover="this.style.borderColor='rgba(233,118,118,.4)';this.style.color='#e97676'"
   onmouseout="this.style.borderColor='rgba(79,69,53,.28)';this.style.color='#9c8f7b'">
@@ -1645,6 +1645,7 @@ async function cargarCitas(silencioso=false) {
       precio     : c.precio || c.servicio_precio || 0,
       notas      : String(c.notas || ''),
     }));
+    detectarCitasNuevas(todasCitas);
     renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
     const ahora=new Date();
     const el=document.getElementById('ultima-actualizacion');
@@ -1978,6 +1979,135 @@ function selPlan(el){
   document.getElementById('plan-btn-txt').textContent=el.dataset.txt;
   syncPlanBadge(); cerrarModalPlan();
 }
+
+/* ══ NOTIFICACIONES CITAS NUEVAS ══ */
+let _citasKnownIds = new Set();
+let _audioCtx      = null;
+let _notiActiva    = false;
+
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+/* Sonido de alerta fuerte: 3 pulsos graves + agudos */
+function sonarAlerta() {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+
+    const pulsos = [
+      { freq: 880, t: 0,    dur: 0.18 },
+      { freq: 660, t: 0.22, dur: 0.14 },
+      { freq: 880, t: 0.40, dur: 0.22 },
+    ];
+
+    pulsos.forEach(({ freq, t, dur }) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type      = 'square';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + t);
+      gain.gain.setValueAtTime(0, ctx.currentTime + t);
+      gain.gain.linearRampToValueAtTime(0.55, ctx.currentTime + t + 0.01);
+      gain.gain.linearRampToValueAtTime(0,    ctx.currentTime + t + dur);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + dur + 0.05);
+    });
+  } catch(e) {}
+}
+
+/* Banner de nueva cita */
+function mostrarBannerCita(cita) {
+  let banner = document.getElementById('_banner-nuevacita');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = '_banner-nuevacita';
+    banner.style.cssText = `
+      position:fixed;top:0;left:0;right:0;z-index:999998;
+      background:#e9c176;color:#412d00;
+      font-family:'Manrope',sans-serif;
+      display:flex;align-items:center;gap:12px;
+      padding:13px 16px;
+      transform:translateY(-100%);
+      transition:transform .38s cubic-bezier(.22,1,.36,1);
+      cursor:pointer;
+    `;
+    banner.onclick = () => {
+      goTabByName('t-citas');
+      ocultarBannerCita();
+    };
+    document.body.appendChild(banner);
+  }
+
+  const servicio = cita.servicio || 'Corte';
+  const cliente  = cita.nombre   || 'Cliente';
+  const hora     = normHora(cita.hora);
+
+  banner.innerHTML = `
+    <span class="material-symbols-outlined" style="font-size:22px;flex-shrink:0">notifications_active</span>
+    <div style="flex:1;min-width:0">
+      <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:1px">Nueva cita agendada</p>
+      <p style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+        ${cliente} · ${servicio} · ${hora}
+      </p>
+    </div>
+    <button onclick="event.stopPropagation();ocultarBannerCita()"
+      style="background:rgba(65,45,0,.18);border:none;color:#412d00;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%">
+      <span class="material-symbols-outlined" style="font-size:16px">close</span>
+    </button>
+  `;
+
+  requestAnimationFrame(() => {
+    banner.style.transform = 'translateY(0)';
+  });
+
+  // Auto-ocultar a los 7 segundos
+  clearTimeout(banner._ht);
+  banner._ht = setTimeout(ocultarBannerCita, 7000);
+}
+
+function ocultarBannerCita() {
+  const b = document.getElementById('_banner-nuevacita');
+  if (b) b.style.transform = 'translateY(-100%)';
+}
+
+/* Hook: se llama cada vez que llegan citas nuevas del servidor */
+function detectarCitasNuevas(citasNuevas) {
+  if (_citasKnownIds.size === 0) {
+    // Primera carga — solo registrar IDs, no alertar
+    citasNuevas.forEach(c => _citasKnownIds.add(c.cita_id));
+    return;
+  }
+
+  const nuevas = citasNuevas.filter(c =>
+    !_citasKnownIds.has(c.cita_id) && c.estado === 'pendiente'
+  );
+
+  nuevas.forEach(c => {
+    _citasKnownIds.add(c.cita_id);
+    sonarAlerta();
+    mostrarBannerCita(c);
+
+    // Notificación del sistema si el usuario la otorgó
+    if (Notification?.permission === 'granted') {
+      new Notification('Nueva cita · The Atelier', {
+        body : `${c.nombre || 'Cliente'} · ${c.servicio || 'Corte'} · ${normHora(c.hora)}`,
+        icon : '/favicon.ico',
+        tag  : c.cita_id,
+      });
+    }
+  });
+}
+
+/* Pedir permiso de notificación del sistema al primer toque */
+function pedirPermisoNotificacion() {
+  if (Notification?.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+document.addEventListener('click', pedirPermisoNotificacion, { once: true });
 
 /* ══════════════════════════════════════
    INIT
@@ -2681,8 +2811,55 @@ async function actualizarTodo() {
   }
 }
 
+function abrirModalSalir() {
+  const m = document.getElementById('modal-salir');
+  m.style.display = 'flex';
+}
+function cerrarModalSalir() {
+  const m = document.getElementById('modal-salir');
+  m.style.display = 'none';
+}
+function confirmarSalir() {
+  sessionStorage.removeItem('atelier_sesion');
+  localStorage.removeItem('atelier_sesion');
+  window.location.href = '/pages/login/login.html';
+}
+
 
 </script>
+<!-- MODAL SALIR -->
+<div id="modal-salir" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.93);backdrop-filter:blur(18px);align-items:flex-end;justify-content:center">
+  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,118,118,.22);padding:28px 20px 44px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+
+    <!-- Icono -->
+    <div style="width:52px;height:52px;border:1px solid rgba(233,118,118,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+      <span class="material-symbols-outlined" style="font-size:24px;color:#e97676">logout</span>
+    </div>
+
+    <!-- Texto -->
+    <p style="font-size:7px;letter-spacing:.42em;text-transform:uppercase;color:rgba(233,118,118,.4);text-align:center;margin-bottom:10px">Sesión activa</p>
+    <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;text-align:center;margin-bottom:8px;font-weight:400">¿Cerrar sesión?</p>
+    <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:28px">Si sales, las notificaciones de citas nuevas<br>se detendrán hasta que vuelvas a ingresar.</p>
+
+    <!-- Separador dorado -->
+    <div style="width:32px;height:1px;background:rgba(233,118,118,.2);margin:0 auto 28px"></div>
+
+    <!-- Botones -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="confirmarSalir()"
+        style="width:100%;padding:15px;background:rgba(233,118,118,.12);border:1px solid rgba(233,118,118,.4);color:#e97676;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s"
+        onmouseover="this.style.opacity='.78'" onmouseout="this.style.opacity='1'">
+        <span class="material-symbols-outlined" style="font-size:15px">logout</span>Sí, cerrar sesión
+      </button>
+      <button onclick="cerrarModalSalir()"
+        style="width:100%;padding:14px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"
+        onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'"
+        onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
+        <span class="material-symbols-outlined" style="font-size:15px">arrow_back</span>Quedarse
+      </button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
