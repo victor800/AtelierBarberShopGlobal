@@ -2000,29 +2000,41 @@ function getAudioCtx() {
 
 /* Sonido de alerta fuerte: 3 pulsos graves + agudos */
 function sonarAlerta() {
+  // ★ Vibración como fallback universal (funciona aunque el audio esté bloqueado)
+  try {
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+  } catch(e) {}
+
+  // ★ Audio con resume explícito y promesa
   try {
     const ctx = getAudioCtx();
-    if (ctx.state === 'suspended') ctx.resume();
+    const disparar = () => {
+      const pulsos = [
+        { freq: 880, t: 0,    dur: 0.18 },
+        { freq: 660, t: 0.22, dur: 0.14 },
+        { freq: 880, t: 0.40, dur: 0.22 },
+        { freq: 1100,t: 0.65, dur: 0.28 },
+      ];
+      pulsos.forEach(({ freq, t, dur }) => {
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + t);
+        gain.gain.setValueAtTime(0,    ctx.currentTime + t);
+        gain.gain.linearRampToValueAtTime(0.7, ctx.currentTime + t + 0.01);
+        gain.gain.linearRampToValueAtTime(0,   ctx.currentTime + t + dur);
+        osc.start(ctx.currentTime + t);
+        osc.stop(ctx.currentTime + t + dur + 0.05);
+      });
+    };
 
-    const pulsos = [
-      { freq: 880, t: 0,    dur: 0.18 },
-      { freq: 660, t: 0.22, dur: 0.14 },
-      { freq: 880, t: 0.40, dur: 0.22 },
-    ];
-
-    pulsos.forEach(({ freq, t, dur }) => {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type      = 'square';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime + t);
-      gain.gain.setValueAtTime(0, ctx.currentTime + t);
-      gain.gain.linearRampToValueAtTime(0.55, ctx.currentTime + t + 0.01);
-      gain.gain.linearRampToValueAtTime(0,    ctx.currentTime + t + dur);
-      osc.start(ctx.currentTime + t);
-      osc.stop(ctx.currentTime + t + dur + 0.05);
-    });
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(disparar).catch(() => {});
+    } else {
+      disparar();
+    }
   } catch(e) {}
 }
 
@@ -2099,11 +2111,30 @@ function detectarCitasNuevas(citasNuevas) {
     mostrarBannerCita(c);
 
     // Notificación del sistema si el usuario la otorgó
+   // ★ Notificación del sistema — solicitar permiso si aún no se dio
+    const dispararNotificacion = () => {
+      try {
+        const n = new Notification('🔔 Nueva cita · The Atelier', {
+          body   : `✂️ ${c.nombre || 'Cliente'} · ${c.servicio || 'Corte'} · ${normHora(c.hora)}`,
+          icon   : 'https://globalbarber.vercel.app/favicon.ico',
+          badge  : 'https://globalbarber.vercel.app/favicon.ico',
+          tag    : c.cita_id,
+          renotify: true,
+          requireInteraction: true,  // ★ no desaparece sola — el barbero la ve aunque esté en otra app
+        });
+        n.onclick = () => {
+          window.focus();
+          goTabByName('t-citas');
+          n.close();
+        };
+      } catch(e) {}
+    };
+
     if (Notification?.permission === 'granted') {
-      new Notification('Nueva cita · The Atelier', {
-        body : `${c.nombre || 'Cliente'} · ${c.servicio || 'Corte'} · ${normHora(c.hora)}`,
-        icon : '/favicon.ico',
-        tag  : c.cita_id,
+      dispararNotificacion();
+    } else if (Notification?.permission === 'default') {
+      Notification.requestPermission().then(p => {
+        if (p === 'granted') dispararNotificacion();
       });
     }
   });
@@ -2114,6 +2145,19 @@ function pedirPermisoNotificacion() {
   if (Notification?.permission === 'default') {
     Notification.requestPermission();
   }
+  // ★ Pre-inicializar y desbloquear AudioContext en el primer toque
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    // Reproducir silencio para "activar" el contexto de audio
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, ctx.currentTime); // volumen 0 = silencio
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.001);
+  } catch(e) {}
 }
 document.addEventListener('click', pedirPermisoNotificacion, { once: true });
 
