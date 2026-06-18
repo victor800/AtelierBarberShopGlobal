@@ -474,6 +474,63 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     Actualización automática cada 2 min ·
     <span id="ultima-actualizacion" style="color:rgba(233,193,118,.45)">—</span>
   </p>
+
+  <!-- ══ CALENDARIO COLAPSABLE ══ -->
+<div id="cal-wrap" style="margin-bottom:14px;background:#161412;border:1px solid rgba(79,69,53,.22);overflow:hidden">
+
+  <!-- Header clickeable -->
+  <div onclick="toggleCal()" style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="material-symbols-outlined" style="font-size:16px;color:rgba(233,193,118,.6)">calendar_month</span>
+      <div>
+        <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;line-height:1;margin-bottom:2px">Filtrar por fecha</p>
+        <p id="cal-lbl" style="font-size:12px;color:#e9c176;font-weight:600;letter-spacing:.04em">Todas las citas</p>
+      </div>
+    </div>
+    <span class="material-symbols-outlined" id="cal-chevron" style="font-size:18px;color:#9c8f7b;transition:transform .25s">expand_more</span>
+  </div>
+
+  <!-- Cuerpo colapsable -->
+  <div id="cal-body" style="max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)">
+    <div style="padding:0 14px 14px">
+
+      <!-- Nav mes -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <button onclick="calNav(-1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.3)';this.style.color='#9c8f7b'">
+          <span class="material-symbols-outlined" style="font-size:14px">chevron_left</span>
+        </button>
+        <p id="cal-mes-lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#e5e2e1;font-weight:600">—</p>
+        <button onclick="calNav(1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.3)';this.style.color='#9c8f7b'">
+          <span class="material-symbols-outlined" style="font-size:14px">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Días de la semana -->
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">D</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">L</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">J</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">V</span>
+        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">S</span>
+      </div>
+
+      <!-- Grid días -->
+      <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"></div>
+
+      <!-- Limpiar filtro -->
+      <button onclick="calLimpiar()" id="cal-clear-btn" style="display:none;width:100%;margin-top:10px;padding:8px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
+        <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">close</span>Mostrar todas las citas
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
   <div style="display:flex;gap:6px;margin-bottom:16px">
     <button id="fc-todas" onclick="filtrarCitas('todas',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;font-weight:700">Todas</button>
     <button id="fc-pend"  onclick="filtrarCitas('pendiente',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer">Pendientes</button>
@@ -1646,7 +1703,12 @@ async function cargarCitas(silencioso=false) {
       notas      : String(c.notas || ''),
     }));
     detectarCitasNuevas(todasCitas);
-    renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
+    if (_calFiltroFecha) {
+      calSeleccionarFecha(_calFiltroFecha);
+    } else {
+      renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
+    }
+    if (_calAbierto) renderCal();
     const ahora=new Date();
     const el=document.getElementById('ultima-actualizacion');
     if(el) el.textContent=`última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
@@ -2957,6 +3019,152 @@ document.addEventListener('click', function(e) {
   conf.style.opacity = '1';
   document.getElementById('_conf-del-sheet').style.transform = 'translateY(0)';
 });
+/* ══ CALENDARIO DE CITAS ══ */
+let _calAbierto   = false;
+let _calYear      = new Date().getFullYear();
+let _calMonth     = new Date().getMonth();
+let _calFiltroFecha = null; // 'YYYY-MM-DD' o null
+
+const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function toggleCal() {
+  _calAbierto = !_calAbierto;
+  const body    = document.getElementById('cal-body');
+  const chevron = document.getElementById('cal-chevron');
+  if (_calAbierto) {
+    renderCal();
+    body.style.maxHeight = '400px';
+    chevron.style.transform = 'rotate(180deg)';
+  } else {
+    body.style.maxHeight = '0';
+    chevron.style.transform = 'rotate(0deg)';
+  }
+}
+
+function calNav(dir) {
+  _calMonth += dir;
+  if (_calMonth > 11) { _calMonth = 0; _calYear++; }
+  if (_calMonth < 0)  { _calMonth = 11; _calYear--; }
+  renderCal();
+}
+
+function renderCal() {
+  const grid   = document.getElementById('cal-grid');
+  const mesLbl = document.getElementById('cal-mes-lbl');
+  if (!grid || !mesLbl) return;
+
+  mesLbl.textContent = MESES_ES[_calMonth] + ' ' + _calYear;
+  grid.innerHTML = '';
+
+  // Citas del mes para marcar puntos
+  const citasDelMes = todasCitas.reduce((acc, c) => {
+    const f = String(c.fecha || '').split('T')[0];
+    if (f) acc[f] = (acc[f] || 0) + 1;
+    return acc;
+  }, {});
+
+  const primerDia = new Date(_calYear, _calMonth, 1).getDay(); // 0=Dom
+  const diasEnMes = new Date(_calYear, _calMonth + 1, 0).getDate();
+  const hoy       = new Date();
+  const hoyISO    = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+
+  // Celdas vacías antes del primer día
+  for (let i = 0; i < primerDia; i++) {
+    const empty = document.createElement('div');
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= diasEnMes; d++) {
+    const iso   = `${_calYear}-${String(_calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const count = citasDelMes[iso] || 0;
+    const esHoy = iso === hoyISO;
+    const selec = iso === _calFiltroFecha;
+
+    const cel = document.createElement('div');
+    cel.style.cssText = `
+      position:relative;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:5px 2px;cursor:pointer;border-radius:2px;
+      min-height:34px;transition:background .15s;
+      background:${selec ? '#e9c176' : esHoy ? 'rgba(233,193,118,.12)' : 'transparent'};
+      border:1px solid ${selec ? '#e9c176' : esHoy ? 'rgba(233,193,118,.3)' : 'transparent'};
+    `;
+
+    cel.innerHTML = `
+      <span style="font-size:11px;font-weight:${esHoy||selec?700:400};
+        color:${selec ? '#412d00' : esHoy ? '#e9c176' : count > 0 ? '#e5e2e1' : '#6b5f52'};
+        line-height:1">${d}</span>
+      ${count > 0 ? `<span style="margin-top:2px;width:${Math.min(count,3)*4+2}px;height:3px;border-radius:2px;background:${selec?'#412d00':'#e9c176'};opacity:${selec?0.6:0.7}"></span>` : ''}
+    `;
+
+    cel.onmouseover = () => {
+      if (!selec) cel.style.background = 'rgba(233,193,118,.08)';
+    };
+    cel.onmouseout = () => {
+      if (!selec) cel.style.background = esHoy ? 'rgba(233,193,118,.12)' : 'transparent';
+    };
+
+    cel.onclick = () => calSeleccionarFecha(iso);
+    grid.appendChild(cel);
+  }
+}
+
+function calSeleccionarFecha(iso) {
+  _calFiltroFecha = iso;
+
+  // Actualizar label del header
+  const [y, m, d] = iso.split('-');
+  const lbl = document.getElementById('cal-lbl');
+  if (lbl) lbl.textContent = `${d}/${m}/${y}`;
+
+  // Mostrar botón limpiar
+  const clrBtn = document.getElementById('cal-clear-btn');
+  if (clrBtn) clrBtn.style.display = 'block';
+
+  // Re-render para resaltar seleccionado
+  renderCal();
+
+  // Filtrar citas por fecha
+  const filtradas = todasCitas.filter(c => {
+    const f = String(c.fecha || '').split('T')[0];
+    return f === iso;
+  });
+
+  // Re-renderizar lista de citas con el filtro de tab activo también
+  const listaFinal = filtroActivo === 'todas'
+    ? filtradas
+    : filtradas.filter(c => c.estado === filtroActivo);
+
+  renderCitas(listaFinal);
+
+  // Mostrar mensaje si no hay citas ese día
+  if (filtradas.length === 0) {
+    const cont  = document.getElementById('citas-list');
+    const empty = document.getElementById('citas-empty');
+    cont.innerHTML = '';
+    empty.style.display = 'block';
+    // Reemplazar texto del empty con info del día
+    const p = empty.querySelector('p:last-child');
+    if (p) p.textContent = `Sin citas el ${d}/${m}/${y}`;
+  }
+}
+
+function calLimpiar() {
+  _calFiltroFecha = null;
+  const lbl = document.getElementById('cal-lbl');
+  if (lbl) lbl.textContent = 'Todas las citas';
+  const clrBtn = document.getElementById('cal-clear-btn');
+  if (clrBtn) clrBtn.style.display = 'none';
+  renderCal();
+  // Restaurar filtro normal
+  renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
+}
+
+// ★ Cuando se recargan citas, mantener el filtro de fecha activo si hay uno
+const _renderCitasOriginal = renderCitas;
+
+
+
+
 
 
 </script>
