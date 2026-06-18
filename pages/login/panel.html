@@ -726,9 +726,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
 <!-- NAV BOTTOM -->
 <nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(79,69,53,.14);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:7px 0 11px">
-  <a href="home.html" class="nav-i">
-   
-  </a>
+  
   <a href="#" class="nav-i" onclick="goTabByName('t-citas');return false">
     <span class="material-symbols-outlined" style="font-size:21px">event_available</span><p>Citas</p>
   </a>
@@ -872,7 +870,7 @@ async function gasPost(payload) {
   try { return JSON.parse(txt); } catch { return { ok:true }; }
 }
 
-/* ══ SUBIR IMAGEN A DRIVE ══ */
+
 async function subirImagenDrive(file, tipo, barId, upBarId, upFillId) {
   const bar  = document.getElementById(upBarId);
   const fill = document.getElementById(upFillId);
