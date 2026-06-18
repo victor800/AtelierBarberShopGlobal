@@ -2,7 +2,7 @@
 <html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <title>THE ATELIER | Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -10,8 +10,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 .material-symbols-outlined{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" 0,"opsz" 24}
 .ms-f{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
-html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;color:#e5e2e1;overflow-x:hidden}
-.inp{width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;color:#e5e2e1;overflow-x:hidden;-webkit-text-size-adjust:100%;touch-action:manipulation}
+.inp{width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:16px;padding:11px 13px;outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0}
 .inp:focus{border-color:rgba(233,193,118,.5)}
 .inp::placeholder{color:#2e2b27}
 .lbl{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px;display:block}
@@ -62,9 +62,9 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .pb-pro{color:#e9c176;border-color:rgba(233,193,118,.35);background:rgba(233,193,118,.08)}
 .pb-elite{color:#d4af7a;border-color:rgba(212,175,122,.4);background:rgba(212,175,122,.1)}
 .pb-prueba{color:#7ecfa8;border-color:rgba(126,207,168,.35);background:rgba(126,207,168,.07)}
-.time-inp{background:#161412;border:1px solid rgba(79,69,53,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:11px;padding:5px 7px;width:70px;outline:none;text-align:center}
+.time-inp{background:#161412;border:1px solid rgba(79,69,53,.3);color:#e9c176;font-family:'Manrope',sans-serif;font-size:11px;padding:5px 7px;width:70px;outline:none;text-align:center;border-radius:0}
 .time-inp::-webkit-calendar-picker-indicator{filter:invert(.3) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer}
-.int-sel{background:#161412;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;padding:5px 6px;outline:none;cursor:pointer;-webkit-appearance:none}
+.int-sel{background:#161412;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;padding:5px 6px;outline:none;cursor:pointer;-webkit-appearance:none;border-radius:0}
 .dia-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid rgba(79,69,53,.08)}
 .sec-lbl{font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.55);margin-bottom:3px}
 .carousel-wrap{position:relative;overflow:hidden;width:100%}
@@ -72,11 +72,9 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .carousel-track .c-slide{flex:0 0 calc(50% - 5px);min-width:0}
 @media(min-width:640px){
   .carousel-track .c-slide{flex:0 0 calc(33.333% - 7px)}
-  .corte-3d-scene{aspect-ratio:2/3 !important;max-height:360px !important}
 }
 @media(min-width:960px){
   .carousel-track .c-slide{flex:0 0 calc(25% - 8px)}
-  .corte-3d-scene{aspect-ratio:3/5 !important;max-height:320px !important}
 }
 .car-btn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s}
 .car-btn:disabled{opacity:.2;cursor:not-allowed}
@@ -84,7 +82,23 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .car-dots{display:flex;justify-content:center;gap:5px;margin-top:8px}
 .car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.4);cursor:pointer;transition:background .2s}
 .car-dot.on{background:#e9c176}
-.corte-3d-scene{perspective:900px;aspect-ratio:4/3;position:relative;cursor:grab;user-select:none;-webkit-user-select:none}
+
+/* ══ 3D CORTE — aspect ratio acorde a móvil ══ */
+.corte-3d-scene{
+  perspective:900px;
+  aspect-ratio:3/4;
+  max-height:min(70dvh,380px);
+  position:relative;
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none
+}
+@media(min-width:640px){
+  .corte-3d-scene{aspect-ratio:2/3;max-height:360px}
+}
+@media(min-width:960px){
+  .corte-3d-scene{aspect-ratio:3/5;max-height:320px}
+}
 .corte-3d-scene:active{cursor:grabbing}
 .corte-3d-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .06s linear;will-change:transform}
 .corte-3d-inner.snap{transition:transform .45s cubic-bezier(.22,1,.36,1)}
@@ -92,17 +106,51 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .corte-face-front{background:#161412}
 .corte-face-back{background:#0e0c09;transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid rgba(233,193,118,.12)}
 .corte-face img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;pointer-events:none;image-rendering:auto;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-
 .corte-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(8,6,4,.92));padding:10px 8px 8px;pointer-events:none}
-.corte-3d-ctrl{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all}
-.ctrl-btn-3d{background:transparent;border:none;color:#e9c176;cursor:pointer;display:flex;align-items:center;padding:2px 5px;transition:opacity .2s;font-size:13px}
-.ctrl-btn-3d:hover{opacity:.7}
-.ctrl-sep{width:1px;height:14px;background:rgba(233,193,118,.2)}
-.rot-deg{font-size:8px;letter-spacing:.14em;color:#9c8f7b;min-width:30px;text-align:center}
 .corte-dest-badge{position:absolute;top:6px;left:6px;background:#e9c176;padding:2px 7px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00;z-index:5;pointer-events:none}
-.corte-3d-hint{position:absolute;top:8px;right:8px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(8,6,4,.72);border:1px solid rgba(233,193,118,.2);padding:3px 7px;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(233,193,118,.7);pointer-events:none;animation:hintFade 3s ease forwards 1.2s}
+.corte-3d-hint{position:absolute;top:8px;right:46px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(8,6,4,.72);border:1px solid rgba(233,193,118,.2);padding:3px 7px;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(233,193,118,.7);pointer-events:none;animation:hintFade 3s ease forwards 1.2s}
 @keyframes hintFade{0%{opacity:1}80%{opacity:1}100%{opacity:0}}
-.corte-del-btn{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(8,6,4,.8);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:10}
+
+/* ══ BOTÓN ELIMINAR CORTE — siempre visible ══ */
+.corte-del-btn{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:34px;
+  height:34px;
+  background:rgba(8,6,4,.88);
+  border:1px solid rgba(200,60,60,.45);
+  color:#e97676;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  transition:all .2s;
+  border-radius:0
+}
+.corte-del-btn:hover{background:rgba(200,60,60,.2);border-color:rgba(200,60,60,.7)}
+
+/* ══ BOTÓN LUPA — siempre visible ══ */
+.corte-zoom-btn{
+  position:absolute;
+  top:6px;
+  right:46px;
+  width:34px;
+  height:34px;
+  background:rgba(8,6,4,.78);
+  border:1px solid rgba(233,193,118,.28);
+  color:#e9c176;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  transition:all .2s;
+  border-radius:0
+}
+.corte-zoom-btn:hover{background:rgba(233,193,118,.15)}
+
 .dorso-label{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(233,193,118,.4);margin-bottom:4px}
 .dorso-name{font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;text-align:center;line-height:1.3}
 .dorso-estilo{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin-top:6px}
@@ -117,7 +165,6 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .ht-tarde{color:#e9c176;border-color:rgba(233,193,118,.3);background:rgba(233,193,118,.07)}
 .ht-especial{color:#7ecfa8;border-color:rgba(126,207,168,.3);background:rgba(126,207,168,.07)}
 .chip-nueva{display:inline-flex;align-items:center;gap:5px;background:rgba(126,207,168,.08);border:1px solid rgba(126,207,168,.3);color:#7ecfa8;font-size:8px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;margin-bottom:14px}
-/* ★ WhatsApp button inline */
 .btn-wa{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);color:#25d366;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;padding:4px 9px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .btn-wa:hover{background:rgba(37,211,102,.22);border-color:rgba(37,211,102,.6)}
 #toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);padding:10px 20px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;z-index:9998;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
@@ -133,15 +180,47 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 .skel{background:linear-gradient(90deg,#1c1b1b 25%,#2a2825 50%,#1c1b1b 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:2px;height:40px;width:100%}
 @keyframes pinPulse{0%{box-shadow:0 0 0 0 rgba(233,193,118,.5)}70%{box-shadow:0 0 0 12px rgba(233,193,118,0)}100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}}
-#fu-local img, #img-local{object-fit:cover;object-position:center}
-@media(min-width:640px){
-  #fu-local{aspect-ratio:21/7 !important}
+#fu-local img,#img-local{object-fit:cover;object-position:center}
+
+/* ══ Ajuste de inputs para no activar zoom en iOS ══ */
+select,textarea{font-size:16px!important;border-radius:0}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=url]{font-size:16px!important}
+input[type=date],input[type=time]{font-size:14px!important}
+
+/* ══ Ancho máximo para vista web ══ */
+@media(min-width:700px){
+  .panel-inner{max-width:640px;margin:0 auto}
+  header .panel-inner-hdr{max-width:640px;margin:0 auto}
 }
 @media(min-width:960px){
-  #fu-local{aspect-ratio:32/9 !important;max-height:260px !important}
+  .panel-inner{max-width:720px;margin:0 auto}
 }
-</style>
 
+/* ══ Banner cita nueva ══ */
+#_banner-nuevacita{padding-top:env(safe-area-inset-top,0)}
+
+/* ══ Controles 3D ══ */
+.corte-3d-ctrl-bar{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(8,6,4,.78);
+  border:1px solid rgba(233,193,118,.18);
+  padding:5px 10px;
+  backdrop-filter:blur(6px);
+  pointer-events:all;
+  white-space:nowrap
+}
+.ctrl-btn-3d{background:transparent;border:none;color:#e9c176;cursor:pointer;display:flex;align-items:center;padding:2px 5px;transition:opacity .2s;font-size:13px}
+.ctrl-btn-3d:hover{opacity:.7}
+.ctrl-sep{width:1px;height:14px;background:rgba(233,193,118,.2)}
+.rot-deg{font-size:8px;letter-spacing:.14em;color:#9c8f7b;min-width:30px;text-align:center}
+</style>
 </head>
 <body>
 
@@ -156,7 +235,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
 <!-- HEADER FIJO -->
 <header style="position:fixed;top:0;width:100%;z-index:50;background:rgba(8,6,4,.96);backdrop-filter:blur(18px);border-bottom:1px solid rgba(79,69,53,.15)">
-  <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 16px">
+  <div class="panel-inner" style="display:flex;justify-content:space-between;align-items:center;padding:9px 16px">
     <div style="display:flex;align-items:center;gap:9px;min-width:0">
       <div style="width:6px;height:22px;overflow:hidden;border-radius:3px;border:1px solid rgba(79,69,53,.28);flex-shrink:0">
         <div class="pole" style="height:150px"></div>
@@ -168,14 +247,12 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
     <div style="display:flex;align-items:center;gap:9px;flex-shrink:0">
       <span id="plan-badge" class="pbadge pb-pro">PRO</span>
-
-     <button onclick="abrirModalSalir()" title="Cerrar sesión"
-  style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 8px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;transition:all .2s"
-  onmouseover="this.style.borderColor='rgba(233,118,118,.4)';this.style.color='#e97676'"
-  onmouseout="this.style.borderColor='rgba(79,69,53,.28)';this.style.color='#9c8f7b'">
-  <span class="material-symbols-outlined" style="font-size:13px">logout</span>Salir
-</button>
-
+      <button onclick="abrirModalSalir()" title="Cerrar sesión"
+        style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 8px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;transition:all .2s"
+        onmouseover="this.style.borderColor='rgba(233,118,118,.4)';this.style.color='#e97676'"
+        onmouseout="this.style.borderColor='rgba(79,69,53,.28)';this.style.color='#9c8f7b'">
+        <span class="material-symbols-outlined" style="font-size:13px">logout</span>Salir
+      </button>
       <div class="av-wrap" title="Cambiar foto de perfil">
         <input type="file" accept="image/*" onchange="onAvatar(this)"/>
         <div class="av-inner" id="av-inner">
@@ -188,17 +265,18 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
       </div>
     </div>
   </div>
-  <div style="display:flex;border-bottom:1px solid rgba(79,69,53,.13);padding:0 2px;overflow-x:auto;scrollbar-width:none">
+  <div class="panel-inner" style="display:flex;border-bottom:1px solid rgba(79,69,53,.13);padding:0 2px;overflow-x:auto;scrollbar-width:none">
     <button class="tab-btn on" id="tb-datos"    onclick="goTab(this,'t-datos')">Perfil</button>
     <button class="tab-btn"   id="tb-horarios" onclick="goTab(this,'t-horarios')">Horarios</button>
     <button class="tab-btn" id="tb-citas" onclick="goTab(this,'t-citas')" style="position:relative">Citas<span id="badge-citas" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
     <button class="tab-btn" id="tb-tienda" onclick="goTab(this,'t-tienda')" style="position:relative">Tienda<span id="badge-tienda" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
     <button class="tab-btn" id="tb-cortes" onclick="goTab(this,'t-cortes')" style="position:relative">Cortes<span id="badge-cortes" style="display:none;position:absolute;top:4px;right:6px;min-width:14px;height:14px;background:#c0392b;color:#fff;border-radius:7px;font-size:8px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;font-family:'Manrope',sans-serif"></span></button>
-     <button class="tab-btn" id="tb-dash" onclick="goTab(this,'t-dash');renderDashboard()" style="position:relative">Dashboard</button>
+    <button class="tab-btn" id="tb-dash" onclick="goTab(this,'t-dash');renderDashboard()">Dashboard</button>
   </div>
 </header>
 
 <main style="padding-top:108px;padding-bottom:80px">
+<div class="panel-inner">
 
 <!-- ══════════════════════════ PERFIL ══════════════════════════ -->
 <div id="t-datos" class="tc on" style="padding:18px;gap:14px">
@@ -213,8 +291,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
   <div>
     <label class="lbl">Foto del local / negocio</label>
-       <div class="fu" id="fu-local" style="width:100%;aspect-ratio:16/6;max-height:clamp(180px,28vh,320px)">
-
+    <div class="fu" id="fu-local" style="width:100%;aspect-ratio:16/6;max-height:clamp(180px,28vh,320px)">
       <input type="file" accept="image/*" onchange="onFotoLocal(this)"/>
       <img id="img-local" src="" alt=""/>
       <div class="ph">
@@ -285,9 +362,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
   <div>
     <label class="lbl">Plan</label>
     <button type="button" id="btn-open-plan" onclick="abrirModalPlan()"
-      style="width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;
-      font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;text-align:left;
-      cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+      style="width:100%;background:#1c1b1b;border:1px solid rgba(79,69,53,.4);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
       <span id="plan-btn-txt">Pro — $89.000/mes</span>
       <span class="material-symbols-outlined" style="font-size:16px;color:#9c8f7b">expand_more</span>
     </button>
@@ -299,16 +374,14 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;transform:translateY(0);animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
       <p style="font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.45);text-align:center;margin-bottom:20px">Elige tu plan</p>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
-        <div class="plan-opt" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlan(this)"
-          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div class="plan-opt" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlan(this)" style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:4px">Básico</p>
               <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1">$50.000<span style="font-size:11px;color:#9c8f7b">/mes</span></p></div>
             <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Perfil · Citas<br>Horarios básicos</p></div>
           </div>
         </div>
-        <div class="plan-opt" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlan(this)"
-          style="padding:16px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.4);cursor:pointer;position:relative">
+        <div class="plan-opt" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlan(this)" style="padding:16px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.4);cursor:pointer;position:relative">
           <div style="position:absolute;top:-1px;right:12px;background:#e9c176;padding:2px 9px;font-size:7px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#412d00">Popular</div>
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#e9c176;margin-bottom:4px">Pro</p>
@@ -316,16 +389,14 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
             <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Básico +<br>Tienda · Cortes · Fotos</p></div>
           </div>
         </div>
-        <div class="plan-opt" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlan(this)"
-          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
+        <div class="plan-opt" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlan(this)" style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#d4af7a;margin-bottom:4px">Élite</p>
               <p style="font-family:'Noto Serif',serif;font-size:22px;color:#d4af7a">$149.000<span style="font-size:11px;color:rgba(212,175,122,.5)">/mes</span></p></div>
             <div style="text-align:right"><p style="font-size:9px;color:#9c8f7b;line-height:1.6">Todo Pro +<br>Analytics · Prioridad</p></div>
           </div>
         </div>
-        <div class="plan-opt" data-val="Prueba" data-txt="Prueba gratuita — 15 días" onclick="selPlan(this)"
-          style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
+        <div class="plan-opt" data-val="Prueba" data-txt="Prueba gratuita — 15 días" onclick="selPlan(this)" style="padding:16px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7ecfa8;margin-bottom:4px">Prueba</p>
               <p style="font-family:'Noto Serif',serif;font-size:22px;color:#7ecfa8">Gratis<span style="font-size:11px;color:rgba(126,207,168,.5)"> 15 días</span></p></div>
@@ -345,71 +416,49 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <div class="pbar"><div class="pfill" id="prog-fill" style="width:0%"></div></div>
   </div>
 
-
-  <!-- ══ URL PÚBLICA + QR — dentro del formulario de Perfil ══ -->
-<!-- Pegar ANTES del botón "Guardar Perfil" en t-datos -->
-
-<div id="sec-url-publica" style="background:#161412;border:1px solid rgba(233,193,118,.18);padding:0;overflow:hidden">
-
-  <!-- Encabezado -->
-  <div style="background:rgba(233,193,118,.06);border-bottom:1px solid rgba(233,193,118,.14);padding:11px 14px;display:flex;align-items:center;gap:8px">
-    <span class="material-symbols-outlined" style="font-size:15px;color:rgba(233,193,118,.7)">link</span>
-    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.65);font-weight:700">Tu perfil público</p>
-  </div>
-
-  <div style="padding:14px">
-
-    <!-- URL display + botón copiar -->
-    <div style="background:#0e0c08;border:1px solid rgba(79,69,53,.28);padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span class="material-symbols-outlined" style="font-size:14px;color:rgba(233,193,118,.35);flex-shrink:0">public</span>
-      <p id="url-publica-txt" style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;letter-spacing:.04em;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">—</p>
-      <button onclick="copiarUrlPublica()" id="btn-copy-url"
-        style="flex-shrink:0;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap">
-        <span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar
-      </button>
+  <!-- URL PÚBLICA + QR -->
+  <div id="sec-url-publica" style="background:#161412;border:1px solid rgba(233,193,118,.18);padding:0;overflow:hidden">
+    <div style="background:rgba(233,193,118,.06);border-bottom:1px solid rgba(233,193,118,.14);padding:11px 14px;display:flex;align-items:center;gap:8px">
+      <span class="material-symbols-outlined" style="font-size:15px;color:rgba(233,193,118,.7)">link</span>
+      <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.65);font-weight:700">Tu perfil público</p>
     </div>
-
-    <!-- Fila: QR + acciones -->
-    <div style="display:flex;gap:12px;align-items:flex-start">
-
-      <!-- QR canvas -->
-      <div style="flex-shrink:0;background:#0e0c08;border:1px solid rgba(79,69,53,.22);padding:8px;display:flex;align-items:center;justify-content:center;width:110px;height:110px;position:relative">
-        <canvas id="qr-canvas" width="94" height="94" style="display:none;image-rendering:pixelated"></canvas>
-        <div id="qr-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:5px">
-          <span class="material-symbols-outlined" style="font-size:26px;color:rgba(233,193,118,.12)">qr_code_2</span>
-          <p style="font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(156,143,123,.22)">QR</p>
+    <div style="padding:14px">
+      <div style="background:#0e0c08;border:1px solid rgba(79,69,53,.28);padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span class="material-symbols-outlined" style="font-size:14px;color:rgba(233,193,118,.35);flex-shrink:0">public</span>
+        <p id="url-publica-txt" style="font-family:'Manrope',sans-serif;font-size:10px;color:#9c8f7b;letter-spacing:.04em;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">—</p>
+        <button onclick="copiarUrlPublica()" id="btn-copy-url"
+          style="flex-shrink:0;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap">
+          <span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar
+        </button>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="flex-shrink:0;background:#0e0c08;border:1px solid rgba(79,69,53,.22);padding:8px;display:flex;align-items:center;justify-content:center;width:110px;height:110px;position:relative">
+          <canvas id="qr-canvas" width="94" height="94" style="display:none;image-rendering:pixelated"></canvas>
+          <div id="qr-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+            <span class="material-symbols-outlined" style="font-size:26px;color:rgba(233,193,118,.12)">qr_code_2</span>
+            <p style="font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(156,143,123,.22)">QR</p>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
+          <p style="font-size:10px;color:#9c8f7b;line-height:1.6">Comparte este código QR o la URL directa con tus clientes — acceden a tu perfil sin necesidad de login.</p>
+          <button onclick="compartirPerfil()" id="btn-share-url"
+            style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s">
+            <span class="material-symbols-outlined" style="font-size:13px">share</span>Compartir perfil
+          </button>
+          <button onclick="descargarQR()" id="btn-dl-qr"
+            style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s"
+            onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'"
+            onmouseout="this.style.borderColor='rgba(79,69,53,.35)';this.style.color='#9c8f7b'">
+            <span class="material-symbols-outlined" style="font-size:13px">download</span>Descargar QR
+          </button>
         </div>
       </div>
-
-      <!-- Info + botones acción -->
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
-        <p style="font-size:10px;color:#9c8f7b;line-height:1.6">Comparte este código QR o la URL directa con tus clientes — acceden a tu perfil sin necesidad de login.</p>
-
-        <!-- Botón compartir (Web Share API) / fallback copiar -->
-        <button onclick="compartirPerfil()" id="btn-share-url"
-          style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s">
-          <span class="material-symbols-outlined" style="font-size:13px">share</span>Compartir perfil
-        </button>
-
-        <!-- Descargar QR -->
-        <button onclick="descargarQR()" id="btn-dl-qr"
-          style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;padding:9px 12px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s"
-          onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'"
-          onmouseout="this.style.borderColor='rgba(79,69,53,.35)';this.style.color='#9c8f7b'">
-          <span class="material-symbols-outlined" style="font-size:13px">download</span>Descargar QR
-        </button>
+      <div style="display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:9px 10px;background:rgba(233,193,118,.04);border:1px solid rgba(79,69,53,.18)">
+        <span class="material-symbols-outlined" style="font-size:12px;color:rgba(233,193,118,.3);flex-shrink:0;margin-top:1px">info</span>
+        <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;line-height:1.65">El QR y la URL apuntan directamente a tu perfil. Tu cliente agenda sin necesidad de registrarse.</p>
       </div>
     </div>
-
-    <!-- Nota informativa -->
-    <div style="display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:9px 10px;background:rgba(233,193,118,.04);border:1px solid rgba(79,69,53,.18)">
-      <span class="material-symbols-outlined" style="font-size:12px;color:rgba(233,193,118,.3);flex-shrink:0;margin-top:1px">info</span>
-      <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;line-height:1.65">El QR y la URL apuntan directamente a tu perfil. Tu cliente agenda sin necesidad de registrarse.</p>
-    </div>
   </div>
-</div>
-
-
 
   <button class="btn-g" id="btn-perfil" onclick="guardarPerfil()" style="width:100%;padding:15px">
     <span class="material-symbols-outlined" style="font-size:15px">save</span>Guardar Perfil
@@ -493,61 +542,45 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <span id="ultima-actualizacion" style="color:rgba(233,193,118,.45)">—</span>
   </p>
 
-  <!-- ══ CALENDARIO COLAPSABLE ══ -->
-<div id="cal-wrap" style="margin-bottom:14px;background:#161412;border:1px solid rgba(79,69,53,.22);overflow:hidden">
-
-  <!-- Header clickeable -->
-  <div onclick="toggleCal()" style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none">
-    <div style="display:flex;align-items:center;gap:8px">
-      <span class="material-symbols-outlined" style="font-size:16px;color:rgba(233,193,118,.6)">calendar_month</span>
-      <div>
-        <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;line-height:1;margin-bottom:2px">Filtrar por fecha</p>
-        <p id="cal-lbl" style="font-size:12px;color:#e9c176;font-weight:600;letter-spacing:.04em">Todas las citas</p>
+  <!-- CALENDARIO COLAPSABLE -->
+  <div id="cal-wrap" style="margin-bottom:14px;background:#161412;border:1px solid rgba(79,69,53,.22);overflow:hidden">
+    <div onclick="toggleCal()" style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="material-symbols-outlined" style="font-size:16px;color:rgba(233,193,118,.6)">calendar_month</span>
+        <div>
+          <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;line-height:1;margin-bottom:2px">Filtrar por fecha</p>
+          <p id="cal-lbl" style="font-size:12px;color:#e9c176;font-weight:600;letter-spacing:.04em">Todas las citas</p>
+        </div>
+      </div>
+      <span class="material-symbols-outlined" id="cal-chevron" style="font-size:18px;color:#9c8f7b;transition:transform .25s">expand_more</span>
+    </div>
+    <div id="cal-body" style="max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)">
+      <div style="padding:0 14px 14px;overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:inherit">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <button onclick="calNav(-1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+            <span class="material-symbols-outlined" style="font-size:14px">chevron_left</span>
+          </button>
+          <p id="cal-mes-lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#e5e2e1;font-weight:600">—</p>
+          <button onclick="calNav(1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+            <span class="material-symbols-outlined" style="font-size:14px">chevron_right</span>
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">D</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">L</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">J</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">V</span>
+          <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">S</span>
+        </div>
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"></div>
+        <button onclick="calLimpiar()" id="cal-clear-btn" style="display:none;width:100%;margin-top:10px;padding:8px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer">
+          <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">close</span>Mostrar todas las citas
+        </button>
       </div>
     </div>
-    <span class="material-symbols-outlined" id="cal-chevron" style="font-size:18px;color:#9c8f7b;transition:transform .25s">expand_more</span>
   </div>
-
-  <!-- Cuerpo colapsable -->
-  <div id="cal-body" style="max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)">
-    <div style="padding:0 14px 14px;overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:inherit">
-
-      <!-- Nav mes -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <button onclick="calNav(-1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.3)';this.style.color='#9c8f7b'">
-          <span class="material-symbols-outlined" style="font-size:14px">chevron_left</span>
-        </button>
-        <p id="cal-mes-lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#e5e2e1;font-weight:600">—</p>
-        <button onclick="calNav(1)" style="background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.4)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.3)';this.style.color='#9c8f7b'">
-          <span class="material-symbols-outlined" style="font-size:14px">chevron_right</span>
-        </button>
-      </div>
-
-      <!-- Días de la semana -->
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">D</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">L</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">M</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">J</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">V</span>
-        <span style="text-align:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;padding:3px 0">S</span>
-      </div>
-
-      <!-- Grid días -->
-      <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"></div>
-
-      <!-- Limpiar filtro -->
-      <button onclick="calLimpiar()" id="cal-clear-btn" style="display:none;width:100%;margin-top:10px;padding:8px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'" onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
-        <span class="material-symbols-outlined" style="font-size:11px;vertical-align:middle;margin-right:4px">close</span>Mostrar todas las citas
-      </button>
-    </div>
-  </div>
-</div>
-
-
-
-
 
   <div style="display:flex;gap:6px;margin-bottom:16px">
     <button id="fc-todas" onclick="filtrarCitas('todas',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;font-weight:700">Todas</button>
@@ -708,75 +741,59 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
   </div>
 </div>
 
+<!-- ══════════════════════════ DASHBOARD ══════════════════════════ -->
 <div id="t-dash" class="tc" style="padding:18px;gap:0">
- 
-  <!-- ── Encabezado ── -->
   <p class="sec-lbl" style="margin-bottom:3px">Análisis</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Dashboard</p>
-  <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.65">
-    Estadísticas de citas, ingresos y walk-ins. Filtra por período para ver el rendimiento de tu barbería.
-  </p>
- 
-  <!-- ── Filtros rápidos ── -->
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.65">Estadísticas de citas, ingresos y walk-ins. Filtra por período para ver el rendimiento de tu barbería.</p>
+
   <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap">
-    <button id="df-hoy"     class="dash-fb" onclick="filtrarDash('hoy',this)"   style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Hoy</button>
-    <button id="df-semana"  class="dash-fb" onclick="filtrarDash('semana',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Semana</button>
-    <button id="df-mes"     class="dash-fb" onclick="filtrarDash('mes',this)"    style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;transition:all .2s;font-weight:700;min-width:44px">Mes</button>
-    <button id="df-todo"    class="dash-fb" onclick="filtrarDash('todo',this)"   style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Todo</button>
-    <button id="df-custom"  class="dash-fb" onclick="filtrarDash('custom',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s;min-width:44px">Fechas</button>
+    <button id="df-hoy"    class="dash-fb" onclick="filtrarDash('hoy',this)"    style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;min-width:44px">Hoy</button>
+    <button id="df-semana" class="dash-fb" onclick="filtrarDash('semana',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;min-width:44px">Semana</button>
+    <button id="df-mes"    class="dash-fb" onclick="filtrarDash('mes',this)"    style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;font-weight:700;min-width:44px">Mes</button>
+    <button id="df-todo"   class="dash-fb" onclick="filtrarDash('todo',this)"   style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;min-width:44px">Todo</button>
+    <button id="df-custom" class="dash-fb" onclick="filtrarDash('custom',this)" style="flex:1;padding:8px 4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer;min-width:44px">Fechas</button>
   </div>
- 
-  <!-- Rango personalizado -->
+
   <div id="dash-custom-row" style="display:none;align-items:center;gap:8px;margin-bottom:12px">
-    <input type="date" id="dash-desde" class="inp" style="flex:1;color:#e9c176"
-      onchange="dashDesde=this.value;if(dashHasta)renderDashboard()"/>
+    <input type="date" id="dash-desde" class="inp" style="flex:1;color:#e9c176" onchange="dashDesde=this.value;if(dashHasta)renderDashboard()"/>
     <span style="font-size:10px;color:#9c8f7b;flex-shrink:0">—</span>
-    <input type="date" id="dash-hasta" class="inp" style="flex:1;color:#e9c176"
-      onchange="dashHasta=this.value;if(dashDesde)renderDashboard()"/>
+    <input type="date" id="dash-hasta" class="inp" style="flex:1;color:#e9c176" onchange="dashHasta=this.value;if(dashDesde)renderDashboard()"/>
   </div>
- 
-  <!-- ── Tarjetas de estadísticas ── -->
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">
- 
     <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.22);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Total citas</p>
       <p id="ds-total" style="font-family:'Noto Serif',serif;font-size:30px;color:#e5e2e1;line-height:1;margin-bottom:4px">0</p>
       <p style="font-size:9px;color:#6b5f52">en el período</p>
     </div>
- 
     <div style="background:#1c1b1b;border:1px solid rgba(74,222,128,.15);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Confirmadas</p>
       <p id="ds-conf" style="font-family:'Noto Serif',serif;font-size:30px;color:#4ade80;line-height:1;margin-bottom:4px">0</p>
       <p style="font-size:9px;color:#6b5f52"><span id="ds-tasa">0%</span> tasa de éxito</p>
     </div>
- 
     <div style="background:#1c1b1b;border:1px solid rgba(233,118,118,.12);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Canceladas</p>
       <p id="ds-canc" style="font-family:'Noto Serif',serif;font-size:30px;color:#e97676;line-height:1;margin-bottom:4px">0</p>
       <p style="font-size:9px;color:#6b5f52">en el período</p>
     </div>
- 
     <div style="background:#1c1b1b;border:1px solid rgba(126,207,168,.15);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Walk-ins</p>
       <p id="ds-wi" style="font-family:'Noto Serif',serif;font-size:30px;color:#7ecfa8;line-height:1;margin-bottom:4px">0</p>
       <p style="font-size:9px;color:#6b5f52">sin agenda</p>
     </div>
- 
     <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.22);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b;margin-bottom:7px">Clientes únicos</p>
       <p id="ds-cli" style="font-family:'Noto Serif',serif;font-size:30px;color:#e9c176;line-height:1;margin-bottom:4px">0</p>
       <p style="font-size:9px;color:#6b5f52">identificados</p>
     </div>
- 
     <div style="background:rgba(233,193,118,.05);border:1px solid rgba(233,193,118,.25);padding:14px">
       <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(233,193,118,.6);margin-bottom:7px">Ingresos est.</p>
       <p id="ds-ing" style="font-family:'Noto Serif',serif;font-size:22px;color:#e9c176;line-height:1;margin-bottom:4px">$0</p>
       <p style="font-size:9px;color:#6b5f52">confirmadas + walk-ins</p>
     </div>
- 
   </div>
- 
-  <!-- ── Gráfica últimos 7 días ── -->
+
   <div style="background:#161412;border:1px solid rgba(79,69,53,.15);padding:14px;margin-bottom:18px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b">Últimos 7 días</p>
@@ -793,45 +810,29 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
     <div id="dash-barchart" style="display:flex;align-items:flex-end;gap:6px;height:110px;padding-top:8px"></div>
   </div>
- 
-  <!-- ── Top servicios ── -->
+
   <div style="background:#161412;border:1px solid rgba(79,69,53,.15);padding:14px;margin-bottom:22px">
     <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px">Top servicios · período</p>
     <div id="dash-svc-body">
       <p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>
     </div>
   </div>
- 
-  <!-- ══════ WALK-INS ══════ -->
+
+  <!-- WALK-INS -->
   <p class="sec-lbl" style="margin-bottom:3px">Sin agenda</p>
   <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Registrar Walk-in</p>
-  <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.65">
-    Cliente que llegó directo a tu silla. Regístralo para llevar el control real de tu negocio.
-  </p>
- 
-  <!-- Formulario walk-in -->
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:16px;line-height:1.65">Cliente que llegó directo a tu silla. Regístralo para llevar el control real de tu negocio.</p>
+
   <div style="background:#161412;border:1px solid rgba(126,207,168,.18);padding:16px;margin-bottom:18px">
     <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#7ecfa8;margin-bottom:14px">+ Nuevo walk-in</p>
     <div style="display:flex;flex-direction:column;gap:10px">
- 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div>
-          <label class="lbl">Cliente (opcional)</label>
-          <input class="inp" id="wi-cliente" type="text" placeholder="Nombre o alias"/>
-        </div>
-        <div>
-          <label class="lbl">Servicio *</label>
-          <input class="inp" id="wi-servicio" type="text" placeholder="Fade, Clásico, Barba..."/>
-        </div>
+        <div><label class="lbl">Cliente (opcional)</label><input class="inp" id="wi-cliente" type="text" placeholder="Nombre o alias"/></div>
+        <div><label class="lbl">Servicio *</label><input class="inp" id="wi-servicio" type="text" placeholder="Fade, Clásico, Barba..."/></div>
       </div>
- 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div>
-          <label class="lbl">Precio (COP)</label>
-          <input class="inp" id="wi-precio" type="number" placeholder="45000" min="0"/>
-        </div>
-        <div>
-          <label class="lbl">Método de pago</label>
+        <div><label class="lbl">Precio (COP)</label><input class="inp" id="wi-precio" type="number" placeholder="45000" min="0"/></div>
+        <div><label class="lbl">Método de pago</label>
           <select class="inp" id="wi-pago">
             <option value="Efectivo">Efectivo</option>
             <option value="Nequi">Nequi</option>
@@ -842,41 +843,30 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
           </select>
         </div>
       </div>
- 
-      <div>
-        <label class="lbl">Notas</label>
-        <input class="inp" id="wi-notas" type="text" placeholder="Corte adicional, observaciones..."/>
-      </div>
- 
+      <div><label class="lbl">Notas</label><input class="inp" id="wi-notas" type="text" placeholder="Corte adicional, observaciones..."/></div>
     </div>
- 
-    <button onclick="registrarWalkIn()"
-      style="width:100%;padding:14px;margin-top:14px;background:rgba(126,207,168,.18);border:1px solid rgba(126,207,168,.4);color:#7ecfa8;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s"
-      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+    <button onclick="registrarWalkIn()" style="width:100%;padding:14px;margin-top:14px;background:rgba(126,207,168,.18);border:1px solid rgba(126,207,168,.4);color:#7ecfa8;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
       <span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Registrar walk-in
     </button>
   </div>
- 
-  <!-- Historial hoy -->
+
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
     <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b">Hoy · walk-ins</p>
     <span id="wi-count-hoy" style="font-size:8px;letter-spacing:.12em;color:#7ecfa8">0 hoy</span>
   </div>
- 
+
   <div id="wi-empty" style="display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:6px">
     <span class="material-symbols-outlined" style="font-size:20px;color:rgba(126,207,168,.15)">person_add</span>
     <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin walk-ins hoy</p>
   </div>
- 
   <div id="wi-lista" style="margin-bottom:20px"></div>
- 
 </div>
 
+</div><!-- /panel-inner -->
 </main>
 
 <!-- NAV BOTTOM -->
-<nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(79,69,53,.14);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:7px 0 11px">
-  
+<nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(79,69,53,.14);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:7px 0 11px;padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))">
   <a href="#" class="nav-i" onclick="goTabByName('t-citas');return false">
     <span class="material-symbols-outlined" style="font-size:21px">event_available</span><p>Citas</p>
   </a>
@@ -890,6 +880,27 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     <span class="material-symbols-outlined ms-f" style="font-size:21px">person</span><p>Perfil</p>
   </a>
 </nav>
+
+<!-- MODAL SALIR -->
+<div id="modal-salir" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.93);backdrop-filter:blur(18px);align-items:flex-end;justify-content:center">
+  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,118,118,.22);padding:28px 20px 44px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+    <div style="width:52px;height:52px;border:1px solid rgba(233,118,118,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+      <span class="material-symbols-outlined" style="font-size:24px;color:#e97676">logout</span>
+    </div>
+    <p style="font-size:7px;letter-spacing:.42em;text-transform:uppercase;color:rgba(233,118,118,.4);text-align:center;margin-bottom:10px">Sesión activa</p>
+    <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;text-align:center;margin-bottom:8px;font-weight:400">¿Cerrar sesión?</p>
+    <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:28px">Si sales, las notificaciones de citas nuevas<br>se detendrán hasta que vuelvas a ingresar.</p>
+    <div style="width:32px;height:1px;background:rgba(233,118,118,.2);margin:0 auto 28px"></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="confirmarSalir()" style="width:100%;padding:15px;background:rgba(233,118,118,.12);border:1px solid rgba(233,118,118,.4);color:#e97676;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span class="material-symbols-outlined" style="font-size:15px">logout</span>Sí, cerrar sesión
+      </button>
+      <button onclick="cerrarModalSalir()" style="width:100%;padding:14px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span class="material-symbols-outlined" style="font-size:15px">arrow_back</span>Quedarse
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ══════════════════════════════════════
@@ -1020,7 +1031,6 @@ async function gasPost(payload) {
   try { return JSON.parse(txt); } catch { return { ok:true }; }
 }
 
-
 async function subirImagenDrive(file, tipo, barId, upBarId, upFillId) {
   const bar  = document.getElementById(upBarId);
   const fill = document.getElementById(upFillId);
@@ -1105,7 +1115,6 @@ function mostrarAvatar(url) {
   if (icon) icon.style.display = 'none';
 }
 
-/* ══ HELPERS DE PRELLENADO ══ */
 function prellenarInputs(map) {
   Object.entries(map).forEach(([id, val]) => {
     const el = document.getElementById(id);
@@ -1250,26 +1259,18 @@ async function guardarPerfil() {
       imgs.avatar_url  = await subirImagenDrive(imgs.avatar_file, 'perfil_barbero', BAR_ID, 'upbar-local', 'upfill-local');
       imgs.avatar_file = null;
       mostrarAvatar(imgs.avatar_url);
-      toast('✓ Foto de perfil subida');
     } catch(e) {
-      toast('⚠ Foto no subida — se guarda sin imagen', true);
       imgs.avatar_file = null;
     }
   }
   if (imgs.local_file) {
-    toast('Subiendo foto del local a Drive...');
     try {
       imgs.local_url  = await subirImagenDrive(imgs.local_file, 'perfil_local', BAR_ID, 'upbar-local', 'upfill-local');
       imgs.local_file = null;
-      toast('✓ Foto del local subida');
     } catch(e) {
-      toast('⚠ Foto local no subida', true);
       imgs.local_file = null;
     }
   }
-
-  const fotoBarb  = imgs.avatar_url || sesion.foto_barbero_url || '';
-  const fotoLocal = imgs.local_url  || sesion.foto_local_url   || '';
 
   const datos = {
     accion             : 'guardarPerfil',
@@ -1283,8 +1284,8 @@ async function guardarPerfil() {
     telefono           : t,
     email              : document.getElementById('f-email').value.trim(),
     redes_sociales     : '',
-    foto_barbero_url   : fotoBarb,
-    foto_local_url     : fotoLocal,
+    foto_barbero_url   : imgs.avatar_url || sesion.foto_barbero_url || '',
+    foto_local_url     : imgs.local_url  || sesion.foto_local_url   || '',
     maps_url           : document.getElementById('f-maps').value.trim(),
     plan               : document.getElementById('f-plan').value,
     activo             : true,
@@ -1308,7 +1309,7 @@ async function guardarPerfil() {
       foto_barbero_url:imgs.avatar_url, foto_local_url:imgs.local_url,
       maps_url:datos.maps_url, plan:datos.plan,
     });
-    syncHeader();
+    syncHeader(); syncPlanBadge();
     document.getElementById('banner-nueva').style.display = 'none';
     toast('✓ Perfil guardado');
   } catch(e) {
@@ -1453,7 +1454,7 @@ async function guardarHorarios() {
     fecha_actualizacion: fecha,
   }));
   const activos=dias.filter(h=>h.activo).length;
-  showOv(`Guardando ${activos} días en Sheet...`);
+  showOv(`Guardando ${activos} días...`);
   try {
     const json=await gasPost({ accion:'guardarHorarios', barberia_id:BAR_ID, barbero_id:BAR_ID2, dias:JSON.stringify(dias) });
     hideOv();
@@ -1464,50 +1465,27 @@ async function guardarHorarios() {
   btn.disabled=false;
 }
 
-/* ══════════════════════════════════════
-   CITAS — HORA
-   Sheets guarda la hora como serial de fecha 1899-12-30THH:MM:SSZ (UTC).
-   El serial numérico 0.xxx × 24 = hora real local (lo que el barbero ingresó).
-   NO se aplica offset de zona — se leen los minutos UTC directamente.
-══════════════════════════════════════ */
+/* ══ CITAS ══ */
 let todasCitas=[];
 let filtroActivo='todas';
 
-/**
- * Convierte el valor raw de la columna hora de Sheets.
- *  - "1899-12-30T14:56:16.000Z"  →  14h 56m UTC  →  redondear a 15:00
- *    PERO el barber agendó 10:00 en Colombia (UTC-5), lo que en Sheets
- *    queda almacenado como fracción del día = 10/24 = 0.4167
- *    → 0.4167 × 24 × 3600 = 36000 s → 10:00
- *    En ISO: 1899-12-30T10:00:00Z  →  getUTCHours() = 10  ✓
- *
- *  Si Sheets devuelve "10:00" como string, lo usamos directamente.
- */
 function normHora(raw) {
   if (raw === null || raw === undefined) return '—';
   const s = String(raw).trim();
   if (!s || s === '—') return '—';
-
   if (s.includes('T')) {
     try {
       const d = new Date(s);
-      console.log('[normHora] raw:', s, '| getUTCHours:', d.getUTCHours(), '| getHours (local):', d.getHours());
       return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
     } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
   }
-
   if (/^\d{1,2}:\d{2}/.test(s)) {
     const parts = s.slice(0,5);
     return parts.length === 4 ? '0' + parts : parts;
   }
-
   return s;
 }
 
-/**
- * Convierte fecha raw de Sheets.
- * Si viene como ISO "2026-04-22T..." toma solo la parte de fecha sin convertir.
- */
 function normFecha(raw) {
   if (raw === null || raw === undefined) return '—';
   if (raw instanceof Date) {
@@ -1534,7 +1512,6 @@ function fmtCOP(n) {
   return '$'+num.toLocaleString('es-CO');
 }
 
-/* ★ Arma el mensaje de WhatsApp para una cita */
 function buildWAMsg(cita) {
   const barb = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
   const dir  = sesion.direccion || '';
@@ -1585,6 +1562,9 @@ function renderCitas(lista) {
     const card = document.createElement('div');
     card.style.cssText = `background:${cfg.bg};border:1px solid ${cfg.border};border-left:3px solid ${cfg.dot};padding:0;overflow:hidden;`;
 
+    const waMsg    = telefono ? buildWAMsg(c) : '';
+    const telLimpio = telefono.replace(/\D/g,'');
+
     const header = `
       <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 10px">
         <div style="flex:1;min-width:0">
@@ -1609,16 +1589,13 @@ function renderCitas(lista) {
         </div>
         <div style="flex:1;display:flex;align-items:center;gap:7px;padding:9px 14px">
           <span class="material-symbols-outlined" style="font-size:14px;color:#e9c176;flex-shrink:0">schedule</span>
-          <div style="flex:1;min-width:0">
+          <div>
             <p style="font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:#9c8f7b;margin-bottom:1px">Hora</p>
             <p style="font-size:12px;color:#e5e2e1;font-weight:600">${horaFmt}</p>
           </div>
         </div>
       </div>`;
 
-    /* ★ Fila teléfono: número + botón WA al frente */
-    const waMsg    = telefono ? buildWAMsg(c) : '';
-    const telLimpio = telefono.replace(/\D/g,'');
     const filaDetalles = `
       <div style="padding:10px 14px;display:flex;flex-direction:column;gap:6px">
         ${telefono ? `
@@ -1641,7 +1618,6 @@ function renderCitas(lista) {
           </div>` : ''}
       </div>`;
 
-    /* ★ Acciones: solo confirmar/cancelar — sin auto-abrir WhatsApp */
     const acciones = est === 'pendiente'
       ? `<div style="display:flex;gap:0;border-top:1px solid rgba(79,69,53,.14)">
           <button onclick="accionCita('${citaId}','confirmada')" style="flex:1;padding:12px 8px;background:#e9c176;border:none;border-right:1px solid rgba(79,69,53,.14);color:#412d00;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px">
@@ -1678,12 +1654,10 @@ function filtrarCitas(filtro, btn) {
   renderCitas(filtro==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtro));
 }
 
-/* ★ accionCita — solo guarda en Sheet, NO abre WhatsApp */
 async function accionCita(id, estado) {
   todasCitas = todasCitas.map(c => c.cita_id===id ? {...c, estado} : c);
   renderCitas(filtroActivo==='todas' ? todasCitas : todasCitas.filter(c=>c.estado===filtroActivo));
   toast(estado==='confirmada' ? '✓ Cita confirmada' : 'Cita cancelada');
-
   try {
     const res = await gasPost({ accion:'actualizarEstadoCita', reserva_id:id, cita_id:id, barberia_id:BAR_ID, estado });
     if (res.error) toast('GAS: '+res.error, true);
@@ -1739,25 +1713,16 @@ async function cargarCitas(silencioso=false) {
     if(btn) btn.style.opacity='1';
   }
 }
-function actualizarCitas() { cargarCitas(false); }
 
 function iniciarAutoRefresh() {
   if (_refreshInterval) clearInterval(_refreshInterval);
   _refreshInterval = setInterval(async () => {
-    const enCitas  = document.getElementById('t-citas')?.classList.contains('on');
+    await cargarCitas(true);
     const enCortes = document.getElementById('t-cortes')?.classList.contains('on');
     const enTienda = document.getElementById('t-tienda')?.classList.contains('on');
-
-    // ★ SIEMPRE verificar citas nuevas para notificaciones,
-    //   sin importar en qué tab está el usuario
-    await cargarCitas(true);
-
-    // Solo recargar tienda/cortes si esa tab está activa
     if (enCortes) recargarCortes();
     if (enTienda) recargarProductos();
-
-    // Si no está en la tab de citas, actualizar el badge sin re-renderizar
-    if (!enCitas) actualizarBadges();
+    actualizarBadges();
   }, 10 * 1000);
 }
 
@@ -1777,6 +1742,7 @@ function carMove(type,dir) {
   document.getElementById(`${type}-car-next`).disabled=st.idx>=max;
 }
 
+/* ══ BUILD CAROUSEL — CORTES con botones absolutamente visibles ══ */
 function buildCarousel(type, items) {
   const st=carState[type]; st.items=items; st.idx=0;
   const track=document.getElementById(`${type}-car-track`);
@@ -1798,7 +1764,7 @@ function buildCarousel(type, items) {
           <img src="${imgUrl}" alt="${item.nombre}" style="width:100%;height:100%;object-fit:cover"
             onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
           ${item.destacado?`<div style="position:absolute;top:5px;left:5px;background:#e9c176;padding:2px 6px;font-size:7px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#412d00">★</div>`:''}
-          <button onclick="eliminarProducto('${item.producto_id}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(8,6,4,.8);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">&times;</button>
+          <button onclick="eliminarProducto('${item.producto_id}')" style="position:absolute;top:4px;right:4px;width:26px;height:26px;background:rgba(8,6,4,.85);border:1px solid rgba(200,60,60,.5);color:#e97676;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:10">&times;</button>
         </div>
         <div style="padding:8px">
           <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;margin-bottom:2px">${item.categoria}</p>
@@ -1810,48 +1776,70 @@ function buildCarousel(type, items) {
       const imgUrl=normDriveUrl(item.imagen_url);
       const cid=item.corte_id;
       const descTxt=item.descripcion?`<p class="dorso-desc">${item.descripcion}</p>`:'';
-      slide.innerHTML=`<div style="position:relative;border:1px solid rgba(79,69,53,.22)">
-        <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4;max-height:min(70dvh,420px)">
-          <div class="corte-3d-inner" id="inner-${cid}">
-            <div class="corte-face corte-face-front">
-              <img src="${imgUrl}" alt="${item.nombre}" onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
-              ${item.destacado?`<div class="corte-dest-badge">★ Dest.</div>`:''}
-              <div style="position:absolute;top:8px;right:8px;z-index:10;display:flex;flex-direction:column;gap:5px;pointer-events:all">
-                <button onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
-                  <span class="material-symbols-outlined" style="font-size:16px">zoom_in</span></button>
-               <button data-cid="${cid}" class="_del-corte-btn" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(200,60,60,.3);color:#e97676;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)"><span class="material-symbols-outlined" style="font-size:15px">delete</span></button>
+      slide.innerHTML=`
+        <div style="position:relative;border:1px solid rgba(79,69,53,.22)">
+          <div class="corte-3d-scene" id="scene-${cid}">
+            <div class="corte-3d-inner" id="inner-${cid}">
 
-              <div class="corte-3d-hint" id="hint-${cid}"><span style="font-size:11px">↔</span>Girar</div>
-              <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px">
-                <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
-                <p style="font-family:'Noto Serif',serif;font-size:13px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
-                ${item.precio>0?`<p style="font-size:14px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
+              <!-- CARA FRONTAL -->
+              <div class="corte-face corte-face-front">
+                <img src="${imgUrl}" alt="${item.nombre}"
+                  onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
+
+                ${item.destacado?`<div class="corte-dest-badge">★ Dest.</div>`:''}
+
+                <!-- INFO SUPERIOR -->
+                <div style="position:absolute;top:0;left:0;right:80px;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px;pointer-events:none">
+                  <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
+                  <p style="font-family:'Noto Serif',serif;font-size:13px;color:#e5e2e1;line-height:1.2">${item.nombre}</p>
+                  ${item.precio>0?`<p style="font-size:14px;color:#e9c176;margin-top:3px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
+                </div>
+
+                <!-- BOTÓN LUPA -->
+                <button class="corte-zoom-btn" onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado">
+                  <span class="material-symbols-outlined" style="font-size:18px">zoom_in</span>
+                </button>
+
+                <!-- BOTÓN ELIMINAR — SIEMPRE VISIBLE, ESQUINA SUPERIOR DERECHA -->
+                <button class="corte-del-btn _del-corte-btn" data-cid="${cid}" title="Eliminar corte">
+                  <span class="material-symbols-outlined" style="font-size:18px">delete</span>
+                </button>
+
+                <!-- HINT DRAG — se desvanece solo -->
+                <div class="corte-3d-hint" id="hint-${cid}">
+                  <span style="font-size:11px">↔</span>Girar
+                </div>
+
+                <!-- CONTROLES ROTACIÓN -->
+                <div class="corte-3d-ctrl-bar">
+                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)">◀</button>
+                  <div class="ctrl-sep"></div>
+                  <span class="rot-deg" id="deg-${cid}">0°</span>
+                  <div class="ctrl-sep"></div>
+                  <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)">▶</button>
+                  <div class="ctrl-sep"></div>
+                  <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" style="font-size:10px">↺</button>
+                </div>
               </div>
-              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all">
-                <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',-30)">◀</button>
-                <div class="ctrl-sep"></div>
-                <span class="rot-deg" id="deg-${cid}">0°</span>
-                <div class="ctrl-sep"></div>
-                <button class="ctrl-btn-3d" onclick="rotarCorte('${cid}',30)">▶</button>
-                <div class="ctrl-sep"></div>
-                <button class="ctrl-btn-3d" onclick="resetCorte('${cid}')" style="font-size:10px">↺</button>
+
+              <!-- CARA TRASERA -->
+              <div class="corte-face corte-face-back">
+                <div class="dorso-label">The Atelier · Portafolio</div>
+                <div class="dorso-deco"></div>
+                <p class="dorso-name">${item.nombre}</p>
+                <p class="dorso-estilo">${item.estilo||'Corte'}</p>
+                ${item.precio>0?`<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
+                ${descTxt}
+                <div class="dorso-deco"></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
+                  <span style="width:5px;height:5px;background:#e9c176;border-radius:50%;display:inline-block"></span>
+                  <span style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.4)">Barbería exclusiva</span>
+                </div>
               </div>
-            </div>
-            <div class="corte-face corte-face-back">
-              <div class="dorso-label">The Atelier · Portafolio</div>
-              <div class="dorso-deco"></div>
-              <p class="dorso-name">${item.nombre}</p>
-              <p class="dorso-estilo">${item.estilo||'Corte'}</p>
-              ${item.precio>0?`<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;margin-top:6px;font-weight:700">$${Number(item.precio).toLocaleString('es-CO')}</p>`:''}
-              ${descTxt}
-              <div class="dorso-deco"></div>
-              <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
-                <span style="width:5px;height:5px;background:#e9c176;border-radius:50%;display:inline-block"></span>
-                <span style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.4)">Barbería exclusiva</span>
-              </div>
+
             </div>
           </div>
-        </div></div>`;
+        </div>`;
       requestAnimationFrame(() => init3DCorte(cid));
     }
     track.appendChild(slide);
@@ -1874,40 +1862,42 @@ function init3DCorte(cid) {
   function applyAngle(a,useSnap){
     a=Math.max(-180,Math.min(180,a)); corte3DState[cid].angle=a;
     inner.classList.toggle('snap',!!useSnap); inner.style.transform='rotateY('+a+'deg)';
-    var d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(a)+'°';
+    const d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(a)+'°';
   }
   scene.addEventListener('pointerdown',function(e){
-    var st=corte3DState[cid]; st.dragging=true; st.lastX=e.clientX; st.vel=0;
+    const btn=e.target.closest('button');
+    if(btn) return;
+    const st=corte3DState[cid]; st.dragging=true; st.lastX=e.clientX; st.vel=0;
     if(st.raf) cancelAnimationFrame(st.raf);
     inner.classList.remove('snap'); scene.setPointerCapture(e.pointerId); e.preventDefault();
   },{passive:false});
   scene.addEventListener('pointermove',function(e){
-    var st=corte3DState[cid]; if(!st.dragging) return;
-    var dx=e.clientX-st.lastX; st.vel=dx; st.lastX=e.clientX;
+    const st=corte3DState[cid]; if(!st.dragging) return;
+    const dx=e.clientX-st.lastX; st.vel=dx; st.lastX=e.clientX;
     applyAngle(st.angle+dx*0.55,false); e.preventDefault();
   },{passive:false});
   function endDrag(){
-    var st=corte3DState[cid]; if(!st.dragging) return; st.dragging=false;
-    var vel=st.vel*0.5;
+    const st=corte3DState[cid]; if(!st.dragging) return; st.dragging=false;
+    let vel=st.vel*0.5;
     function inertia(){ if(Math.abs(vel)<0.25) return; applyAngle(st.angle+vel,false); vel*=0.86; st.raf=requestAnimationFrame(inertia); }
     inertia();
   }
   scene.addEventListener('pointerup',endDrag); scene.addEventListener('pointercancel',endDrag);
 }
 function rotarCorte(cid,delta){
-  var st=corte3DState[cid]; if(!st) return;
-  var inner=document.getElementById('inner-'+cid);
+  const st=corte3DState[cid]; if(!st) return;
+  const inner=document.getElementById('inner-'+cid);
   if(st.raf) cancelAnimationFrame(st.raf);
   st.angle=Math.max(-180,Math.min(180,st.angle+delta));
   inner.classList.add('snap'); inner.style.transform='rotateY('+st.angle+'deg)';
-  var d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(st.angle)+'°';
+  const d=document.getElementById('deg-'+cid); if(d) d.textContent=Math.round(st.angle)+'°';
 }
 function resetCorte(cid){
-  var st=corte3DState[cid]; if(!st) return;
-  var inner=document.getElementById('inner-'+cid);
+  const st=corte3DState[cid]; if(!st) return;
+  const inner=document.getElementById('inner-'+cid);
   if(st.raf) cancelAnimationFrame(st.raf);
   st.angle=0; inner.classList.add('snap'); inner.style.transform='rotateY(0deg)';
-  var d=document.getElementById('deg-'+cid); if(d) d.textContent='0°';
+  const d=document.getElementById('deg-'+cid); if(d) d.textContent='0°';
 }
 
 /* ══ PUBLICAR PRODUCTO ══ */
@@ -1920,7 +1910,7 @@ async function publicarProducto() {
   const btn=document.getElementById('btn-prod'); btn.disabled=true;
   if(imgs.prod_file){
     toast('Subiendo foto del producto...');
-    try{ imgs.prod_url=await subirImagenDrive(imgs.prod_file,'prod',BAR_ID,'upbar-prod','upfill-prod'); imgs.prod_file=null; toast('✓ Foto subida'); }
+    try{ imgs.prod_url=await subirImagenDrive(imgs.prod_file,'prod',BAR_ID,'upbar-prod','upfill-prod'); imgs.prod_file=null; }
     catch(e){ toast('⚠ No se pudo subir la foto',true); btn.disabled=false; return; }
   }
   const prod={
@@ -1951,13 +1941,13 @@ async function recargarProductos() {
     const jp=await gasGet({ accion:'leerProductos', barberia_id:BAR_ID });
     if(jp.productos?.length){
       productos=jp.productos.map(p=>({
-        producto_id:p.producto_id, barberia_id:p.barberia_id,
+        producto_id:p.producto_id,barberia_id:p.barberia_id,
         imagen_url:normDriveUrl(p.imagen_url),
-        nombre:p.nombre, precio:Number(p.precio),
-        categoria:p.categoria, descripcion:p.descripcion,
+        nombre:p.nombre,precio:Number(p.precio),
+        categoria:p.categoria,descripcion:p.descripcion,
         stock:Number(p.stock)||0,
         destacado:p.destacado===true||String(p.destacado).toLowerCase()==='true',
-        fecha_publicacion:p.fecha_publicacion, activo:true,
+        fecha_publicacion:p.fecha_publicacion,activo:true,
       }));
       buildCarousel('prod',productos);
     }
@@ -1990,7 +1980,7 @@ async function publicarCorte() {
   const btn=document.getElementById('btn-corte'); btn.disabled=true;
   if(imgs.corte_file){
     toast('Subiendo foto del corte...');
-    try{ imgs.corte_url=await subirImagenDrive(imgs.corte_file,'corte',BAR_ID,'upbar-corte','upfill-corte'); imgs.corte_file=null; toast('✓ Foto de corte subida'); }
+    try{ imgs.corte_url=await subirImagenDrive(imgs.corte_file,'corte',BAR_ID,'upbar-corte','upfill-corte'); imgs.corte_file=null; }
     catch(e){ toast('⚠ No se pudo subir la foto',true); btn.disabled=false; return; }
   }
   const corte={
@@ -2021,9 +2011,9 @@ async function recargarCortes() {
     const jc=await gasGet({ accion:'leerCortes', barberia_id:BAR_ID });
     if(jc.cortes?.length){
       cortes=jc.cortes.map(c=>({
-        corte_id:c.corte_id, barberia_id:c.barberia_id, barbero_id:c.barbero_id,
+        corte_id:c.corte_id,barberia_id:c.barberia_id,barbero_id:c.barbero_id,
         imagen_url:normDriveUrl(c.imagen_url),
-        nombre:c.nombre, estilo:c.estilo, descripcion:c.descripcion,
+        nombre:c.nombre,estilo:c.estilo,descripcion:c.descripcion,
         destacado:c.destacado===true||String(c.destacado).toLowerCase()==='true'||false,
         fecha_publicacion:c.fecha_publicacion,
         precio:parseFloat(String(c.precio||'0').replace(/[^0-9.]/g,''))||0,
@@ -2035,7 +2025,6 @@ async function recargarCortes() {
   actualizarBadges();
 }
 function eliminarCorte(id){
-  if(!confirm('¿Eliminar este corte?')) return;
   cortes=cortes.filter(c=>c.corte_id!==id);
   buildCarousel('corte',cortes);
   toast('Corte eliminado');
@@ -2053,14 +2042,7 @@ function toast(msg,err=false){
 }
 
 /* ══ PLAN MODAL ══ */
-function abrirModalPlan(){
-  const m=document.getElementById('modal-plan'); m.style.display='flex';
-  const cur=document.getElementById('f-plan').value;
-  document.querySelectorAll('.plan-opt').forEach(o=>{
-    const sel=o.dataset.val===cur;
-    o.style.borderColor=sel?'rgba(233,193,118,.6)':(o.dataset.val==='Pro'?'rgba(233,193,118,.4)':'rgba(79,69,53,.3)');
-  });
-}
+function abrirModalPlan(){ const m=document.getElementById('modal-plan'); m.style.display='flex'; }
 function cerrarModalPlan(){ document.getElementById('modal-plan').style.display='none'; }
 function selPlan(el){
   document.getElementById('f-plan').value=el.dataset.val;
@@ -2068,24 +2050,17 @@ function selPlan(el){
   syncPlanBadge(); cerrarModalPlan();
 }
 
-/* ══ NOTIFICACIONES CITAS NUEVAS ══ */
+/* ══ NOTIFICACIONES ══ */
 let _citasKnownIds = new Set();
 let _audioCtx      = null;
-let _notiActiva    = false;
 
 function getAudioCtx() {
   if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return _audioCtx;
 }
 
-/* Sonido de alerta fuerte: 3 pulsos graves + agudos */
 function sonarAlerta() {
-  // ★ Vibración como fallback universal (funciona aunque el audio esté bloqueado)
-  try {
-    if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
-  } catch(e) {}
-
-  // ★ Audio con resume explícito y promesa
+  try { if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]); } catch(e) {}
   try {
     const ctx = getAudioCtx();
     const disparar = () => {
@@ -2098,8 +2073,7 @@ function sonarAlerta() {
       pulsos.forEach(({ freq, t, dur }) => {
         const osc  = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+        osc.connect(gain); gain.connect(ctx.destination);
         osc.type = 'square';
         osc.frequency.setValueAtTime(freq, ctx.currentTime + t);
         gain.gain.setValueAtTime(0,    ctx.currentTime + t);
@@ -2109,61 +2083,30 @@ function sonarAlerta() {
         osc.stop(ctx.currentTime + t + dur + 0.05);
       });
     };
-
-    if (ctx.state === 'suspended') {
-      ctx.resume().then(disparar).catch(() => {});
-    } else {
-      disparar();
-    }
+    if (ctx.state === 'suspended') ctx.resume().then(disparar).catch(() => {});
+    else disparar();
   } catch(e) {}
 }
 
-/* Banner de nueva cita */
 function mostrarBannerCita(cita) {
   let banner = document.getElementById('_banner-nuevacita');
   if (!banner) {
     banner = document.createElement('div');
     banner.id = '_banner-nuevacita';
-    banner.style.cssText = `
-      position:fixed;top:0;left:0;right:0;z-index:999998;
-      background:#e9c176;color:#412d00;
-      font-family:'Manrope',sans-serif;
-      display:flex;align-items:center;gap:12px;
-      padding:13px 16px;
-      transform:translateY(-100%);
-      transition:transform .38s cubic-bezier(.22,1,.36,1);
-      cursor:pointer;
-    `;
-    banner.onclick = () => {
-      goTabByName('t-citas');
-      ocultarBannerCita();
-    };
+    banner.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:999998;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:12px;padding:13px 16px;padding-top:calc(13px + env(safe-area-inset-top,0px));transform:translateY(-100%);transition:transform .38s cubic-bezier(.22,1,.36,1);cursor:pointer;`;
+    banner.onclick = () => { goTabByName('t-citas'); ocultarBannerCita(); };
     document.body.appendChild(banner);
   }
-
-  const servicio = cita.servicio || 'Corte';
-  const cliente  = cita.nombre   || 'Cliente';
-  const hora     = normHora(cita.hora);
-
   banner.innerHTML = `
     <span class="material-symbols-outlined" style="font-size:22px;flex-shrink:0">notifications_active</span>
     <div style="flex:1;min-width:0">
       <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:1px">Nueva cita agendada</p>
-      <p style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-        ${cliente} · ${servicio} · ${hora}
-      </p>
+      <p style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cita.nombre||'Cliente'} · ${cita.servicio||'Corte'} · ${normHora(cita.hora)}</p>
     </div>
-    <button onclick="event.stopPropagation();ocultarBannerCita()"
-      style="background:rgba(65,45,0,.18);border:none;color:#412d00;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%">
+    <button onclick="event.stopPropagation();ocultarBannerCita()" style="background:rgba(65,45,0,.18);border:none;color:#412d00;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%">
       <span class="material-symbols-outlined" style="font-size:16px">close</span>
-    </button>
-  `;
-
-  requestAnimationFrame(() => {
-    banner.style.transform = 'translateY(0)';
-  });
-
-  // Auto-ocultar a los 7 segundos
+    </button>`;
+  requestAnimationFrame(() => { banner.style.transform = 'translateY(0)'; });
   clearTimeout(banner._ht);
   banner._ht = setTimeout(ocultarBannerCita, 7000);
 }
@@ -2173,520 +2116,209 @@ function ocultarBannerCita() {
   if (b) b.style.transform = 'translateY(-100%)';
 }
 
-/* Hook: se llama cada vez que llegan citas nuevas del servidor */
 function detectarCitasNuevas(citasNuevas) {
   if (_citasKnownIds.size === 0) {
-    // Primera carga — solo registrar IDs, no alertar
     citasNuevas.forEach(c => _citasKnownIds.add(c.cita_id));
     return;
   }
-
-  const nuevas = citasNuevas.filter(c =>
-    !_citasKnownIds.has(c.cita_id) && c.estado === 'pendiente'
-  );
-
+  const nuevas = citasNuevas.filter(c => !_citasKnownIds.has(c.cita_id) && c.estado === 'pendiente');
   nuevas.forEach(c => {
     _citasKnownIds.add(c.cita_id);
     sonarAlerta();
     mostrarBannerCita(c);
-
-    // Notificación del sistema si el usuario la otorgó
-   // ★ Notificación del sistema — solicitar permiso si aún no se dio
     const dispararNotificacion = () => {
       try {
         const n = new Notification('🔔 Nueva cita · The Atelier', {
-          body   : `✂️ ${c.nombre || 'Cliente'} · ${c.servicio || 'Corte'} · ${normHora(c.hora)}`,
-          icon   : 'https://globalbarber.vercel.app/favicon.ico',
-          badge  : 'https://globalbarber.vercel.app/favicon.ico',
-          tag    : c.cita_id,
-          renotify: true,
-          requireInteraction: true,  // ★ no desaparece sola — el barbero la ve aunque esté en otra app
+          body: `✂️ ${c.nombre||'Cliente'} · ${c.servicio||'Corte'} · ${normHora(c.hora)}`,
+          tag: c.cita_id, renotify: true, requireInteraction: true,
         });
-        n.onclick = () => {
-          window.focus();
-          goTabByName('t-citas');
-          n.close();
-        };
+        n.onclick = () => { window.focus(); goTabByName('t-citas'); n.close(); };
       } catch(e) {}
     };
-
-    if (Notification?.permission === 'granted') {
-      dispararNotificacion();
-    } else if (Notification?.permission === 'default') {
-      Notification.requestPermission().then(p => {
-        if (p === 'granted') dispararNotificacion();
-      });
-    }
+    if (Notification?.permission === 'granted') dispararNotificacion();
+    else if (Notification?.permission === 'default') Notification.requestPermission().then(p => { if(p==='granted') dispararNotificacion(); });
   });
 }
 
-/* Pedir permiso de notificación del sistema al primer toque */
 function pedirPermisoNotificacion() {
-  if (Notification?.permission === 'default') {
-    Notification.requestPermission();
-  }
-  // ★ Pre-inicializar y desbloquear AudioContext en el primer toque
+  if (Notification?.permission === 'default') Notification.requestPermission();
   try {
     const ctx = getAudioCtx();
     if (ctx.state === 'suspended') ctx.resume();
-    // Reproducir silencio para "activar" el contexto de audio
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0, ctx.currentTime); // volumen 0 = silencio
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.001);
+    const osc=ctx.createOscillator(); const gain=ctx.createGain();
+    gain.gain.setValueAtTime(0,ctx.currentTime); osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.001);
   } catch(e) {}
 }
 document.addEventListener('click', pedirPermisoNotificacion, { once: true });
 
-/* ══════════════════════════════════════
-   INIT
-══════════════════════════════════════ */
-async function init() {
-  buildHorarios(); updateSlots();
-  initHeader(); calcProg();
-  buildCarousel('prod', []);
-  buildCarousel('corte', []);
-  renderCitas([]);
-  renderHorariosEspeciales();
-
-  showOv('Cargando datos de la barbería...');
-
-  let perfilGuardado = false;
-  try {
-    const json = await gasGet({ accion:'leerPerfil', barberia_id:BAR_ID });
-    const p    = json.perfil;
-    if (p && p.nombre_barberia) {
-      prellenarInputs({
-        'f-nombre': p.nombre_barberia,
-        'f-ciudad': p.ciudad,
-        'f-depto':  p.departamento,
-        'f-dir':    p.direccion,
-        'f-tel':    p.telefono,
-        'f-email':  p.email,
-        'f-dueno':  p.nombre_dueno,
-        'f-maps':   p.maps_url,
-        'f-plan':   p.plan,
-      });
-      if (p.foto_barbero_url) { imgs.avatar_url = normDriveUrl(p.foto_barbero_url); mostrarAvatar(imgs.avatar_url); }
-      if (p.foto_local_url) {
-        imgs.local_url = normDriveUrl(p.foto_local_url);
-        document.getElementById('img-local').src = imgs.local_url;
-        document.getElementById('fu-local').classList.add('loaded');
-      }
-      if (p.codigo_acceso) { document.getElementById('codigo-display').textContent = p.codigo_acceso; sesion.codigo_acceso = p.codigo_acceso; }
-      const planPrecios = { 'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días' };
-      if (p.plan) { const txtEl = document.getElementById('plan-btn-txt'); if (txtEl) txtEl.textContent = p.plan + ' — ' + (planPrecios[p.plan] || ''); }
-      Object.assign(sesion, {
-        nombre:p.nombre_barberia, nombre_barberia:p.nombre_barberia,
-        dueno:p.nombre_dueno, ciudad:p.ciudad, departamento:p.departamento,
-        direccion:p.direccion, telefono:p.telefono, email:p.email,
-        foto_barbero_url:imgs.avatar_url, foto_local_url:imgs.local_url,
-        maps_url:p.maps_url, plan:p.plan,
-      });
-      perfilGuardado = true;
-      toast('✓ ' + p.nombre_barberia + ' · perfil cargado');
-    }
-  } catch(e) {}
-
-  if (!perfilGuardado) {
-    try {
-      const json = await gasGet({ accion:'leerDatosRegistro', barberia_id:BAR_ID });
-      const r    = json.barberia || json.datos || json.perfil || null;
-      if (r) {
-        prellenarInputs({
-          'f-nombre': r.nombre_barberia || r.nombre,
-          'f-ciudad': r.ciudad,
-          'f-depto':  r.departamento,
-          'f-dir':    r.direccion || '',
-          'f-tel':    r.dueno_telefono || r.telefono,
-          'f-email':  r.dueno_email    || r.email,
-          'f-dueno':  r.dueno_nombre   || r.nombre_dueno,
-          'f-plan':   r.plan,
-        });
-        const codigoEl = document.getElementById('codigo-display');
-        if (r.codigo_acceso_cliente && codigoEl) { codigoEl.textContent = r.codigo_acceso_cliente; sesion.codigo_acceso = r.codigo_acceso_cliente; sesion.codigo_acceso_cliente = r.codigo_acceso_cliente; }
-        const planPrecios = { 'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días' };
-        if (r.plan) { const txtEl = document.getElementById('plan-btn-txt'); if (txtEl) txtEl.textContent = r.plan + ' — ' + (planPrecios[r.plan] || ''); }
-        Object.assign(sesion, {
-          nombre:r.nombre_barberia||r.nombre, nombre_barberia:r.nombre_barberia||r.nombre,
-          dueno:r.dueno_nombre||r.nombre_dueno, ciudad:r.ciudad,
-          departamento:r.departamento, telefono:r.dueno_telefono||r.telefono,
-          email:r.dueno_email||r.email, plan:r.plan, estado:r.estado,
-        });
-        document.getElementById('banner-nueva').style.display = 'block';
-        toast('Bienvenido · Completa tu perfil para publicarte');
-      } else {
-        toast('Modo demo — ' + BAR_ID);
-      }
-    } catch(e) { toast('Sin conexión — modo offline', true); }
-  }
-
-  syncHeader(); syncPlanBadge(); calcProg();
-  initUrlPublica();
-  if (document.getElementById('f-maps')?.value) updateMap();
-
-   try {
-    const jh = await gasGet({ accion:'leerHorarios', barberia_id:BAR_ID });
-    const horRows = jh.horarios || jh.data || [];
-    if (horRows.length) {
-      horRows.forEach(h => {
-        // normalizar la clave del día (puede venir con tilde: miércoles, sábado)
-        const diaKey = (h.dia_semana || h.dia || '')
-          .toLowerCase().trim()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-
-        const chk = document.getElementById('d-' + diaKey);
-        const hi  = document.getElementById('hi-' + diaKey);
-        const hf  = document.getElementById('hf-' + diaKey);
-        const iv  = document.getElementById('iv-' + diaKey);
-
-        if (!chk) return; // día no reconocido, ignorar
-
-        const activo = h.activo === true || String(h.activo).toLowerCase() === 'true';
-        chk.checked = activo;
-        togDia(diaKey);
-
-        // helper: extrae HH:MM de cualquier formato que venga de Sheets
-        function extractHM(raw) {
-          const s = String(raw || '').trim();
-          if (!s) return null;
-          if (s.includes('T')) {
-            try {
-              const d = new Date(s);
-              return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-            } catch(e) { return (s.split('T')[1] || '').slice(0,5) || null; }
-          }
-          if (/^\d{1,2}:\d{2}/.test(s)) {
-            const p = s.slice(0,5);
-            return p.length === 4 ? '0' + p : p;
-          }
-          return null;
-        }
-
-        const hiVal = extractHM(h.hora_inicio);
-        const hfVal = extractHM(h.hora_fin);
-        if (hi && hiVal) hi.value = hiVal;
-        if (hf && hfVal) hf.value = hfVal;
-
-        if (iv && h.intervalo_min) {
-          const ivStr = String(parseInt(h.intervalo_min) || 30);
-          // buscar la option que coincida, si no existe dejar la actual
-          const opt = iv.querySelector(`option[value="${ivStr}"]`);
-          if (opt) iv.value = ivStr;
-        }
-      });
-      updateSlots();
-      toast('✓ Horarios cargados');
-    }
-  } catch(e) { console.warn('[horarios]', e); }
- 
-
-  await recargarCortes();
-  await recargarProductos();
-  await cargarCitas(false);
-  iniciarAutoRefresh();
-
-  try {
-    const jhe = await gasGet({ accion:'leerHorariosEspeciales', barberia_id:BAR_ID });
-    if (jhe.horariosEspeciales?.length) {
-      horariosEspeciales = jhe.horariosEspeciales.map(h=>({
-        id:h.hesp_id, fecha:h.fecha, tipo:h.tipo,
-        hora_inicio:h.hora_inicio, hora_fin:h.hora_fin, nota:h.nota,
-      }));
-      renderHorariosEspeciales();
-    }
-  } catch(e) {}
-
-  hideOv();
-}
-init();
-
-
-/* ══ DASHBOARD STATE ══ */
+/* ══ DASHBOARD ══ */
 let walkIns      = [];
 let dashFilter   = 'mes';
 let dashDesde    = '';
 let dashHasta    = '';
-let _dashReady   = false;   // se vuelve true tras cargar walk-ins la primera vez
- 
-/* ══ DATE HELPERS ══ */
+let _dashReady   = false;
+
 function dFechaToDate(raw) {
   if (!raw) return null;
   const s = String(raw).trim();
   if (!s || s === '—') return null;
-  if (s.includes('T')) {
-    const part = s.split('T')[0];
-    const [y,m,d] = part.split('-').map(Number);
-    return new Date(y, m - 1, d);
-  }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    const [y,m,d] = s.split('-').map(Number);
-    return new Date(y, m - 1, d);
-  }
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) {
-    const [d,m,y] = s.split('/').map(Number);
-    return new Date(y, m - 1, d);
-  }
+  if (s.includes('T')) { const p=s.split('T')[0]; const[y,m,d]=p.split('-').map(Number); return new Date(y,m-1,d); }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) { const[y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) { const[d,m,y]=s.split('/').map(Number); return new Date(y,m-1,d); }
   return null;
 }
- 
+
 function dashRangeFor(filtro) {
-  const now  = new Date();
-  const hoy  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if (filtro === 'hoy')   return { desde: hoy, hasta: hoy };
-  if (filtro === 'semana') {
-    const d = new Date(hoy); d.setDate(d.getDate() - 6);
-    return { desde: d, hasta: hoy };
+  const now=new Date(); const hoy=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if (filtro==='hoy')    return { desde:hoy, hasta:hoy };
+  if (filtro==='semana') { const d=new Date(hoy); d.setDate(d.getDate()-6); return { desde:d, hasta:hoy }; }
+  if (filtro==='mes')    return { desde:new Date(hoy.getFullYear(),hoy.getMonth(),1), hasta:hoy };
+  if (filtro==='custom'&&dashDesde&&dashHasta) {
+    const[y1,m1,d1]=dashDesde.split('-').map(Number); const[y2,m2,d2]=dashHasta.split('-').map(Number);
+    return { desde:new Date(y1,m1-1,d1), hasta:new Date(y2,m2-1,d2) };
   }
-  if (filtro === 'mes') {
-    return { desde: new Date(hoy.getFullYear(), hoy.getMonth(), 1), hasta: hoy };
-  }
-  if (filtro === 'custom' && dashDesde && dashHasta) {
-    const [y1,m1,d1] = dashDesde.split('-').map(Number);
-    const [y2,m2,d2] = dashHasta.split('-').map(Number);
-    return { desde: new Date(y1, m1-1, d1), hasta: new Date(y2, m2-1, d2) };
-  }
-  return { desde: null, hasta: null };
+  return { desde:null, hasta:null };
 }
- 
+
 function inRange(fechaRaw, filtro) {
   const { desde, hasta } = dashRangeFor(filtro);
-  if (!desde || !hasta) return true;
-  const f = dFechaToDate(fechaRaw);
-  if (!f) return false;
-  return f >= desde && f <= hasta;
+  if (!desde||!hasta) return true;
+  const f = dFechaToDate(fechaRaw); if(!f) return false;
+  return f>=desde&&f<=hasta;
 }
- 
-function citasEnRango()   { return todasCitas.filter(c => inRange(c.fecha, dashFilter)); }
-function walkInsEnRango() { return walkIns.filter(w => inRange(w.fecha, dashFilter)); }
- 
-/* ══ STATS ══ */
+
+function citasEnRango()   { return todasCitas.filter(c=>inRange(c.fecha,dashFilter)); }
+function walkInsEnRango() { return walkIns.filter(w=>inRange(w.fecha,dashFilter)); }
+
 function computeStats() {
-  const citas = citasEnRango();
-  const wis   = walkInsEnRango();
- 
-  const total       = citas.length;
-  const confirmadas = citas.filter(c => c.estado === 'confirmada').length;
-  const canceladas  = citas.filter(c => c.estado === 'cancelada').length;
-  const tasa        = total > 0 ? Math.round((confirmadas / total) * 100) : 0;
- 
-  const setClientes = new Set();
-  citas.forEach(c => { if (c.nombre && c.nombre !== 'Cliente') setClientes.add(c.nombre.toLowerCase()); });
-  wis.forEach(w  => { if (w.cliente && w.cliente !== 'Walk-in') setClientes.add(w.cliente.toLowerCase()); });
- 
-  let ingresos = 0;
-  citas.filter(c => c.estado === 'confirmada').forEach(c => { ingresos += Number(c.precio) || 0; });
-  wis.forEach(w => { ingresos += Number(w.precio) || 0; });
- 
-  return { total, confirmadas, canceladas, walkins: wis.length, clientesUnicos: setClientes.size, ingresos, tasa };
+  const citas=citasEnRango(); const wis=walkInsEnRango();
+  const total=citas.length; const confirmadas=citas.filter(c=>c.estado==='confirmada').length;
+  const canceladas=citas.filter(c=>c.estado==='cancelada').length;
+  const tasa=total>0?Math.round((confirmadas/total)*100):0;
+  const setClientes=new Set();
+  citas.forEach(c=>{if(c.nombre&&c.nombre!=='Cliente')setClientes.add(c.nombre.toLowerCase());});
+  wis.forEach(w=>{if(w.cliente&&w.cliente!=='Walk-in')setClientes.add(w.cliente.toLowerCase());});
+  let ingresos=0;
+  citas.filter(c=>c.estado==='confirmada').forEach(c=>{ingresos+=Number(c.precio)||0;});
+  wis.forEach(w=>{ingresos+=Number(w.precio)||0;});
+  return { total, confirmadas, canceladas, walkins:wis.length, clientesUnicos:setClientes.size, ingresos, tasa };
 }
- 
-/* ══ RENDER STATS CARDS ══ */
+
 function renderStatCards() {
-  const s = computeStats();
-  const map = {
-    'ds-total': s.total,
-    'ds-conf' : s.confirmadas,
-    'ds-canc' : s.canceladas,
-    'ds-wi'   : s.walkins,
-    'ds-cli'  : s.clientesUnicos,
-    'ds-ing'  : '$' + s.ingresos.toLocaleString('es-CO'),
-    'ds-tasa' : s.tasa + '%',
-  };
-  Object.entries(map).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val;
-  });
+  const s=computeStats();
+  const map={'ds-total':s.total,'ds-conf':s.confirmadas,'ds-canc':s.canceladas,'ds-wi':s.walkins,'ds-cli':s.clientesUnicos,'ds-ing':'$'+s.ingresos.toLocaleString('es-CO'),'ds-tasa':s.tasa+'%'};
+  Object.entries(map).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
 }
- 
-/* ══ BAR CHART ══ */
+
 function renderBarChart() {
-  const ct = document.getElementById('dash-barchart');
-  if (!ct) return;
- 
-  const now = new Date();
-  const LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const days   = [];
- 
-  for (let i = 6; i >= 0; i--) {
-    const d   = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
- 
-    const nCitas = todasCitas.filter(c => {
-      const f = dFechaToDate(c.fecha);
-      if (!f) return false;
-      return f.getFullYear()===d.getFullYear() && f.getMonth()===d.getMonth() && f.getDate()===d.getDate() && c.estado!=='cancelada';
-    }).length;
- 
-    const nWI = walkIns.filter(w => w.fecha === iso).length;
- 
-    days.push({ label: LABELS[d.getDay()], citas: nCitas, wi: nWI, total: nCitas + nWI, isToday: i === 0 });
+  const ct=document.getElementById('dash-barchart'); if(!ct) return;
+  const now=new Date(); const LABELS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']; const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    const nCitas=todasCitas.filter(c=>{const f=dFechaToDate(c.fecha);if(!f)return false;return f.getFullYear()===d.getFullYear()&&f.getMonth()===d.getMonth()&&f.getDate()===d.getDate()&&c.estado!=='cancelada';}).length;
+    const nWI=walkIns.filter(w=>w.fecha===`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`).length;
+    days.push({label:LABELS[d.getDay()],citas:nCitas,wi:nWI,total:nCitas+nWI,isToday:i===0});
   }
- 
-  const maxV = Math.max(...days.map(d => d.total), 1);
- 
-  ct.innerHTML = '';
-  days.forEach(({ label, citas, wi, total, isToday }) => {
-    const citaH = citas > 0 ? Math.max(Math.round((citas / maxV) * 75), 6) : 0;
-    const wiH   = wi   > 0 ? Math.max(Math.round((wi   / maxV) * 75), 6) : 0;
- 
-    const col = document.createElement('div');
-    col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0';
-    col.innerHTML = `
+  const maxV=Math.max(...days.map(d=>d.total),1);
+  ct.innerHTML='';
+  days.forEach(({label,citas,wi,total,isToday})=>{
+    const citaH=citas>0?Math.max(Math.round((citas/maxV)*75),6):0;
+    const wiH=wi>0?Math.max(Math.round((wi/maxV)*75),6):0;
+    const col=document.createElement('div');
+    col.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0';
+    col.innerHTML=`
       <span style="font-size:9px;color:${total>0?'#e9c176':'transparent'};font-weight:700">${total}</span>
       <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:78px;gap:1px">
-        ${citas > 0 ? `<div style="width:100%;height:${citaH}px;background:rgba(233,193,118,.72);transition:height .45s"></div>` : ''}
-        ${wi    > 0 ? `<div style="width:100%;height:${wiH}px;background:rgba(126,207,168,.72);transition:height .45s"></div>` : ''}
-        ${total === 0 ? `<div style="width:100%;height:3px;background:rgba(79,69,53,.14)"></div>` : ''}
+        ${citas>0?`<div style="width:100%;height:${citaH}px;background:rgba(233,193,118,.72)"></div>`:''}
+        ${wi>0?`<div style="width:100%;height:${wiH}px;background:rgba(126,207,168,.72)"></div>`:''}
+        ${total===0?`<div style="width:100%;height:3px;background:rgba(79,69,53,.14)"></div>`:''}
       </div>
       <span style="font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:${isToday?'#e9c176':'#9c8f7b'};font-weight:${isToday?700:400};margin-top:2px">${label}</span>`;
     ct.appendChild(col);
   });
 }
- 
-/* ══ TOP SERVICIOS ══ */
+
 function renderServiciosSummary() {
-  const el = document.getElementById('dash-svc-body');
-  if (!el) return;
- 
-  const citas = citasEnRango().filter(c => c.estado !== 'cancelada');
-  const wis   = walkInsEnRango();
- 
-  const mapa = {};
-  citas.forEach(c => {
-    const k = c.servicio || 'Corte';
-    if (!mapa[k]) mapa[k] = { count:0, ingresos:0 };
-    mapa[k].count++;
-    mapa[k].ingresos += Number(c.precio) || 0;
-  });
-  wis.forEach(w => {
-    const k = w.servicio || 'Walk-in';
-    if (!mapa[k]) mapa[k] = { count:0, ingresos:0 };
-    mapa[k].count++;
-    mapa[k].ingresos += Number(w.precio) || 0;
-  });
- 
-  const sorted = Object.entries(mapa).sort((a,b) => b[1].count - a[1].count);
-  el.innerHTML = '';
- 
-  if (!sorted.length) {
-    el.innerHTML = '<p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>';
-    return;
-  }
- 
-  const maxC = sorted[0][1].count;
-  sorted.slice(0, 6).forEach(([svc, data]) => {
-    const pct = Math.round((data.count / maxC) * 100);
-    const row = document.createElement('div');
-    row.style.cssText = 'padding:8px 0;border-bottom:1px solid rgba(79,69,53,.07)';
-    row.innerHTML = `
+  const el=document.getElementById('dash-svc-body'); if(!el) return;
+  const citas=citasEnRango().filter(c=>c.estado!=='cancelada'); const wis=walkInsEnRango();
+  const mapa={};
+  citas.forEach(c=>{const k=c.servicio||'Corte';if(!mapa[k])mapa[k]={count:0,ingresos:0};mapa[k].count++;mapa[k].ingresos+=Number(c.precio)||0;});
+  wis.forEach(w=>{const k=w.servicio||'Walk-in';if(!mapa[k])mapa[k]={count:0,ingresos:0};mapa[k].count++;mapa[k].ingresos+=Number(w.precio)||0;});
+  const sorted=Object.entries(mapa).sort((a,b)=>b[1].count-a[1].count);
+  el.innerHTML='';
+  if(!sorted.length){el.innerHTML='<p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>';return;}
+  const maxC=sorted[0][1].count;
+  sorted.slice(0,6).forEach(([svc,data])=>{
+    const pct=Math.round((data.count/maxC)*100);
+    const row=document.createElement('div');
+    row.style.cssText='padding:8px 0;border-bottom:1px solid rgba(79,69,53,.07)';
+    row.innerHTML=`
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
         <p style="font-size:11px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%">${svc}</p>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-          ${data.ingresos > 0 ? `<span style="font-size:11px;color:#e9c176;font-weight:700">$${data.ingresos.toLocaleString('es-CO')}</span>` : ''}
+          ${data.ingresos>0?`<span style="font-size:11px;color:#e9c176;font-weight:700">$${data.ingresos.toLocaleString('es-CO')}</span>`:''}
           <span style="font-size:9px;color:#9c8f7b">${data.count} vez${data.count!==1?'es':''}</span>
         </div>
       </div>
       <div style="height:3px;background:rgba(79,69,53,.14)">
-        <div style="height:100%;width:${pct}%;background:rgba(233,193,118,.55);transition:width .5s"></div>
+        <div style="height:100%;width:${pct}%;background:rgba(233,193,118,.55)"></div>
       </div>`;
     el.appendChild(row);
   });
 }
- 
-/* ══ FILTRO ══ */
+
 function filtrarDash(tipo, btn) {
-  dashFilter = tipo;
-  document.querySelectorAll('.dash-fb').forEach(b => {
-    b.style.background    = 'transparent';
-    b.style.color         = '#9c8f7b';
-    b.style.borderColor   = 'rgba(79,69,53,.3)';
-    b.style.fontWeight    = '';
-  });
-  if (tipo !== 'custom') {
-    btn.style.background  = '#e9c176';
-    btn.style.color       = '#412d00';
-    btn.style.borderColor = '#e9c176';
-    btn.style.fontWeight  = '700';
-  } else {
-    btn.style.borderColor = 'rgba(233,193,118,.5)';
-    btn.style.color       = '#e9c176';
-  }
-  const customRow = document.getElementById('dash-custom-row');
-  if (customRow) customRow.style.display = tipo === 'custom' ? 'flex' : 'none';
-  if (tipo !== 'custom') renderDashboard();
+  dashFilter=tipo;
+  document.querySelectorAll('.dash-fb').forEach(b=>{b.style.background='transparent';b.style.color='#9c8f7b';b.style.borderColor='rgba(79,69,53,.3)';b.style.fontWeight='';});
+  if(tipo!=='custom'){btn.style.background='#e9c176';btn.style.color='#412d00';btn.style.borderColor='#e9c176';btn.style.fontWeight='700';}
+  else{btn.style.borderColor='rgba(233,193,118,.5)';btn.style.color='#e9c176';}
+  const customRow=document.getElementById('dash-custom-row');
+  if(customRow) customRow.style.display=tipo==='custom'?'flex':'none';
+  if(tipo!=='custom') renderDashboard();
 }
- 
-/* ══ WALK-IN — REGISTRAR ══ */
+
 async function registrarWalkIn() {
-  const servicio = document.getElementById('wi-servicio').value.trim();
-  if (!servicio) return toast('El servicio es obligatorio', true);
- 
-  const now   = new Date();
-  const fecha = now.toISOString().split('T')[0];
-  const hora  = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
- 
-  const wi = {
-    wi_id      : 'WI-' + Math.random().toString(36).toUpperCase().slice(2, 8),
-    barberia_id: BAR_ID,
-    barbero_id : BAR_ID2,
-    cliente    : document.getElementById('wi-cliente').value.trim() || 'Walk-in',
+  const servicio=document.getElementById('wi-servicio').value.trim();
+  if(!servicio) return toast('El servicio es obligatorio',true);
+  const now=new Date(); const fecha=now.toISOString().split('T')[0];
+  const hora=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const wi={
+    wi_id:'WI-'+Math.random().toString(36).toUpperCase().slice(2,8),
+    barberia_id:BAR_ID, barbero_id:BAR_ID2,
+    cliente:document.getElementById('wi-cliente').value.trim()||'Walk-in',
     servicio,
-    precio     : parseFloat(String(document.getElementById('wi-precio').value||'0').replace(/[^0-9.]/g,'')) || 0,
-    metodo_pago: document.getElementById('wi-pago').value,
-    notas      : document.getElementById('wi-notas').value.trim(),
-    fecha,
-    hora,
+    precio:parseFloat(String(document.getElementById('wi-precio').value||'0').replace(/[^0-9.]/g,''))||0,
+    metodo_pago:document.getElementById('wi-pago').value,
+    notas:document.getElementById('wi-notas').value.trim(),
+    fecha, hora,
   };
- 
-  walkIns.unshift(wi);
-  renderWalkIns();
-  renderDashboard();
- 
-  ['wi-cliente','wi-servicio','wi-precio','wi-notas'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
- 
-  toast('✓ Walk-in registrado · ' + wi.cliente + ' · ' + servicio);
-  gasPost({ accion:'registrarWalkIn', ...wi }).catch(() => {});
+  walkIns.unshift(wi); renderWalkIns(); renderDashboard();
+  ['wi-cliente','wi-servicio','wi-precio','wi-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  toast('✓ Walk-in registrado · '+wi.cliente+' · '+servicio);
+  gasPost({accion:'registrarWalkIn',...wi}).catch(()=>{});
 }
- 
-/* ══ WALK-IN — ELIMINAR ══ */
+
 function eliminarWalkIn(id) {
-  walkIns = walkIns.filter(w => w.wi_id !== id);
-  renderWalkIns();
-  renderDashboard();
+  walkIns=walkIns.filter(w=>w.wi_id!==id);
+  renderWalkIns(); renderDashboard();
   toast('Walk-in eliminado');
-  gasPost({ accion:'eliminarWalkIn', wi_id: id, barberia_id: BAR_ID }).catch(() => {});
+  gasPost({accion:'eliminarWalkIn',wi_id:id,barberia_id:BAR_ID}).catch(()=>{});
 }
- 
-/* ══ WALK-IN — RENDER HISTORIAL HOY ══ */
+
 function renderWalkIns() {
-  const lista  = document.getElementById('wi-lista');
-  const empty  = document.getElementById('wi-empty');
-  const cntEl  = document.getElementById('wi-count-hoy');
-  if (!lista) return;
- 
-  const today   = new Date().toISOString().split('T')[0];
-  const todayWI = walkIns.filter(w => w.fecha === today);
- 
-  if (cntEl) cntEl.textContent = todayWI.length + ' hoy';
-  lista.innerHTML = '';
- 
-  if (!todayWI.length) {
-    if (empty) empty.style.display = 'flex';
-    return;
-  }
-  if (empty) empty.style.display = 'none';
- 
-  todayWI.forEach(w => {
-    const precio = Number(w.precio) > 0 ? '$' + Number(w.precio).toLocaleString('es-CO') : '—';
-    const card   = document.createElement('div');
-    card.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22);margin-bottom:7px;transition:border-color .2s';
-    card.innerHTML = `
+  const lista=document.getElementById('wi-lista'); const empty=document.getElementById('wi-empty'); const cntEl=document.getElementById('wi-count-hoy');
+  if(!lista) return;
+  const today=new Date().toISOString().split('T')[0]; const todayWI=walkIns.filter(w=>w.fecha===today);
+  if(cntEl) cntEl.textContent=todayWI.length+' hoy';
+  lista.innerHTML='';
+  if(!todayWI.length){ if(empty) empty.style.display='flex'; return; }
+  if(empty) empty.style.display='none';
+  todayWI.forEach(w=>{
+    const precio=Number(w.precio)>0?'$'+Number(w.precio).toLocaleString('es-CO'):'—';
+    const card=document.createElement('div');
+    card.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22);margin-bottom:7px';
+    card.innerHTML=`
       <div style="width:36px;height:36px;background:rgba(126,207,168,.1);border:1px solid rgba(126,207,168,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <span class="material-symbols-outlined" style="font-size:17px;color:#7ecfa8">content_cut</span>
       </div>
@@ -2698,8 +2330,8 @@ function renderWalkIns() {
         <p style="font-size:11px;color:#9c8f7b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
           ${w.servicio} · <span style="color:#e9c176;font-weight:700">${precio}</span> · ${w.hora}
         </p>
-        ${w.metodo_pago ? `<p style="font-size:8.5px;color:#6b5f52;letter-spacing:.12em;text-transform:uppercase;margin-top:2px">${w.metodo_pago}</p>` : ''}
-        ${w.notas ? `<p style="font-size:10px;color:#6b5f52;margin-top:3px;line-height:1.4">${w.notas}</p>` : ''}
+        ${w.metodo_pago?`<p style="font-size:8.5px;color:#6b5f52;letter-spacing:.12em;text-transform:uppercase;margin-top:2px">${w.metodo_pago}</p>`:''}
+        ${w.notas?`<p style="font-size:10px;color:#6b5f52;margin-top:3px;line-height:1.4">${w.notas}</p>`:''}
       </div>
       <button onclick="eliminarWalkIn('${w.wi_id}')" class="btn-r" title="Eliminar">
         <span class="material-symbols-outlined" style="font-size:14px">delete</span>
@@ -2707,312 +2339,178 @@ function renderWalkIns() {
     lista.appendChild(card);
   });
 }
- 
-/* ══ CARGAR WALK-INS DESDE GAS ══ */
+
 async function cargarWalkIns() {
   try {
-    const json = await gasGet({ accion:'leerWalkIns', barberia_id: BAR_ID });
-    const raw  = json.walkIns || json.data || [];
-    if (raw.length) {
-      walkIns = raw.map(w => ({
-        wi_id      : String(w.wi_id || 'WI-' + Math.random().toString(36).slice(2,8)),
-        barberia_id: w.barberia_id || BAR_ID,
-        barbero_id : w.barbero_id  || BAR_ID2,
-        cliente    : String(w.cliente    || 'Walk-in'),
-        servicio   : String(w.servicio   || ''),
-        precio     : Number(w.precio)    || 0,
-        metodo_pago: String(w.metodo_pago|| ''),
-        notas      : String(w.notas      || ''),
-        fecha      : String(w.fecha      || ''),
-        hora       : String(w.hora       || ''),
+    const json=await gasGet({accion:'leerWalkIns',barberia_id:BAR_ID});
+    const raw=json.walkIns||json.data||[];
+    if(raw.length){
+      walkIns=raw.map(w=>({
+        wi_id:String(w.wi_id||'WI-'+Math.random().toString(36).slice(2,8)),
+        barberia_id:w.barberia_id||BAR_ID, barbero_id:w.barbero_id||BAR_ID2,
+        cliente:String(w.cliente||'Walk-in'), servicio:String(w.servicio||''),
+        precio:Number(w.precio)||0, metodo_pago:String(w.metodo_pago||''),
+        notas:String(w.notas||''), fecha:String(w.fecha||''), hora:String(w.hora||''),
       }));
     }
-  } catch(e) { /* sin walk-ins previos — ok */ }
+  } catch(e) {}
 }
- 
-/* ══ RENDER DASHBOARD (punto de entrada) ══ */
+
 async function renderDashboard() {
-  if (!_dashReady) {
-    showOv('Cargando dashboard...');
-    await cargarWalkIns();
-    _dashReady = true;
-    hideOv();
-  }
-  renderStatCards();
-  renderBarChart();
-  renderServiciosSummary();
-  renderWalkIns();
+  if (!_dashReady) { showOv('Cargando dashboard...'); await cargarWalkIns(); _dashReady=true; hideOv(); }
+  renderStatCards(); renderBarChart(); renderServiciosSummary(); renderWalkIns();
 }
 
-/* ══════════════════════════════════════
-   URL PÚBLICA + QR
-   Agrega estas funciones al bloque <script> de panel.html
-   Llama initUrlPublica() al final de init(), después de syncHeader()
-══════════════════════════════════════ */
-
-/* ── URL del perfil público del cliente ── */
+/* ══ URL PÚBLICA + QR ══ */
 function getUrlPublica() {
-  // home.html lee el parámetro ?id= según el código que ya tienes
-  const base = 'https://globalbarber.vercel.app/pages/login/home.html';
-  return base + '?id=' + encodeURIComponent(BAR_ID);
+  return 'https://globalbarber.vercel.app/pages/login/home.html?id=' + encodeURIComponent(BAR_ID);
 }
-
-/* ── Actualiza el texto de la URL en el panel ── */
 function renderUrlPublica() {
-  const url = getUrlPublica();
-  const el  = document.getElementById('url-publica-txt');
-  if (el) el.textContent = url;
+  const el=document.getElementById('url-publica-txt');
+  if(el) el.textContent=getUrlPublica();
 }
-
-/* ── Genera el QR usando la API pública de QR Server (sin librería externa) ── */
 function generarQR() {
-  const url      = getUrlPublica();
-  const canvas   = document.getElementById('qr-canvas');
-  const ph       = document.getElementById('qr-placeholder');
-  if (!canvas) return;
-
-  // Usar QR Server API: devuelve imagen PNG del QR
-  const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=94x94&format=png&color=e9c176&bgcolor=0e0c08&data='
-    + encodeURIComponent(url);
-
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, 94, 94);
-    canvas.style.display = 'block';
-    if (ph) ph.style.display = 'none';
-    // Habilitar botón descargar
-    const dlBtn = document.getElementById('btn-dl-qr');
-    if (dlBtn) dlBtn.disabled = false;
-  };
-  img.onerror = () => {
-    // Fallback: mostrar texto si la API falla
-    if (ph) {
-      ph.innerHTML = '<p style="font-size:8px;color:rgba(233,193,118,.3);letter-spacing:.08em;text-align:center;padding:4px">QR no disponible sin conexión</p>';
-    }
-  };
-  img.src = qrApiUrl;
-  // Guardar la URL de la API para poder descargar después
-  canvas._qrApiUrl = qrApiUrl;
+  const canvas=document.getElementById('qr-canvas'); const ph=document.getElementById('qr-placeholder');
+  if(!canvas) return;
+  const qrApiUrl='https://api.qrserver.com/v1/create-qr-code/?size=94x94&format=png&color=e9c176&bgcolor=0e0c08&data='+encodeURIComponent(getUrlPublica());
+  const img=new Image(); img.crossOrigin='anonymous';
+  img.onload=()=>{ const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,94,94); ctx.drawImage(img,0,0,94,94); canvas.style.display='block'; if(ph) ph.style.display='none'; };
+  img.onerror=()=>{ if(ph) ph.innerHTML='<p style="font-size:8px;color:rgba(233,193,118,.3);text-align:center;padding:4px">QR no disponible</p>'; };
+  img.src=qrApiUrl; canvas._qrApiUrl=qrApiUrl;
 }
-
-/* ── Copiar URL al portapapeles ── */
 function copiarUrlPublica() {
-  const url = getUrlPublica();
-  const btn = document.getElementById('btn-copy-url');
-  navigator.clipboard.writeText(url)
-    .then(() => {
-      toast('✓ URL copiada al portapapeles');
-      if (btn) {
-        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px">check</span>Copiado';
-        btn.style.borderColor = 'rgba(233,193,118,.5)';
-        btn.style.color = '#e9c176';
-        setTimeout(() => {
-          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar';
-          btn.style.borderColor = 'rgba(79,69,53,.35)';
-          btn.style.color = '#9c8f7b';
-        }, 2200);
-      }
-    })
-    .catch(() => {
-      // Fallback para dispositivos sin clipboard API
-      const ta = document.createElement('textarea');
-      ta.value = url;
-      ta.style.cssText = 'position:fixed;top:-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      toast('✓ URL copiada');
-    });
+  const url=getUrlPublica(); const btn=document.getElementById('btn-copy-url');
+  navigator.clipboard.writeText(url).then(()=>{ toast('✓ URL copiada al portapapeles'); if(btn){btn.innerHTML='<span class="material-symbols-outlined" style="font-size:12px">check</span>Copiado';setTimeout(()=>{btn.innerHTML='<span class="material-symbols-outlined" style="font-size:12px">content_copy</span>Copiar';},2200);} }).catch(()=>{ const ta=document.createElement('textarea');ta.value=url;ta.style.cssText='position:fixed;top:-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('✓ URL copiada'); });
 }
-
-/* ── Compartir con Web Share API (nativo en móvil) ── */
 async function compartirPerfil() {
-  const url    = getUrlPublica();
-  const nombre = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: nombre + ' · Agenda tu cita',
-        text : 'Agenda tu corte en ' + nombre + ' — reserva en línea, sin filas.',
-        url  : url,
-      });
-    } catch(e) {
-      // El usuario canceló el share nativo — no es error real
-      if (e.name !== 'AbortError') copiarUrlPublica();
-    }
-  } else {
-    // Fallback desktop: copiar
-    copiarUrlPublica();
-    toast('✓ URL copiada — pégala donde quieras compartir');
-  }
+  const url=getUrlPublica(); const nombre=sesion.nombre_barberia||sesion.nombre||'The Atelier';
+  if(navigator.share){try{await navigator.share({title:nombre+' · Agenda tu cita',text:'Agenda tu corte en '+nombre,url});return;}catch(e){if(e.name==='AbortError')return;}}
+  copiarUrlPublica(); toast('✓ URL copiada — pégala donde quieras compartir');
 }
-
-/* ── Descargar el QR como imagen PNG ── */
 function descargarQR() {
-  const canvas = document.getElementById('qr-canvas');
-  const nombre = (sesion.nombre_barberia || sesion.nombre || 'atelier')
-    .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-
-  if (canvas && canvas.style.display !== 'none') {
-    // Crear canvas grande (400px) para descarga de calidad
-    const SIZE   = 400;
-    const MARGIN = 30;
-    const big    = document.createElement('canvas');
-    big.width    = SIZE;
-    big.height   = SIZE + 70; // espacio para texto debajo
-
-    const ctx = big.getContext('2d');
-
-    // Fondo oscuro
-    ctx.fillStyle = '#0e0c08';
-    ctx.fillRect(0, 0, big.width, big.height);
-
-    // Borde dorado
-    ctx.strokeStyle = 'rgba(233,193,118,0.35)';
-    ctx.lineWidth   = 2;
-    ctx.strokeRect(1, 1, big.width - 2, big.height - 2);
-
-    // QR — escalar el canvas pequeño (94px) a la zona central (340px)
-    ctx.drawImage(canvas, MARGIN, MARGIN, SIZE - MARGIN * 2, SIZE - MARGIN * 2);
-
-    // Nombre de la barbería debajo
-    const barbNombre = sesion.nombre_barberia || sesion.nombre || 'THE ATELIER';
-    ctx.fillStyle = '#e9c176';
-    ctx.font      = 'bold 16px Manrope, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(barbNombre.toUpperCase(), SIZE / 2, SIZE + 30);
-
-    // URL pequeña
-    ctx.fillStyle = 'rgba(156,143,123,0.6)';
-    ctx.font      = '10px Manrope, sans-serif';
-    ctx.fillText('Escanea para agendar tu cita', SIZE / 2, SIZE + 52);
-
-    // Descargar
-    const a    = document.createElement('a');
-    a.download = 'qr-' + nombre + '.png';
-    a.href     = big.toDataURL('image/png');
-    a.click();
+  const canvas=document.getElementById('qr-canvas');
+  const nombre=(sesion.nombre_barberia||sesion.nombre||'atelier').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  if(canvas&&canvas.style.display!=='none'){
+    const SIZE=400; const MARGIN=30; const big=document.createElement('canvas'); big.width=SIZE; big.height=SIZE+70;
+    const ctx=big.getContext('2d'); ctx.fillStyle='#0e0c08'; ctx.fillRect(0,0,big.width,big.height);
+    ctx.strokeStyle='rgba(233,193,118,0.35)'; ctx.lineWidth=2; ctx.strokeRect(1,1,big.width-2,big.height-2);
+    ctx.drawImage(canvas,MARGIN,MARGIN,SIZE-MARGIN*2,SIZE-MARGIN*2);
+    ctx.fillStyle='#e9c176'; ctx.font='bold 16px Manrope,sans-serif'; ctx.textAlign='center';
+    ctx.fillText((sesion.nombre_barberia||sesion.nombre||'THE ATELIER').toUpperCase(),SIZE/2,SIZE+30);
+    ctx.fillStyle='rgba(156,143,123,.6)'; ctx.font='10px Manrope,sans-serif';
+    ctx.fillText('Escanea para agendar tu cita',SIZE/2,SIZE+52);
+    const a=document.createElement('a'); a.download='qr-'+nombre+'.png'; a.href=big.toDataURL('image/png'); a.click();
     toast('✓ QR descargado');
   } else {
-    // Si el canvas no está listo, descargar directo de la API
-    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&color=e9c176&bgcolor=0e0c08&data='
-      + encodeURIComponent(getUrlPublica());
-    const a = document.createElement('a');
-    a.href     = qrUrl;
-    a.download = 'qr-' + nombre + '.png';
-    a.target   = '_blank';
-    a.click();
-    toast('✓ Descargando QR...');
+    const a=document.createElement('a'); a.href='https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&color=e9c176&bgcolor=0e0c08&data='+encodeURIComponent(getUrlPublica());
+    a.download='qr-'+nombre+'.png'; a.target='_blank'; a.click(); toast('✓ Descargando QR...');
   }
 }
+function initUrlPublica() { renderUrlPublica(); generarQR(); }
 
-/* ── Init — llamar desde init() después de syncHeader() ── */
-function initUrlPublica() {
-  renderUrlPublica();
-  generarQR();
-}
-
-function cerrarSesion() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  sessionStorage.removeItem('atelier_sesion');
-  localStorage.removeItem('atelier_sesion');
-  window.location.href = 'https://globalbarber.vercel.app/pages/login/index.html';
+/* ══ SESIÓN ══ */
+function abrirModalSalir(){ document.getElementById('modal-salir').style.display='flex'; }
+function cerrarModalSalir(){ document.getElementById('modal-salir').style.display='none'; }
+function confirmarSalir(){
+  sessionStorage.removeItem('atelier_sesion'); localStorage.removeItem('atelier_sesion');
+  window.location.href='https://globalbarber.vercel.app/pages/login/index.html';
 }
 
 async function actualizarTodo() {
-  const ico = document.getElementById('refresh-ico');
-  const btn = document.getElementById('btn-refresh');
-  if (ico) ico.style.animation = 'rot 1s linear infinite';
-  if (btn) btn.style.opacity = '.5';
+  const ico=document.getElementById('refresh-ico'); const btn=document.getElementById('btn-refresh');
+  if(ico) ico.style.animation='rot 1s linear infinite'; if(btn) btn.style.opacity='.5';
   try {
-    await Promise.all([cargarCitas(true), recargarCortes(), recargarProductos()]);
-    const ahora = new Date();
-    const el = document.getElementById('ultima-actualizacion');
-    if (el) el.textContent = `última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    await Promise.all([cargarCitas(true),recargarCortes(),recargarProductos()]);
+    const ahora=new Date(); const el=document.getElementById('ultima-actualizacion');
+    if(el) el.textContent=`última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
     toast('✓ Todo actualizado');
-  } catch(e) {
-    toast('Error al actualizar', true);
-  } finally {
-    if (ico) ico.style.animation = '';
-    if (btn) btn.style.opacity = '1';
+  } catch(e){ toast('Error al actualizar',true); }
+  finally{ if(ico) ico.style.animation=''; if(btn) btn.style.opacity='1'; }
+}
+
+/* ══ CALENDARIO ══ */
+let _calAbierto=false; let _calYear=new Date().getFullYear(); let _calMonth=new Date().getMonth(); let _calFiltroFecha=null;
+const MESES_ES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function toggleCal() {
+  _calAbierto=!_calAbierto;
+  const body=document.getElementById('cal-body'); const chevron=document.getElementById('cal-chevron');
+  if(_calAbierto){ renderCal(); body.style.maxHeight=Math.min(360,Math.round(window.innerHeight*.60))+'px'; chevron.style.transform='rotate(180deg)'; }
+  else{ body.style.maxHeight='0'; chevron.style.transform='rotate(0deg)'; }
+}
+
+function calNav(dir) {
+  _calMonth+=dir;
+  if(_calMonth>11){_calMonth=0;_calYear++;} if(_calMonth<0){_calMonth=11;_calYear--;}
+  renderCal();
+}
+
+function renderCal() {
+  const grid=document.getElementById('cal-grid'); const mesLbl=document.getElementById('cal-mes-lbl');
+  if(!grid||!mesLbl) return;
+  mesLbl.textContent=MESES_ES[_calMonth]+' '+_calYear; grid.innerHTML='';
+  const citasDelMes=todasCitas.reduce((acc,c)=>{const f=String(c.fecha||'').split('T')[0];if(f)acc[f]=(acc[f]||0)+1;return acc;},{});
+  const primerDia=new Date(_calYear,_calMonth,1).getDay();
+  const diasEnMes=new Date(_calYear,_calMonth+1,0).getDate();
+  const hoy=new Date(); const hoyISO=`${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+  for(let i=0;i<primerDia;i++){const e=document.createElement('div');grid.appendChild(e);}
+  for(let d=1;d<=diasEnMes;d++){
+    const iso=`${_calYear}-${String(_calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const count=citasDelMes[iso]||0; const esHoy=iso===hoyISO; const selec=iso===_calFiltroFecha;
+    const cel=document.createElement('div');
+    cel.style.cssText=`position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 2px;cursor:pointer;border-radius:2px;min-height:34px;transition:background .15s;background:${selec?'#e9c176':esHoy?'rgba(233,193,118,.12)':'transparent'};border:1px solid ${selec?'#e9c176':esHoy?'rgba(233,193,118,.3)':'transparent'};`;
+    cel.innerHTML=`<span style="font-size:11px;font-weight:${esHoy||selec?700:400};color:${selec?'#412d00':esHoy?'#e9c176':count>0?'#e5e2e1':'#6b5f52'};line-height:1">${d}</span>${count>0?`<span style="margin-top:2px;width:${Math.min(count,3)*4+2}px;height:3px;border-radius:2px;background:${selec?'#412d00':'#e9c176'};opacity:${selec?0.6:0.7}"></span>`:''}`;
+    cel.onclick=()=>calSeleccionarFecha(iso); grid.appendChild(cel);
   }
 }
 
-function abrirModalSalir() {
-  const m = document.getElementById('modal-salir');
-  m.style.display = 'flex';
-}
-function cerrarModalSalir() {
-  const m = document.getElementById('modal-salir');
-  m.style.display = 'none';
-}
-function confirmarSalir() {
-  sessionStorage.removeItem('atelier_sesion');
-  localStorage.removeItem('atelier_sesion');
-  window.location.href = 'https://globalbarber.vercel.app/pages/login/index.html';
+function calSeleccionarFecha(iso) {
+  _calFiltroFecha=iso;
+  const[y,m,d]=iso.split('-'); const lbl=document.getElementById('cal-lbl');
+  if(lbl) lbl.textContent=`${d}/${m}/${y}`;
+  const clrBtn=document.getElementById('cal-clear-btn'); if(clrBtn) clrBtn.style.display='block';
+  renderCal();
+  const filtradas=todasCitas.filter(c=>String(c.fecha||'').split('T')[0]===iso);
+  const listaFinal=filtroActivo==='todas'?filtradas:filtradas.filter(c=>c.estado===filtroActivo);
+  renderCitas(listaFinal);
+  if(!filtradas.length){
+    const empty=document.getElementById('citas-empty'); if(empty){ empty.style.display='block'; const p=empty.querySelector('p:last-child'); if(p) p.textContent=`Sin citas el ${d}/${m}/${y}`; }
+  }
 }
 
+function calLimpiar() {
+  _calFiltroFecha=null; const lbl=document.getElementById('cal-lbl'); if(lbl) lbl.textContent='Todas las citas';
+  const clrBtn=document.getElementById('cal-clear-btn'); if(clrBtn) clrBtn.style.display='none';
+  renderCal(); renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
+}
 
-/* ══ DELEGACIÓN ELIMINAR CORTE ══ */
+/* ══ DELEGACIÓN CLICK — ELIMINAR CORTE con modal de confirmación ══ */
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('._del-corte-btn');
   if (!btn) return;
   const cid = btn.dataset.cid;
   if (!cid) return;
   e.stopPropagation();
-  
-  // Mini-modal de confirmación al estilo Atelier
+
   let conf = document.getElementById('_conf-del-corte');
   if (!conf) {
     conf = document.createElement('div');
     conf.id = '_conf-del-corte';
-    conf.style.cssText = `
-      position:fixed;inset:0;z-index:999999;
-      background:rgba(5,3,1,.92);backdrop-filter:blur(14px);
-      display:flex;align-items:flex-end;justify-content:center;
-      opacity:0;transition:opacity .22s;pointer-events:none
-    `;
+    conf.style.cssText = `position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.92);backdrop-filter:blur(14px);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .22s;pointer-events:none`;
     conf.innerHTML = `
-      <div id="_conf-del-sheet" style="width:100%;max-width:480px;background:#111009;
-        border-top:1px solid rgba(233,118,118,.2);padding:24px 18px 40px;
-        transform:translateY(30px);transition:transform .28s cubic-bezier(.22,1,.36,1)">
-        <div style="width:44px;height:44px;border:1px solid rgba(233,118,118,.22);border-radius:50%;
-          display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+      <div id="_conf-del-sheet" style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,118,118,.2);padding:24px 18px 40px;transform:translateY(30px);transition:transform .28s cubic-bezier(.22,1,.36,1)">
+        <div style="width:44px;height:44px;border:1px solid rgba(233,118,118,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
           <span class="material-symbols-outlined" style="font-size:20px;color:#e97676">delete</span>
         </div>
-        <p style="font-size:7px;letter-spacing:.38em;text-transform:uppercase;
-          color:rgba(233,118,118,.4);text-align:center;margin-bottom:8px">Portafolio</p>
-        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;
-          text-align:center;margin-bottom:6px;font-weight:400">¿Eliminar este corte?</p>
-        <p style="font-size:11px;color:#9c8f7b;text-align:center;
-          line-height:1.7;margin-bottom:24px">Esta acción no se puede deshacer.<br>
-          El corte dejará de aparecer en tu portafolio.</p>
+        <p style="font-size:7px;letter-spacing:.38em;text-transform:uppercase;color:rgba(233,118,118,.4);text-align:center;margin-bottom:8px">Portafolio</p>
+        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;text-align:center;margin-bottom:6px;font-weight:400">¿Eliminar este corte?</p>
+        <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:24px">Esta acción no se puede deshacer.<br>El corte dejará de aparecer en tu portafolio.</p>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <button id="_conf-del-si"
-            style="width:100%;padding:14px;background:rgba(233,118,118,.12);
-            border:1px solid rgba(233,118,118,.4);color:#e97676;
-            font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;
-            text-transform:uppercase;font-weight:700;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s"
-            onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
-            <span class="material-symbols-outlined" style="font-size:14px">delete_forever</span>
-            Sí, eliminar corte
+          <button id="_conf-del-si" style="width:100%;padding:14px;background:rgba(233,118,118,.12);border:1px solid rgba(233,118,118,.4);color:#e97676;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span class="material-symbols-outlined" style="font-size:14px">delete_forever</span>Sí, eliminar corte
           </button>
-          <button id="_conf-del-no"
-            style="width:100%;padding:13px;background:transparent;
-            border:1px solid rgba(79,69,53,.25);color:#9c8f7b;
-            font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;
-            text-transform:uppercase;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"
-            onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'"
-            onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
-            <span class="material-symbols-outlined" style="font-size:14px">arrow_back</span>
-            Cancelar
+          <button id="_conf-del-no" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span class="material-symbols-outlined" style="font-size:14px">arrow_back</span>Cancelar
           </button>
         </div>
       </div>`;
@@ -3020,207 +2518,98 @@ document.addEventListener('click', function(e) {
   }
 
   function closeConf() {
-    conf.style.opacity = '0';
-    document.getElementById('_conf-del-sheet').style.transform = 'translateY(30px)';
-    setTimeout(() => { conf.style.pointerEvents = 'none'; }, 260);
+    conf.style.opacity='0';
+    document.getElementById('_conf-del-sheet').style.transform='translateY(30px)';
+    setTimeout(()=>{conf.style.pointerEvents='none';},260);
   }
 
   document.getElementById('_conf-del-no').onclick = closeConf;
-  conf.onclick = (ev) => { if (ev.target === conf) closeConf(); };
+  conf.onclick = ev => { if(ev.target===conf) closeConf(); };
+  document.getElementById('_conf-del-si').onclick = () => { closeConf(); eliminarCorte(cid); };
 
-  document.getElementById('_conf-del-si').onclick = () => {
-    closeConf();
-    eliminarCorte(cid);
-  };
-
-  conf.style.pointerEvents = 'all';
-  conf.style.opacity = '1';
-  document.getElementById('_conf-del-sheet').style.transform = 'translateY(0)';
+  conf.style.pointerEvents='all'; conf.style.opacity='1';
+  document.getElementById('_conf-del-sheet').style.transform='translateY(0)';
 });
-/* ══ CALENDARIO DE CITAS ══ */
-let _calAbierto   = false;
-let _calYear      = new Date().getFullYear();
-let _calMonth     = new Date().getMonth();
-let _calFiltroFecha = null; // 'YYYY-MM-DD' o null
 
-const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+/* ══ INIT ══ */
+async function init() {
+  buildHorarios(); updateSlots();
+  initHeader(); calcProg();
+  buildCarousel('prod',[]); buildCarousel('corte',[]);
+  renderCitas([]); renderHorariosEspeciales();
 
-function toggleCal() {
-  _calAbierto = !_calAbierto;
-  const body    = document.getElementById('cal-body');
-  const chevron = document.getElementById('cal-chevron');
-  if (_calAbierto) {
-    renderCal();
-        const maxH = Math.min(360, Math.round(window.innerHeight * 0.60));
-    body.style.maxHeight = maxH + 'px';
+  showOv('Cargando datos de la barbería...');
 
-    chevron.style.transform = 'rotate(180deg)';
-  } else {
-    body.style.maxHeight = '0';
-    chevron.style.transform = 'rotate(0deg)';
-  }
-}
+  let perfilGuardado=false;
+  try {
+    const json=await gasGet({accion:'leerPerfil',barberia_id:BAR_ID});
+    const p=json.perfil;
+    if(p&&p.nombre_barberia){
+      prellenarInputs({'f-nombre':p.nombre_barberia,'f-ciudad':p.ciudad,'f-depto':p.departamento,'f-dir':p.direccion,'f-tel':p.telefono,'f-email':p.email,'f-dueno':p.nombre_dueno,'f-maps':p.maps_url,'f-plan':p.plan});
+      if(p.foto_barbero_url){imgs.avatar_url=normDriveUrl(p.foto_barbero_url);mostrarAvatar(imgs.avatar_url);}
+      if(p.foto_local_url){imgs.local_url=normDriveUrl(p.foto_local_url);document.getElementById('img-local').src=imgs.local_url;document.getElementById('fu-local').classList.add('loaded');}
+      if(p.codigo_acceso){document.getElementById('codigo-display').textContent=p.codigo_acceso;sesion.codigo_acceso=p.codigo_acceso;}
+      const planPrecios={'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días'};
+      if(p.plan){const txtEl=document.getElementById('plan-btn-txt');if(txtEl)txtEl.textContent=p.plan+' — '+(planPrecios[p.plan]||'');}
+      Object.assign(sesion,{nombre:p.nombre_barberia,nombre_barberia:p.nombre_barberia,dueno:p.nombre_dueno,ciudad:p.ciudad,departamento:p.departamento,direccion:p.direccion,telefono:p.telefono,email:p.email,foto_barbero_url:imgs.avatar_url,foto_local_url:imgs.local_url,maps_url:p.maps_url,plan:p.plan});
+      perfilGuardado=true;
+      toast('✓ '+p.nombre_barberia+' · perfil cargado');
+    }
+  } catch(e){}
 
-function calNav(dir) {
-  _calMonth += dir;
-  if (_calMonth > 11) { _calMonth = 0; _calYear++; }
-  if (_calMonth < 0)  { _calMonth = 11; _calYear--; }
-  renderCal();
-}
-
-function renderCal() {
-  const grid   = document.getElementById('cal-grid');
-  const mesLbl = document.getElementById('cal-mes-lbl');
-  if (!grid || !mesLbl) return;
-
-  mesLbl.textContent = MESES_ES[_calMonth] + ' ' + _calYear;
-  grid.innerHTML = '';
-
-  // Citas del mes para marcar puntos
-  const citasDelMes = todasCitas.reduce((acc, c) => {
-    const f = String(c.fecha || '').split('T')[0];
-    if (f) acc[f] = (acc[f] || 0) + 1;
-    return acc;
-  }, {});
-
-  const primerDia = new Date(_calYear, _calMonth, 1).getDay(); // 0=Dom
-  const diasEnMes = new Date(_calYear, _calMonth + 1, 0).getDate();
-  const hoy       = new Date();
-  const hoyISO    = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
-
-  // Celdas vacías antes del primer día
-  for (let i = 0; i < primerDia; i++) {
-    const empty = document.createElement('div');
-    grid.appendChild(empty);
+  if(!perfilGuardado){
+    try{
+      const json=await gasGet({accion:'leerDatosRegistro',barberia_id:BAR_ID});
+      const r=json.barberia||json.datos||json.perfil||null;
+      if(r){
+        prellenarInputs({'f-nombre':r.nombre_barberia||r.nombre,'f-ciudad':r.ciudad,'f-depto':r.departamento,'f-dir':r.direccion||'','f-tel':r.dueno_telefono||r.telefono,'f-email':r.dueno_email||r.email,'f-dueno':r.dueno_nombre||r.nombre_dueno,'f-plan':r.plan});
+        const codigoEl=document.getElementById('codigo-display');
+        if(r.codigo_acceso_cliente&&codigoEl){codigoEl.textContent=r.codigo_acceso_cliente;sesion.codigo_acceso=r.codigo_acceso_cliente;sesion.codigo_acceso_cliente=r.codigo_acceso_cliente;}
+        const planPrecios={'Básico':'$50.000/mes','Pro':'$89.000/mes','Élite':'$149.000/mes','Prueba':'Gratis 15 días'};
+        if(r.plan){const txtEl=document.getElementById('plan-btn-txt');if(txtEl)txtEl.textContent=r.plan+' — '+(planPrecios[r.plan]||'');}
+        Object.assign(sesion,{nombre:r.nombre_barberia||r.nombre,nombre_barberia:r.nombre_barberia||r.nombre,dueno:r.dueno_nombre||r.nombre_dueno,ciudad:r.ciudad,departamento:r.departamento,telefono:r.dueno_telefono||r.telefono,email:r.dueno_email||r.email,plan:r.plan,estado:r.estado});
+        document.getElementById('banner-nueva').style.display='block';
+        toast('Bienvenido · Completa tu perfil para publicarte');
+      } else { toast('Modo demo — '+BAR_ID); }
+    }catch(e){ toast('Sin conexión — modo offline',true); }
   }
 
-  for (let d = 1; d <= diasEnMes; d++) {
-    const iso   = `${_calYear}-${String(_calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const count = citasDelMes[iso] || 0;
-    const esHoy = iso === hoyISO;
-    const selec = iso === _calFiltroFecha;
+  syncHeader(); syncPlanBadge(); calcProg();
+  initUrlPublica();
+  if(document.getElementById('f-maps')?.value) updateMap();
 
-    const cel = document.createElement('div');
-    cel.style.cssText = `
-      position:relative;display:flex;flex-direction:column;align-items:center;
-      justify-content:center;padding:5px 2px;cursor:pointer;border-radius:2px;
-      min-height:34px;transition:background .15s;
-      background:${selec ? '#e9c176' : esHoy ? 'rgba(233,193,118,.12)' : 'transparent'};
-      border:1px solid ${selec ? '#e9c176' : esHoy ? 'rgba(233,193,118,.3)' : 'transparent'};
-    `;
+  try{
+    const jh=await gasGet({accion:'leerHorarios',barberia_id:BAR_ID});
+    const horRows=jh.horarios||jh.data||[];
+    if(horRows.length){
+      horRows.forEach(h=>{
+        const diaKey=(h.dia_semana||h.dia||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        const chk=document.getElementById('d-'+diaKey); const hi=document.getElementById('hi-'+diaKey);
+        const hf=document.getElementById('hf-'+diaKey); const iv=document.getElementById('iv-'+diaKey);
+        if(!chk) return;
+        const activo=h.activo===true||String(h.activo).toLowerCase()==='true'; chk.checked=activo; togDia(diaKey);
+        function extractHM(raw){const s=String(raw||'').trim();if(!s)return null;if(s.includes('T')){try{const d=new Date(s);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}catch(e){return(s.split('T')[1]||'').slice(0,5)||null;}}if(/^\d{1,2}:\d{2}/.test(s)){const p=s.slice(0,5);return p.length===4?'0'+p:p;}return null;}
+        const hiVal=extractHM(h.hora_inicio); const hfVal=extractHM(h.hora_fin);
+        if(hi&&hiVal)hi.value=hiVal; if(hf&&hfVal)hf.value=hfVal;
+        if(iv&&h.intervalo_min){const ivStr=String(parseInt(h.intervalo_min)||30);const opt=iv.querySelector(`option[value="${ivStr}"]`);if(opt)iv.value=ivStr;}
+      });
+      updateSlots(); toast('✓ Horarios cargados');
+    }
+  }catch(e){}
 
-    cel.innerHTML = `
-      <span style="font-size:11px;font-weight:${esHoy||selec?700:400};
-        color:${selec ? '#412d00' : esHoy ? '#e9c176' : count > 0 ? '#e5e2e1' : '#6b5f52'};
-        line-height:1">${d}</span>
-      ${count > 0 ? `<span style="margin-top:2px;width:${Math.min(count,3)*4+2}px;height:3px;border-radius:2px;background:${selec?'#412d00':'#e9c176'};opacity:${selec?0.6:0.7}"></span>` : ''}
-    `;
+  await recargarCortes(); await recargarProductos(); await cargarCitas(false); iniciarAutoRefresh();
 
-    cel.onmouseover = () => {
-      if (!selec) cel.style.background = 'rgba(233,193,118,.08)';
-    };
-    cel.onmouseout = () => {
-      if (!selec) cel.style.background = esHoy ? 'rgba(233,193,118,.12)' : 'transparent';
-    };
+  try{
+    const jhe=await gasGet({accion:'leerHorariosEspeciales',barberia_id:BAR_ID});
+    if(jhe.horariosEspeciales?.length){
+      horariosEspeciales=jhe.horariosEspeciales.map(h=>({id:h.hesp_id,fecha:h.fecha,tipo:h.tipo,hora_inicio:h.hora_inicio,hora_fin:h.hora_fin,nota:h.nota}));
+      renderHorariosEspeciales();
+    }
+  }catch(e){}
 
-    cel.onclick = () => calSeleccionarFecha(iso);
-    grid.appendChild(cel);
-  }
+  hideOv();
 }
-
-function calSeleccionarFecha(iso) {
-  _calFiltroFecha = iso;
-
-  // Actualizar label del header
-  const [y, m, d] = iso.split('-');
-  const lbl = document.getElementById('cal-lbl');
-  if (lbl) lbl.textContent = `${d}/${m}/${y}`;
-
-  // Mostrar botón limpiar
-  const clrBtn = document.getElementById('cal-clear-btn');
-  if (clrBtn) clrBtn.style.display = 'block';
-
-  // Re-render para resaltar seleccionado
-  renderCal();
-
-  // Filtrar citas por fecha
-  const filtradas = todasCitas.filter(c => {
-    const f = String(c.fecha || '').split('T')[0];
-    return f === iso;
-  });
-
-  // Re-renderizar lista de citas con el filtro de tab activo también
-  const listaFinal = filtroActivo === 'todas'
-    ? filtradas
-    : filtradas.filter(c => c.estado === filtroActivo);
-
-  renderCitas(listaFinal);
-
-  // Mostrar mensaje si no hay citas ese día
-  if (filtradas.length === 0) {
-    const cont  = document.getElementById('citas-list');
-    const empty = document.getElementById('citas-empty');
-    cont.innerHTML = '';
-    empty.style.display = 'block';
-    // Reemplazar texto del empty con info del día
-    const p = empty.querySelector('p:last-child');
-    if (p) p.textContent = `Sin citas el ${d}/${m}/${y}`;
-  }
-}
-
-function calLimpiar() {
-  _calFiltroFecha = null;
-  const lbl = document.getElementById('cal-lbl');
-  if (lbl) lbl.textContent = 'Todas las citas';
-  const clrBtn = document.getElementById('cal-clear-btn');
-  if (clrBtn) clrBtn.style.display = 'none';
-  renderCal();
-  // Restaurar filtro normal
-  renderCitas(filtroActivo === 'todas' ? todasCitas : todasCitas.filter(c => c.estado === filtroActivo));
-}
-
-// ★ Cuando se recargan citas, mantener el filtro de fecha activo si hay uno
-const _renderCitasOriginal = renderCitas;
-
-
-
-
-
-
+init();
 </script>
-<!-- MODAL SALIR -->
-<div id="modal-salir" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.93);backdrop-filter:blur(18px);align-items:flex-end;justify-content:center">
-  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,118,118,.22);padding:28px 20px 44px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
-
-    <!-- Icono -->
-    <div style="width:52px;height:52px;border:1px solid rgba(233,118,118,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
-      <span class="material-symbols-outlined" style="font-size:24px;color:#e97676">logout</span>
-    </div>
-
-    <!-- Texto -->
-    <p style="font-size:7px;letter-spacing:.42em;text-transform:uppercase;color:rgba(233,118,118,.4);text-align:center;margin-bottom:10px">Sesión activa</p>
-    <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;text-align:center;margin-bottom:8px;font-weight:400">¿Cerrar sesión?</p>
-    <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:28px">Si sales, las notificaciones de citas nuevas<br>se detendrán hasta que vuelvas a ingresar.</p>
-
-    <!-- Separador dorado -->
-    <div style="width:32px;height:1px;background:rgba(233,118,118,.2);margin:0 auto 28px"></div>
-
-    <!-- Botones -->
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button onclick="confirmarSalir()"
-        style="width:100%;padding:15px;background:rgba(233,118,118,.12);border:1px solid rgba(233,118,118,.4);color:#e97676;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s"
-        onmouseover="this.style.opacity='.78'" onmouseout="this.style.opacity='1'">
-        <span class="material-symbols-outlined" style="font-size:15px">logout</span>Sí, cerrar sesión
-      </button>
-      <button onclick="cerrarModalSalir()"
-        style="width:100%;padding:14px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"
-        onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'"
-        onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
-        <span class="material-symbols-outlined" style="font-size:15px">arrow_back</span>Quedarse
-      </button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
