@@ -1731,8 +1731,8 @@ function buildCarousel(type, items) {
               <div style="position:absolute;top:8px;right:8px;z-index:10;display:flex;flex-direction:column;gap:5px;pointer-events:all">
                 <button onclick="abrirLupaCorte('${imgUrl}','${item.nombre}')" title="Ver ampliado" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.28);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
                   <span class="material-symbols-outlined" style="font-size:16px">zoom_in</span></button>
-                <button onclick="eliminarCorte('${cid}')" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(255,255,255,.1);color:#9c8f7b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;backdrop-filter:blur(4px)">&times;</button>
-              </div>
+               <button data-cid="${cid}" class="_del-corte-btn" style="width:30px;height:30px;background:rgba(8,6,4,.78);border:1px solid rgba(200,60,60,.3);color:#e97676;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)"><span class="material-symbols-outlined" style="font-size:15px">delete</span></button>
+
               <div class="corte-3d-hint" id="hint-${cid}"><span style="font-size:11px">↔</span>Girar</div>
               <div class="corte-overlay" style="top:0;bottom:auto;background:linear-gradient(to bottom,rgba(8,6,4,.9),transparent);padding:10px 10px 22px">
                 <p style="font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.7);margin-bottom:2px">${item.estilo||'Corte'}</p>
@@ -2789,7 +2789,7 @@ function cerrarSesion() {
   if (!confirm('¿Cerrar sesión?')) return;
   sessionStorage.removeItem('atelier_sesion');
   localStorage.removeItem('atelier_sesion');
-  window.location.href = '/pages/login/index.html';
+  window.location.href = 'https://globalbarber.vercel.app/pages/login/index.html';
 }
 
 async function actualizarTodo() {
@@ -2822,8 +2822,89 @@ function cerrarModalSalir() {
 function confirmarSalir() {
   sessionStorage.removeItem('atelier_sesion');
   localStorage.removeItem('atelier_sesion');
-  window.location.href = '/pages/login/index.html';
+  window.location.href = 'https://globalbarber.vercel.app/pages/login/index.html';
 }
+
+
+/* ══ DELEGACIÓN ELIMINAR CORTE ══ */
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('._del-corte-btn');
+  if (!btn) return;
+  const cid = btn.dataset.cid;
+  if (!cid) return;
+  e.stopPropagation();
+  
+  // Mini-modal de confirmación al estilo Atelier
+  let conf = document.getElementById('_conf-del-corte');
+  if (!conf) {
+    conf = document.createElement('div');
+    conf.id = '_conf-del-corte';
+    conf.style.cssText = `
+      position:fixed;inset:0;z-index:999999;
+      background:rgba(5,3,1,.92);backdrop-filter:blur(14px);
+      display:flex;align-items:flex-end;justify-content:center;
+      opacity:0;transition:opacity .22s;pointer-events:none
+    `;
+    conf.innerHTML = `
+      <div id="_conf-del-sheet" style="width:100%;max-width:480px;background:#111009;
+        border-top:1px solid rgba(233,118,118,.2);padding:24px 18px 40px;
+        transform:translateY(30px);transition:transform .28s cubic-bezier(.22,1,.36,1)">
+        <div style="width:44px;height:44px;border:1px solid rgba(233,118,118,.22);border-radius:50%;
+          display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+          <span class="material-symbols-outlined" style="font-size:20px;color:#e97676">delete</span>
+        </div>
+        <p style="font-size:7px;letter-spacing:.38em;text-transform:uppercase;
+          color:rgba(233,118,118,.4);text-align:center;margin-bottom:8px">Portafolio</p>
+        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;
+          text-align:center;margin-bottom:6px;font-weight:400">¿Eliminar este corte?</p>
+        <p style="font-size:11px;color:#9c8f7b;text-align:center;
+          line-height:1.7;margin-bottom:24px">Esta acción no se puede deshacer.<br>
+          El corte dejará de aparecer en tu portafolio.</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button id="_conf-del-si"
+            style="width:100%;padding:14px;background:rgba(233,118,118,.12);
+            border:1px solid rgba(233,118,118,.4);color:#e97676;
+            font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;
+            text-transform:uppercase;font-weight:700;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s"
+            onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
+            <span class="material-symbols-outlined" style="font-size:14px">delete_forever</span>
+            Sí, eliminar corte
+          </button>
+          <button id="_conf-del-no"
+            style="width:100%;padding:13px;background:transparent;
+            border:1px solid rgba(79,69,53,.25);color:#9c8f7b;
+            font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;
+            text-transform:uppercase;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"
+            onmouseover="this.style.borderColor='rgba(233,193,118,.3)';this.style.color='#e9c176'"
+            onmouseout="this.style.borderColor='rgba(79,69,53,.25)';this.style.color='#9c8f7b'">
+            <span class="material-symbols-outlined" style="font-size:14px">arrow_back</span>
+            Cancelar
+          </button>
+        </div>
+      </div>`;
+    document.body.appendChild(conf);
+  }
+
+  function closeConf() {
+    conf.style.opacity = '0';
+    document.getElementById('_conf-del-sheet').style.transform = 'translateY(30px)';
+    setTimeout(() => { conf.style.pointerEvents = 'none'; }, 260);
+  }
+
+  document.getElementById('_conf-del-no').onclick = closeConf;
+  conf.onclick = (ev) => { if (ev.target === conf) closeConf(); };
+
+  document.getElementById('_conf-del-si').onclick = () => {
+    closeConf();
+    eliminarCorte(cid);
+  };
+
+  conf.style.pointerEvents = 'all';
+  conf.style.opacity = '1';
+  document.getElementById('_conf-del-sheet').style.transform = 'translateY(0)';
+});
 
 
 </script>
