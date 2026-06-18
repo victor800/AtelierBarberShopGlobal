@@ -151,6 +151,14 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
     </div>
     <div style="display:flex;align-items:center;gap:9px;flex-shrink:0">
       <span id="plan-badge" class="pbadge pb-pro">PRO</span>
+
+      <button onclick="cerrarSesion()" title="Cerrar sesión"
+  style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 8px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;transition:all .2s"
+  onmouseover="this.style.borderColor='rgba(233,118,118,.4)';this.style.color='#e97676'"
+  onmouseout="this.style.borderColor='rgba(79,69,53,.28)';this.style.color='#9c8f7b'">
+  <span class="material-symbols-outlined" style="font-size:13px">logout</span>Salir
+</button>
+
       <div class="av-wrap" title="Cambiar foto de perfil">
         <input type="file" accept="image/*" onchange="onAvatar(this)"/>
         <div class="av-inner" id="av-inner">
@@ -456,7 +464,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 <div id="t-citas" class="tc" style="padding:18px;gap:0">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
     <p class="sec-lbl" style="margin-bottom:0">Agenda</p>
-    <button onclick="actualizarCitas()" id="btn-refresh"
+    <button onclick="actualizarTodo()" id="btn-refresh"
       style="display:flex;align-items:center;gap:5px;background:transparent;border:1px solid rgba(233,193,118,.22);color:#e9c176;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;padding:5px 10px;transition:all .2s">
       <span class="material-symbols-outlined" id="refresh-ico" style="font-size:14px">refresh</span>Actualizar
     </button>
@@ -1651,11 +1659,17 @@ async function cargarCitas(silencioso=false) {
   }
 }
 function actualizarCitas() { cargarCitas(false); }
+
 function iniciarAutoRefresh() {
-  if(_refreshInterval) clearInterval(_refreshInterval);
-  _refreshInterval=setInterval(()=>{
-    if(document.getElementById('t-citas')?.classList.contains('on')) cargarCitas(true);
-  }, 2*60*1000);
+  if (_refreshInterval) clearInterval(_refreshInterval);
+  _refreshInterval = setInterval(async () => {
+    const enCitas  = document.getElementById('t-citas')?.classList.contains('on');
+    const enCortes = document.getElementById('t-cortes')?.classList.contains('on');
+    const enTienda = document.getElementById('t-tienda')?.classList.contains('on');
+    if (enCitas)  cargarCitas(true);
+    if (enCortes) recargarCortes();
+    if (enTienda) recargarProductos();
+  }, 10 * 1000);
 }
 
 /* ══ CAROUSEL ENGINE ══ */
@@ -2641,6 +2655,31 @@ function initUrlPublica() {
   generarQR();
 }
 
+function cerrarSesion() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  sessionStorage.removeItem('atelier_sesion');
+  localStorage.removeItem('atelier_sesion');
+  window.location.href = '/pages/login/login.html';
+}
+
+async function actualizarTodo() {
+  const ico = document.getElementById('refresh-ico');
+  const btn = document.getElementById('btn-refresh');
+  if (ico) ico.style.animation = 'rot 1s linear infinite';
+  if (btn) btn.style.opacity = '.5';
+  try {
+    await Promise.all([cargarCitas(true), recargarCortes(), recargarProductos()]);
+    const ahora = new Date();
+    const el = document.getElementById('ultima-actualizacion');
+    if (el) el.textContent = `última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    toast('✓ Todo actualizado');
+  } catch(e) {
+    toast('Error al actualizar', true);
+  } finally {
+    if (ico) ico.style.animation = '';
+    if (btn) btn.style.opacity = '1';
+  }
+}
 
 
 </script>
