@@ -2611,5 +2611,202 @@ async function init() {
 }
 init();
 </script>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════════════
+   PATCH: panel-barbero.html — 6 correcciones
+   
+   INSTRUCCIÓN: Pega este bloque completo ANTES del </body> en tu
+   panel-barbero.html. Sobreescribe las funciones con bugs sin
+   modificar nada más del archivo.
+   ═══════════════════════════════════════════════════════════════ */
+
+// ─── FIX 3 (base): fechaToISO — normalizar cualquier formato a YYYY-MM-DD ──
+window.fechaToISO = function(raw) {
+  if (!raw) return null;
+  const s = String(raw).trim();
+  if (!s || s === '—') return null;
+  if (s.includes('T')) return s.split('T')[0];
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+    const [d,m,y] = s.split('/');
+    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+  }
+  return null;
+};
+
+window.dateToISO = function(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+
+// ─── FIX 3: inRange — sin bugs de timezone, compara strings ISO ─────────────
+window.inRange = function(fechaRaw, filtro) {
+  const { desde, hasta } = dashRangeFor(filtro);
+  if (!desde || !hasta) return true;
+  const fISO     = fechaToISO(fechaRaw); if (!fISO) return false;
+  const desdeISO = dateToISO(desde);
+  const hastaISO = dateToISO(hasta);
+  return fISO >= desdeISO && fISO <= hastaISO;
+};
+
+// ─── FIX 1: registrarWalkIn — precio correcto, barbero_id = dueño ────────────
+window.registrarWalkIn = async function() {
+  const servicio = document.getElementById('wi-servicio').value.trim();
+  if (!servicio) return toast('El servicio es obligatorio', true);
+
+  const now   = new Date();
+  const fecha = now.toISOString().split('T')[0];
+  const hora  = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  // ✅ precio: parsear correctamente eliminando símbolos
+  const precioRaw = String(document.getElementById('wi-precio').value || '').replace(/[^0-9.]/g,'');
+  const precio    = parseFloat(precioRaw) || 0;
+
+  // ✅ barbero_id = nombre del dueño/barbero (NO el cliente)
+  const barberoNombre = sesion.nombre_dueno || sesion.dueno || BAR_ID2;
+  const clienteNombre = document.getElementById('wi-cliente').value.trim() || 'Walk-in';
+
+  const wi = {
+    wi_id       : 'WI-' + Math.random().toString(36).toUpperCase().slice(2,8),
+    barberia_id : BAR_ID,
+    barbero_id  : barberoNombre,  // ✅ dueño de la barbería
+    cliente     : clienteNombre,
+    servicio,
+    precio,
+    metodo_pago : document.getElementById('wi-pago').value,
+    notas       : document.getElementById('wi-notas').value.trim(),
+    fecha,
+    hora,
+  };
+
+  walkIns.unshift(wi);
+  renderWalkIns();
+  renderDashboard();
+
+  ['wi-cliente','wi-servicio','wi-precio','wi-notas'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  toast('✓ Walk-in · ' + wi.cliente + ' · ' + servicio +
+        (precio > 0 ? ' · $' + precio.toLocaleString('es-CO') : ''));
+
+  // ✅ POST al GAS con campos explícitos y correctos
+  try {
+    await gasPost({
+      accion      : 'registrarWalkIn',
+      wi_id       : wi.wi_id,
+      barberia_id : wi.barberia_id,
+      barbero_id  : wi.barbero_id,   // dueño
+      cliente     : wi.cliente,
+      servicio    : wi.servicio,
+      precio      : wi.precio,       // número real
+      metodo_pago : wi.metodo_pago,
+      notas       : wi.notas,
+      fecha       : wi.fecha,
+      hora        : wi.hora,
+    });
+  } catch(e) {
+    toast('⚠ Walk-in guardado local, no sincronizado', true);
+  }
+};
+
+// ─── FIX 2: renderDashboard — recarga citas reales antes de calcular stats ──
+window.renderDashboard = async function() {
+  if (!_dashReady) {
+    showOv('Cargando dashboard...');
+    await Promise.all([ cargarWalkIns(), cargarCitas(true) ]); // ✅ recarga citas reales
+    _dashReady = true;
+    hideOv();
+  }
+  renderStatCards();
+  renderBarChart();
+  renderServiciosSummary();
+  renderWalkIns();
+};
+
+// ─── FIX 4: filtrarDash — fuerza recarga al cambiar período ──────────────────
+window.filtrarDash = function(tipo, btn) {
+  dashFilter = tipo;
+  document.querySelectorAll('.dash-fb').forEach(b => {
+    b.style.background='transparent'; b.style.color='#9c8f7b';
+    b.style.borderColor='rgba(79,69,53,.3)'; b.style.fontWeight='';
+  });
+  if (tipo !== 'custom') {
+    btn.style.background='#e9c176'; btn.style.color='#412d00';
+    btn.style.borderColor='#e9c176'; btn.style.fontWeight='700';
+  } else {
+    btn.style.borderColor='rgba(233,193,118,.5)'; btn.style.color='#e9c176';
+  }
+  const customRow = document.getElementById('dash-custom-row');
+  if (customRow) customRow.style.display = tipo === 'custom' ? 'flex' : 'none';
+  if (tipo !== 'custom') {
+    _dashReady = false;  // ✅ fuerza recarga de datos reales
+    renderDashboard();
+  }
+};
+
+// ─── FIX 5: renderBarChart — usa fechaToISO sin bugs de TZ ──────────────────
+window.renderBarChart = function() {
+  const ct = document.getElementById('dash-barchart'); if (!ct) return;
+  const now    = new Date();
+  const LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const days   = [];
+  for (let i = 6; i >= 0; i--) {
+    const d    = new Date(now.getFullYear(), now.getMonth(), now.getDate()-i);
+    const dISO = dateToISO(d);
+    // ✅ comparación ISO string, sin Date objects que tienen bugs de TZ
+    const nCitas = todasCitas.filter(c => fechaToISO(c.fecha) === dISO && c.estado !== 'cancelada').length;
+    const nWI    = walkIns.filter(w => fechaToISO(w.fecha) === dISO).length;
+    days.push({ label: LABELS[d.getDay()], citas: nCitas, wi: nWI, total: nCitas+nWI, isToday: i===0 });
+  }
+  const maxV = Math.max(...days.map(d => d.total), 1);
+  ct.innerHTML = '';
+  days.forEach(({ label, citas, wi, total, isToday }) => {
+    const citaH = citas > 0 ? Math.max(Math.round((citas/maxV)*75), 6) : 0;
+    const wiH   = wi   > 0 ? Math.max(Math.round((wi/maxV)*75), 6)    : 0;
+    const col   = document.createElement('div');
+    col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0';
+    col.innerHTML = `
+      <span style="font-size:9px;color:${total>0?'#e9c176':'transparent'};font-weight:700">${total}</span>
+      <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:78px;gap:1px">
+        ${citas>0?`<div style="width:100%;height:${citaH}px;background:rgba(233,193,118,.72)"></div>`:''}
+        ${wi>0?`<div style="width:100%;height:${wiH}px;background:rgba(126,207,168,.72)"></div>`:''}
+        ${total===0?`<div style="width:100%;height:3px;background:rgba(79,69,53,.14)"></div>`:''}
+      </div>
+      <span style="font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:${isToday?'#e9c176':'#9c8f7b'};font-weight:${isToday?700:400};margin-top:2px">${label}</span>`;
+    ct.appendChild(col);
+  });
+};
+
+// ─── FIX 6: cargarWalkIns — precio y fecha parseados correctamente ───────────
+window.cargarWalkIns = async function() {
+  try {
+    const json = await gasGet({ accion:'leerWalkIns', barberia_id:BAR_ID });
+    const raw  = json.walkIns || json.data || [];
+    if (raw.length) {
+      walkIns = raw.map(w => ({
+        wi_id       : String(w.wi_id || 'WI-' + Math.random().toString(36).slice(2,8)),
+        barberia_id : w.barberia_id || BAR_ID,
+        barbero_id  : String(w.barbero_id || sesion.nombre_dueno || sesion.dueno || BAR_ID2),
+        cliente     : String(w.cliente     || 'Walk-in'),
+        servicio    : String(w.servicio    || ''),
+        precio      : parseFloat(String(w.precio || '0').replace(/[^0-9.]/g,'')) || 0, // ✅
+        metodo_pago : String(w.metodo_pago || ''),
+        notas       : String(w.notas       || ''),
+        fecha       : String(w.fecha       || '').split('T')[0],  // ✅ solo YYYY-MM-DD
+        hora        : String(w.hora        || ''),
+      }));
+    }
+  } catch(e) {}
+};
+
+// ─── FIX 7: tab Dashboard — fuerza recarga al entrar ────────────────────────
+(function() {
+  const btn = document.getElementById('tb-dash');
+  if (btn) btn.setAttribute('onclick', "goTab(this,'t-dash');_dashReady=false;renderDashboard()");
+})();
+
+console.log('%c✅ Patch panel-barbero — 7 fixes aplicados', 'color:#e9c176;font-weight:bold;');
+  </script>
+
 </body>
 </html>
