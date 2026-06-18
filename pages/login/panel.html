@@ -70,6 +70,14 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .carousel-wrap{position:relative;overflow:hidden;width:100%}
 .carousel-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
 .carousel-track .c-slide{flex:0 0 calc(50% - 5px);min-width:0}
+@media(min-width:640px){
+  .carousel-track .c-slide{flex:0 0 calc(33.333% - 7px)}
+  .corte-3d-scene{aspect-ratio:2/3 !important;max-height:360px !important}
+}
+@media(min-width:960px){
+  .carousel-track .c-slide{flex:0 0 calc(25% - 8px)}
+  .corte-3d-scene{aspect-ratio:3/5 !important;max-height:320px !important}
+}
 .car-btn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s}
 .car-btn:disabled{opacity:.2;cursor:not-allowed}
 .car-btn.prev{left:4px}.car-btn.next{right:4px}
@@ -83,7 +91,8 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .corte-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
 .corte-face-front{background:#161412}
 .corte-face-back{background:#0e0c09;transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid rgba(233,193,118,.12)}
-.corte-face img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.corte-face img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;pointer-events:none;image-rendering:auto;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
 .corte-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(8,6,4,.92));padding:10px 8px 8px;pointer-events:none}
 .corte-3d-ctrl{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:6px;background:rgba(8,6,4,.78);border:1px solid rgba(233,193,118,.18);padding:5px 10px;backdrop-filter:blur(6px);pointer-events:all}
 .ctrl-btn-3d{background:transparent;border:none;color:#e9c176;cursor:pointer;display:flex;align-items:center;padding:2px 5px;transition:opacity .2s;font-size:13px}
@@ -124,7 +133,15 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 .skel{background:linear-gradient(90deg,#1c1b1b 25%,#2a2825 50%,#1c1b1b 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:2px;height:40px;width:100%}
 @keyframes pinPulse{0%{box-shadow:0 0 0 0 rgba(233,193,118,.5)}70%{box-shadow:0 0 0 12px rgba(233,193,118,0)}100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}}
+#fu-local img, #img-local{object-fit:cover;object-position:center}
+@media(min-width:640px){
+  #fu-local{aspect-ratio:21/7 !important}
+}
+@media(min-width:960px){
+  #fu-local{aspect-ratio:32/9 !important;max-height:260px !important}
+}
 </style>
+
 </head>
 <body>
 
@@ -196,7 +213,8 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
   <div>
     <label class="lbl">Foto del local / negocio</label>
-    <div class="fu" id="fu-local" style="width:100%;aspect-ratio:16/6">
+       <div class="fu" id="fu-local" style="width:100%;aspect-ratio:16/6;max-height:clamp(180px,28vh,320px)">
+
       <input type="file" accept="image/*" onchange="onFotoLocal(this)"/>
       <img id="img-local" src="" alt=""/>
       <div class="ph">
@@ -492,7 +510,7 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 
   <!-- Cuerpo colapsable -->
   <div id="cal-body" style="max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)">
-    <div style="padding:0 14px 14px">
+    <div style="padding:0 14px 14px;overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:inherit">
 
       <!-- Nav mes -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -1793,7 +1811,7 @@ function buildCarousel(type, items) {
       const cid=item.corte_id;
       const descTxt=item.descripcion?`<p class="dorso-desc">${item.descripcion}</p>`:'';
       slide.innerHTML=`<div style="position:relative;border:1px solid rgba(79,69,53,.22)">
-        <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4">
+        <div class="corte-3d-scene" id="scene-${cid}" style="aspect-ratio:3/4;max-height:min(70dvh,420px)">
           <div class="corte-3d-inner" id="inner-${cid}">
             <div class="corte-face corte-face-front">
               <img src="${imgUrl}" alt="${item.nombre}" onerror="if(this.src!='${item.imagen_url}')this.src='${item.imagen_url}';else this.style.opacity='.12'"/>
@@ -3033,7 +3051,9 @@ function toggleCal() {
   const chevron = document.getElementById('cal-chevron');
   if (_calAbierto) {
     renderCal();
-    body.style.maxHeight = '400px';
+        const maxH = Math.min(360, Math.round(window.innerHeight * 0.60));
+    body.style.maxHeight = maxH + 'px';
+
     chevron.style.transform = 'rotate(180deg)';
   } else {
     body.style.maxHeight = '0';
