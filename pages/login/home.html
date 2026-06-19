@@ -807,39 +807,39 @@ function renderMapa() {
   const iframe = document.getElementById('mapa-iframe');
   const ph     = document.getElementById('mapa-ph');
 
-  // Armar dirección limpia: solo dirección + ciudad
-  const dirLimpia = [p.direccion, p.ciudad, p.departamento]
+  const lat = parseFloat(p.lat || p.latitud || '');
+  const lng = parseFloat(p.lng || p.longitud || '');
+  const tieneCoords = !isNaN(lat) && !isNaN(lng);
+
+  const dirLimpia = [p.direccion, p.ciudad]
     .filter(Boolean).join(', ');
 
   document.getElementById('mapa-dir-label').textContent =
     dirLimpia || 'Sin dirección registrada';
 
-  if (dirLimpia || p.nombre_barberia) {
-    // Solo usamos dirección (NO el nombre) para el embed
-    // así Google Maps muestra el pin en la ubicación real
-    const queryEmbed = encodeURIComponent(
-      dirLimpia || p.nombre_barberia
-    );
-    const src = 'https://maps.google.com/maps?q='
-      + queryEmbed + '&output=embed&hl=es&z=16&iwloc=near';
+  let srcEmbed, urlExterno;
 
-    iframe.src = src;
-    iframe.style.display = 'block';
-    ph.style.display = 'none';
-
-    // Link externo: abre Google Maps con la dirección
-    const queryMaps = encodeURIComponent(dirLimpia || p.nombre_barberia);
-    const urlMaps = 'https://www.google.com/maps/search/?api=1&query=' + queryMaps;
-
-    const linkExt = document.getElementById('link-maps-ext');
-    if (linkExt) linkExt.href = urlMaps;
-
-    const linkExt2 = document.getElementById('mapa-ext-link');
-    if (linkExt2) {
-      linkExt2.href = urlMaps;
-      linkExt2.style.display = 'block';
-    }
+  if (tieneCoords) {
+    // Pin exacto con coordenadas — el más confiable
+    srcEmbed  = `https://maps.google.com/maps?q=${lat},${lng}&output=embed&hl=es&z=17`;
+    urlExterno = `https://www.google.com/maps?q=${lat},${lng}`;
+  } else if (dirLimpia) {
+    // Fallback: solo dirección + ciudad
+    const q = encodeURIComponent(dirLimpia);
+    srcEmbed  = `https://maps.google.com/maps?q=${q}&output=embed&hl=es&z=16`;
+    urlExterno = `https://www.google.com/maps/search/?api=1&query=${q}`;
+  } else {
+    return; // sin datos, no mostrar mapa
   }
+
+  iframe.src = srcEmbed;
+  iframe.style.display = 'block';
+  ph.style.display = 'none';
+
+  const l1 = document.getElementById('link-maps-ext');
+  const l2 = document.getElementById('mapa-ext-link');
+  if (l1) { l1.href = urlExterno; }
+  if (l2) { l2.href = urlExterno; l2.style.display = 'block'; }
 }
 
 /* ══════════════════════════════════════════════════════
