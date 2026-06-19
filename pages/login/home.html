@@ -791,11 +791,6 @@ function renderPerfil() {
       : p.redes_sociales;
   }
 
-  if (p.maps_url) {
-    document.getElementById('link-maps-ext').href = p.maps_url;
-    document.getElementById('mapa-ext-link').href = p.maps_url;
-    document.getElementById('mapa-ext-link').style.display = 'block';
-  }
 
   document.getElementById('bs-barber').textContent = p.nombre_dueno || nombre;
 }
@@ -859,6 +854,51 @@ function renderMapa() {
     document.getElementById('link-maps-ext').href = linkExterno;
     document.getElementById('mapa-ext-link').href = linkExterno;
     document.getElementById('mapa-ext-link').style.display = 'block';
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   SELECTOR DE SERVICIO
+══════════════════════════════════════════════════════ */
+function renderServicioSelector() {
+  const select = document.getElementById('serv-select');
+  const wrap   = document.getElementById('serv-wrap');
+  const empty  = document.getElementById('serv-empty');
+
+  // Limpiar opciones previas excepto el placeholder
+  while (select.options.length > 1) select.remove(1);
+
+  // Si no hay cortes cargados del sheet, usar uno genérico
+  const lista = cortes.length
+    ? [...cortes].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado))
+    : [{ corte_id: 'generico', nombre: 'Corte The Atelier', estilo: 'Clásico', precio: '' }];
+
+  empty.style.display = 'none';
+  wrap.style.display  = 'block';
+
+  lista.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.corte_id || 'generico';
+
+    const precio = fmtPrecio(c.precio);
+    let label = c.nombre || 'Corte';
+    if (c.estilo) label += ' — ' + c.estilo;
+    if (precio)   label += '  ·  ' + precio;
+    opt.textContent = label;
+
+    opt.dataset.nombre = c.nombre  || 'Corte';
+    opt.dataset.precio = c.precio  || '';
+    opt.dataset.estilo = c.estilo  || '';
+    opt.dataset.id     = c.corte_id || 'generico';
+    opt.dataset.json   = JSON.stringify(c);
+
+    select.appendChild(opt);
+  });
+
+  if (lista.length === 1) {
+    select.selectedIndex = 1;
+    selServicioDropdown(select);
   }
 }
 
