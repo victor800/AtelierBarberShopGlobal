@@ -980,7 +980,7 @@ input[type=date],input[type=time]{font-size:14px!important}
 /* ══════════════════════════════════════
    CONFIG
 ══════════════════════════════════════ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbye7-Al_Q7G4JGGCzc2RyovFpCA8WoQsv-KK0IU-IZIqiYotXAPpXoK83Zwqkpvm2R8/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxwbQQpidnSXxIZzSwu_taVJuqw1O7GudWG9Tbp6hcvD7lxtw0b4L8axbZezmN2mRrX/exec";
 
 const _urlBar    = new URLSearchParams(location.search).get('bar');
 const _storedSes = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
@@ -2883,37 +2883,55 @@ window.cargarWalkIns = async function() {
 })();
 
 console.log('%c✅ Patch panel-barbero — 7 fixes aplicados', 'color:#e9c176;font-weight:bold;');
+ </script>
 
 
+
+
+<!-- ═══════════════════════════════════════════════════════════
+   PATCH v2 — Clientes con leerClientesSimplificado
+   
+   INSTRUCCIÓN: Este bloque REEMPLAZA por completo la sección
+   "JS — CLIENTES + RECORDATORIO WHATSAPP — v1.0" que ya tienes
+   pegada antes de </body> en tu panel-barbero.html.
+   
+   Motivo del cambio: la hoja "Clientes" real no tiene
+   cliente_key/ultima_visita/visitas_totales con esos nombres;
+   tiene barberia_id, nombre, telefono, barbero, fecha, servicio,
+   visitas y fecha_envio en columnas fijas B,C,D,E,F,G,H,I.
+   Por eso ahora se consume la acción "leerClientesSimplificado"
+   en vez de "leerClientes".
+   
+   Reemplaza TODO el bloque viejo (desde el comentario
+   "JS — CLIENTES..." hasta el cierre de initClientesEnDashboard)
+   por este bloque completo.
+═══════════════════════════════════════════════════════════ -->
+<script>
 /* ═══════════════════════════════════════════════════════════
-   JS — CLIENTES + RECORDATORIO WHATSAPP — v1.0
-   Pegar dentro de tu <script> principal, junto a las demás
-   funciones (por ejemplo después de la sección "DASHBOARD").
-   Requiere que el backend GAS tenga las acciones:
-     - GET  leerClientes
-     - POST marcarRecordatorioEnviado
-   (ver Code.gs v4.5)
+   JS — CLIENTES + RECORDATORIO WHATSAPP — v2.0
+   Usa la acción "leerClientesSimplificado" (hoja real "Clientes":
+   barberia_id, nombre, telefono, barbero, fecha, servicio,
+   visitas, fecha_envio — sin cliente_key ni ultima_visita).
 ═══════════════════════════════════════════════════════════ */
 
 let clientesData   = [];
 let clientesFiltro  = 'todos';
 let _clientesReady  = false;
 
-/* ── Helpers de fecha (reutilizan el mismo estilo que el resto del panel) ── */
-function _cliHoyISO() {
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
+/* ── Helpers de fecha ── */
 function _cliDiffDias(fechaISO) {
-  // diferencia en días entre fechaISO y hoy (positivo = futuro, negativo = pasado)
+  if (!fechaISO) return null;
   const [y,m,d] = fechaISO.split('-').map(Number);
+  if (!y || !m || !d) return null;
   const f1 = new Date(y, m-1, d);
   const hoy = new Date(); const f0 = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
   return Math.round((f1 - f0) / (1000*60*60*24));
 }
 function _cliFmtFecha(fechaISO) {
   if (!fechaISO) return { d:'—', l:'' };
-  const [y,m,d] = fechaISO.split('-');
+  const partes = fechaISO.split('-');
+  if (partes.length < 3) return { d: fechaISO, l:'' };
+  const [y,m,d] = partes;
   const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return { d: `${d} ${MESES[parseInt(m,10)-1]}`, l: y };
 }
@@ -2922,29 +2940,51 @@ function _cliIniciales(nombre) {
   if (!partes.length || !partes[0]) return '?';
   return (partes[0][0] + (partes[1]?partes[1][0]:'')).toUpperCase();
 }
+// La hoja no trae cliente_key; se construye localmente igual que el backend
+// (nombre + barberia_id en minúsculas) para tener un identificador estable.
+function _cliKey(nombre, barberiaId) {
+  return String(nombre||'').trim().toLowerCase() + '|' + String(barberiaId||'').trim();
+}
 
-/* ── Cargar clientes desde el backend ── */
+/* ── Cargar clientes desde el backend (leerClientesSimplificado) ── */
 async function cargarClientes(silencioso=false) {
   const ico = document.getElementById('cli-refresh-ico');
   if (ico && !silencioso) ico.style.animation = 'rot 1s linear infinite';
   try {
-    const json = await gasGet({ accion:'leerClientes', barberia_id:BAR_ID });
-    clientesData = (json.clientes || []).map(c => ({
-      cliente_key      : c.cliente_key,
-      nombre           : c.nombre || 'Cliente',
-      telefono         : c.telefono || '',
-      ultima_visita    : c.ultima_visita || '',
-      proxima_sugerida : c.proxima_sugerida || '',
-      visitas_totales  : Number(c.visitas_totales)||0,
-      ultimo_servicio  : c.ultimo_servicio || '',
-      recordatorio_enviado: c.recordatorio_enviado || null,
-    }));
+    const json = await gasGet({ accion:'leerClientesSimplificado', barberia_id:BAR_ID });
+    const raw  = json.clientes || [];
+
+    clientesData = raw.map(c => {
+      const ultima  = String(c.fecha || '').split('T')[0];           // por si llega con hora
+      const proxima = ultima ? sumarDiasISOFront(ultima, 15) : '';
+      return {
+        cliente_key      : _cliKey(c.nombre, c.barberia_id),
+        nombre           : c.nombre   || 'Cliente',
+        telefono         : c.telefono || '',
+        barbero          : c.barbero  || '',
+        ultima_visita    : ultima,
+        proxima_sugerida : proxima,
+        visitas_totales  : Number(c.visitas) || 0,
+        ultimo_servicio  : c.servicio || '',
+        fecha_envio      : c.fecha_envio || '',
+      };
+    });
+
     renderClientes();
   } catch(e) {
     if (!silencioso) toast('Error cargando clientes: ' + e.message, true);
   } finally {
     if (ico) ico.style.animation = '';
   }
+}
+
+// Suma días a una fecha ISO (YYYY-MM-DD) — equivalente local a sumarDiasISO del backend
+function sumarDiasISOFront(fechaISO, dias) {
+  const partes = fechaISO.split('-').map(Number);
+  if (partes.length < 3 || !partes[0]) return '';
+  const d = new Date(partes[0], partes[1]-1, partes[2]);
+  d.setDate(d.getDate() + dias);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
 async function recargarClientes() { await cargarClientes(false); }
@@ -2960,6 +3000,7 @@ function filtrarClientes(tipo, btn) {
 function _cliAplicaFiltro(c) {
   if (!c.proxima_sugerida) return clientesFiltro === 'todos';
   const dias = _cliDiffDias(c.proxima_sugerida);
+  if (dias === null) return clientesFiltro === 'todos';
   if (clientesFiltro === 'vencidos') return dias < 0;
   if (clientesFiltro === 'proximos') return dias >= 0 && dias <= 7;
   return true; // todos
@@ -3023,7 +3064,6 @@ let _recClienteActual = null;
 
 function _buildMensajeRecordatorio(c) {
   const barb = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
-  const proxima = _cliFmtFecha(c.proxima_sugerida);
   return `¡Hola ${c.nombre.split(' ')[0]}! 👋 Soy de *${barb}*.\n\n` +
     `Notamos que tu último corte fue hace un tiempo y ya va siendo hora de tu próxima visita ✂️\n\n` +
     `¿Te gustaría agendar tu cita? Responde este mensaje o agenda directamente aquí:\n` +
@@ -3058,12 +3098,10 @@ function abrirModalRecordatorio(clienteKey) {
     sinTel.style.display = 'block';
   }
 
-  // Actualizar el link si el usuario edita el mensaje a mano
   document.getElementById('rec-mensaje').oninput = function() {
     if (telLimpio) btn.href = `https://wa.me/${telLimpio}?text=${encodeURIComponent(this.value)}`;
   };
 
-  // Al hacer click en enviar, marcamos el recordatorio como enviado (no bloqueante)
   btn.onclick = function() {
     if (!telLimpio) return;
     gasPost({
@@ -3084,11 +3122,7 @@ function cerrarModalRecordatorio() {
   _recClienteActual = null;
 }
 
-/* ── Hook: cargar clientes cuando se entra al Dashboard ──
-   Si ya tienes una función renderDashboard(), añade dentro de ella:
-     cargarClientes(true);
-   Aquí se deja también un wrapper independiente por si prefieres
-   llamarlo aparte. */
+/* ── Hook: cargar clientes cuando se entra al Dashboard ── */
 async function initClientesEnDashboard() {
   if (!_clientesReady) {
     await cargarClientes(true);
@@ -3097,688 +3131,8 @@ async function initClientesEnDashboard() {
     renderClientes();
   }
 }
-
-  </script>
-
-  <script>
-/* ═══════════════════════════════════════════════════════════
-   PATCH v2 — panel-barbero.html
-   1) Walk-in movido a popup accesible desde tab Citas
-   2) Clientes lee hoja Clientes: barberia_id(B) cliente_id(C)
-      reserva_id(D) fecha_envio(I) = fecha último corte
-   Pegar este bloque COMPLETO antes de </body>
-   Reemplaza el bloque de patches anterior si lo tenías
-═══════════════════════════════════════════════════════════ */
-
-/* ─── HELPERS COMPARTIDOS ─────────────────────────────── */
-window.fechaToISO = function(raw) {
-  if (!raw) return null;
-  const s = String(raw).trim();
-  if (!s || s === '—') return null;
-  if (s.includes('T')) return s.split('T')[0];
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
-    const [d,m,y] = s.split('/');
-    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-  }
-  return null;
-};
-
-window.dateToISO = function(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-};
-
-window.inRange = function(fechaRaw, filtro) {
-  const { desde, hasta } = dashRangeFor(filtro);
-  if (!desde || !hasta) return true;
-  const fISO = fechaToISO(fechaRaw); if (!fISO) return false;
-  return fISO >= dateToISO(desde) && fISO <= dateToISO(hasta);
-};
-
-/* ─── FIX: filtrarDash con recarga ───────────────────── */
-window.filtrarDash = function(tipo, btn) {
-  dashFilter = tipo;
-  document.querySelectorAll('.dash-fb').forEach(b => {
-    b.style.background='transparent'; b.style.color='#9c8f7b';
-    b.style.borderColor='rgba(79,69,53,.3)'; b.style.fontWeight='';
-  });
-  if (tipo !== 'custom') {
-    btn.style.background='#e9c176'; btn.style.color='#412d00';
-    btn.style.borderColor='#e9c176'; btn.style.fontWeight='700';
-  } else {
-    btn.style.borderColor='rgba(233,193,118,.5)'; btn.style.color='#e9c176';
-  }
-  const customRow = document.getElementById('dash-custom-row');
-  if (customRow) customRow.style.display = tipo === 'custom' ? 'flex' : 'none';
-  if (tipo !== 'custom') { _dashReady = false; renderDashboard(); }
-};
-
-/* ─── FIX: renderBarChart sin bugs TZ ─────────────────── */
-window.renderBarChart = function() {
-  const ct = document.getElementById('dash-barchart'); if (!ct) return;
-  const now = new Date(); const LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']; const days = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate()-i);
-    const dISO = dateToISO(d);
-    const nCitas = todasCitas.filter(c => fechaToISO(c.fecha) === dISO && c.estado !== 'cancelada').length;
-    const nWI = walkIns.filter(w => fechaToISO(w.fecha) === dISO).length;
-    days.push({ label: LABELS[d.getDay()], citas: nCitas, wi: nWI, total: nCitas+nWI, isToday: i===0 });
-  }
-  const maxV = Math.max(...days.map(d => d.total), 1);
-  ct.innerHTML = '';
-  days.forEach(({ label, citas, wi, total, isToday }) => {
-    const citaH = citas > 0 ? Math.max(Math.round((citas/maxV)*75), 6) : 0;
-    const wiH   = wi   > 0 ? Math.max(Math.round((wi/maxV)*75), 6)    : 0;
-    const col = document.createElement('div');
-    col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0';
-    col.innerHTML = `
-      <span style="font-size:9px;color:${total>0?'#e9c176':'transparent'};font-weight:700">${total}</span>
-      <div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;height:78px;gap:1px">
-        ${citas>0?`<div style="width:100%;height:${citaH}px;background:rgba(233,193,118,.72)"></div>`:''}
-        ${wi>0?`<div style="width:100%;height:${wiH}px;background:rgba(126,207,168,.72)"></div>`:''}
-        ${total===0?`<div style="width:100%;height:3px;background:rgba(79,69,53,.14)"></div>`:''}
-      </div>
-      <span style="font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:${isToday?'#e9c176':'#9c8f7b'};font-weight:${isToday?700:400};margin-top:2px">${label}</span>`;
-    ct.appendChild(col);
-  });
-};
-
-/* ─── FIX: cargarWalkIns precio + fecha limpios ────────── */
-window.cargarWalkIns = async function() {
-  try {
-    const json = await gasGet({ accion:'leerWalkIns', barberia_id:BAR_ID });
-    const raw = json.walkIns || json.data || [];
-    if (raw.length) {
-      walkIns = raw.map(w => ({
-        wi_id       : String(w.wi_id || 'WI-' + Math.random().toString(36).slice(2,8)),
-        barberia_id : w.barberia_id || BAR_ID,
-        barbero_id  : String(w.barbero_id || sesion.nombre_dueno || sesion.dueno || BAR_ID2),
-        cliente     : String(w.cliente || 'Walk-in'),
-        servicio    : String(w.servicio || ''),
-        precio      : parseFloat(String(w.precio||'0').replace(/[^0-9.]/g,'')) || 0,
-        metodo_pago : String(w.metodo_pago || ''),
-        notas       : String(w.notas || ''),
-        fecha       : String(w.fecha || '').split('T')[0],
-        hora        : String(w.hora || ''),
-      }));
-    }
-  } catch(e) {}
-};
-
-/* ─── FIX: renderDashboard recarga datos reales ─────────── */
-window.renderDashboard = async function() {
-  if (!_dashReady) {
-    showOv('Cargando dashboard...');
-    await Promise.all([ cargarWalkIns(), cargarCitas(true) ]);
-    _dashReady = true;
-    hideOv();
-  }
-  renderStatCards(); renderBarChart(); renderServiciosSummary();
-  // Walk-ins ahora se renderizan en el popup, pero mantenemos el mini-contador en dash
-  _renderWalkInsDashMini();
-};
-
-/* Mini-resumen walk-ins en dashboard (sin el formulario) */
-function _renderWalkInsDashMini() {
-  const el = document.getElementById('_wi-dash-mini');
-  if (!el) return;
-  const today = dateToISO(new Date());
-  const hoy = walkIns.filter(w => fechaToISO(w.fecha) === today);
-  const ingHoy = hoy.reduce((s,w) => s + (Number(w.precio)||0), 0);
-  el.innerHTML = `
-    <div style="display:flex;gap:8px;margin-bottom:18px">
-      <div style="flex:1;background:#1c1b1b;border:1px solid rgba(126,207,168,.18);padding:12px;display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;background:rgba(126,207,168,.1);border:1px solid rgba(126,207,168,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <span class="material-symbols-outlined" style="font-size:16px;color:#7ecfa8">person_add</span>
-        </div>
-        <div>
-          <p style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#7ecfa8;margin-bottom:2px">Walk-ins hoy</p>
-          <p style="font-family:'Noto Serif',serif;font-size:22px;color:#7ecfa8;line-height:1">${hoy.length}</p>
-        </div>
-      </div>
-      <div style="flex:1;background:#1c1b1b;border:1px solid rgba(126,207,168,.18);padding:12px;display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;background:rgba(126,207,168,.1);border:1px solid rgba(126,207,168,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <span class="material-symbols-outlined" style="font-size:16px;color:#7ecfa8">payments</span>
-        </div>
-        <div>
-          <p style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#7ecfa8;margin-bottom:2px">Ingreso hoy</p>
-          <p style="font-family:'Noto Serif',serif;font-size:16px;color:#7ecfa8;line-height:1">${ingHoy > 0 ? '$'+ingHoy.toLocaleString('es-CO') : '—'}</p>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ─── INYECTAR mini-widget en Dashboard ──────────────────── */
-(function() {
-  const dash = document.getElementById('t-dash');
-  if (!dash) return;
-  // Buscar el bloque "Sin agenda" y quitarlo si existe
-  dash.querySelectorAll('p.sec-lbl').forEach(p => {
-    if (p.textContent.trim() === 'Sin agenda') {
-      // Eliminar desde este p hasta el siguiente elemento de formulario de walk-in
-      let node = p;
-      const toRemove = [];
-      while (node && node !== dash.lastElementChild) {
-        toRemove.push(node);
-        node = node.nextElementSibling;
-        // parar cuando encontremos el cierre del div t-dash
-        if (!node || node.id === 'wi-lista') { if(node) toRemove.push(node); break; }
-      }
-      toRemove.forEach(n => { try { n.remove(); } catch(e){} });
-    }
-  });
-
-  // Inyectar mini bloque walk-ins al final del Dashboard, antes del cierre
-  const mini = document.createElement('div');
-  mini.id = '_wi-dash-mini';
-  dash.appendChild(mini);
-})();
-
-/* ══════════════════════════════════════════════════════════
-   POPUP WALK-IN — accesible desde tab Citas
-   Botón flotante verde en esquina inferior derecha de Citas
-══════════════════════════════════════════════════════════ */
-
-/* Crear el popup */
-(function buildWalkInPopup() {
-  /* Botón FAB en tab Citas */
-  const fab = document.createElement('button');
-  fab.id = '_fab-walkin';
-  fab.innerHTML = `
-    <span class="material-symbols-outlined" style="font-size:22px">person_add</span>
-    <span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:700">Walk-in</span>`;
-  fab.style.cssText = `
-    display:none;position:fixed;bottom:84px;right:16px;z-index:900;
-    background:rgba(126,207,168,.22);border:1px solid rgba(126,207,168,.55);
-    color:#7ecfa8;font-family:'Manrope',sans-serif;cursor:pointer;
-    padding:10px 14px;display:none;flex-direction:column;align-items:center;gap:3px;
-    backdrop-filter:blur(8px);transition:all .2s;border-radius:0;
-    box-shadow:0 4px 24px rgba(0,0,0,.45)`;
-  fab.onclick = () => abrirPopupWalkIn();
-  document.body.appendChild(fab);
-
-  /* Mostrar FAB solo cuando el tab Citas está activo */
-  const tabCitas = document.getElementById('tb-citas');
-  if (tabCitas) {
-    const origOnclick = tabCitas.getAttribute('onclick') || '';
-    tabCitas.setAttribute('onclick', origOnclick + ';_showWalkInFAB(true)');
-  }
-  document.querySelectorAll('.tab-btn:not(#tb-citas)').forEach(btn => {
-    const oc = btn.getAttribute('onclick') || '';
-    btn.setAttribute('onclick', oc + ';_showWalkInFAB(false)');
-  });
-
-  window._showWalkInFAB = function(show) {
-    const f = document.getElementById('_fab-walkin');
-    if (f) f.style.display = show ? 'flex' : 'none';
-  };
-
-  /* POPUP SHEET */
-  const popup = document.createElement('div');
-  popup.id = '_popup-walkin';
-  popup.style.cssText = `
-    position:fixed;inset:0;z-index:9990;
-    background:rgba(5,3,1,.93);backdrop-filter:blur(18px);
-    display:none;align-items:flex-end;justify-content:center`;
-  popup.innerHTML = `
-    <div id="_popup-walkin-sheet" style="
-      width:100%;max-width:480px;background:#0d0b08;
-      border-top:1px solid rgba(126,207,168,.28);
-      padding:0 0 env(safe-area-inset-bottom,24px);
-      transform:translateY(60px);transition:transform .32s cubic-bezier(.22,1,.36,1);
-      max-height:92dvh;overflow-y:auto">
-
-      <!-- HEADER -->
-      <div style="position:sticky;top:0;background:#0d0b08;border-bottom:1px solid rgba(79,69,53,.15);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;z-index:2">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:30px;height:30px;background:rgba(126,207,168,.12);border:1px solid rgba(126,207,168,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span class="material-symbols-outlined" style="font-size:15px;color:#7ecfa8">content_cut</span>
-          </div>
-          <div>
-            <p style="font-size:7px;letter-spacing:.36em;text-transform:uppercase;color:rgba(126,207,168,.45);line-height:1;margin-bottom:2px">Sin agenda</p>
-            <p style="font-family:'Noto Serif',serif;font-size:16px;color:#e5e2e1;line-height:1;font-weight:400">Registrar Walk-in</p>
-          </div>
-        </div>
-        <button onclick="cerrarPopupWalkIn()" style="
-          background:transparent;border:1px solid rgba(79,69,53,.3);color:#9c8f7b;
-          width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center">
-          <span class="material-symbols-outlined" style="font-size:16px">close</span>
-        </button>
-      </div>
-
-      <!-- FORM -->
-      <div style="padding:18px">
-        <p style="font-size:10px;color:#6b5f52;margin-bottom:18px;line-height:1.65">
-          Cliente que llegó directo a tu silla. Regístralo para llevar el control real de tu negocio.
-        </p>
-
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <!-- Cliente + Servicio -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div>
-              <label class="lbl">Cliente (opcional)</label>
-              <input class="inp" id="wi-cliente" type="text" placeholder="Nombre o alias"/>
-            </div>
-            <div>
-              <label class="lbl">Servicio *</label>
-              <input class="inp" id="wi-servicio" type="text" placeholder="Fade, Clásico, Barba..."/>
-            </div>
-          </div>
-
-          <!-- Precio + Pago -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div>
-              <label class="lbl">Precio (COP)</label>
-              <input class="inp" id="wi-precio" type="number" placeholder="45000" min="0"/>
-            </div>
-            <div>
-              <label class="lbl">Método de pago</label>
-              <select class="inp" id="wi-pago">
-                <option value="Efectivo">Efectivo</option>
-                <option value="Nequi">Nequi</option>
-                <option value="Daviplata">Daviplata</option>
-                <option value="Transferencia">Transferencia</option>
-                <option value="Tarjeta">Tarjeta</option>
-                <option value="Otro">Otro</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Notas -->
-          <div>
-            <label class="lbl">Notas</label>
-            <input class="inp" id="wi-notas" type="text" placeholder="Observaciones, servicios adicionales..."/>
-          </div>
-        </div>
-
-        <!-- Lista del día -->
-        <div style="margin-top:20px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(79,69,53,.14)">
-            <p style="font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#9c8f7b">Walk-ins registrados hoy</p>
-            <span id="wi-count-hoy" style="font-size:9px;color:#7ecfa8;font-weight:700">0</span>
-          </div>
-          <div id="wi-empty" style="display:flex;align-items:center;gap:8px;padding:8px 0">
-            <span class="material-symbols-outlined" style="font-size:18px;color:rgba(126,207,168,.15)">person_add</span>
-            <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin walk-ins hoy</p>
-          </div>
-          <div id="wi-lista"></div>
-        </div>
-
-        <!-- Botón registrar -->
-        <button onclick="registrarWalkIn()" style="
-          width:100%;padding:15px;margin-top:16px;
-          background:rgba(126,207,168,.18);border:1px solid rgba(126,207,168,.45);
-          color:#7ecfa8;font-family:'Manrope',sans-serif;
-          font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;
-          cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-          <span class="material-symbols-outlined" style="font-size:15px">add_circle</span>
-          Registrar walk-in
-        </button>
-      </div>
-    </div>`;
-
-  popup.addEventListener('click', e => { if (e.target === popup) cerrarPopupWalkIn(); });
-  document.body.appendChild(popup);
-})();
-
-window.abrirPopupWalkIn = function() {
-  const popup = document.getElementById('_popup-walkin');
-  if (!popup) return;
-  popup.style.display = 'flex';
-  requestAnimationFrame(() => {
-    document.getElementById('_popup-walkin-sheet').style.transform = 'translateY(0)';
-  });
-  renderWalkIns();
-};
-
-window.cerrarPopupWalkIn = function() {
-  const sheet = document.getElementById('_popup-walkin-sheet');
-  const popup = document.getElementById('_popup-walkin');
-  if (!sheet || !popup) return;
-  sheet.style.transform = 'translateY(60px)';
-  setTimeout(() => { popup.style.display = 'none'; }, 340);
-};
-
-/* Override renderWalkIns para que funcione dentro del popup */
-window.renderWalkIns = function() {
-  const lista  = document.getElementById('wi-lista');
-  const empty  = document.getElementById('wi-empty');
-  const cntEl  = document.getElementById('wi-count-hoy');
-  if (!lista) return;
-
-  const today   = dateToISO(new Date());
-  const todayWI = walkIns.filter(w => fechaToISO(w.fecha) === today);
-
-  if (cntEl) cntEl.textContent = todayWI.length + (todayWI.length === 1 ? ' walk-in' : ' walk-ins');
-  lista.innerHTML = '';
-
-  if (!todayWI.length) { if (empty) empty.style.display = 'flex'; return; }
-  if (empty) empty.style.display = 'none';
-
-  todayWI.forEach(w => {
-    const precio = Number(w.precio) > 0 ? '$' + Number(w.precio).toLocaleString('es-CO') : '—';
-    const card = document.createElement('div');
-    card.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(79,69,53,.1)';
-    card.innerHTML = `
-      <div style="width:34px;height:34px;background:rgba(126,207,168,.08);border:1px solid rgba(126,207,168,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span class="material-symbols-outlined" style="font-size:15px;color:#7ecfa8">content_cut</span>
-      </div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
-          <p style="font-size:12px;color:#e5e2e1;font-weight:600">${w.cliente}</p>
-          <span style="font-size:7px;padding:1px 6px;background:rgba(126,207,168,.07);border:1px solid rgba(126,207,168,.18);color:#7ecfa8;letter-spacing:.12em;text-transform:uppercase">WI</span>
-        </div>
-        <p style="font-size:10px;color:#9c8f7b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-          ${w.servicio} ·
-          <span style="color:#e9c176;font-weight:700">${precio}</span>
-          · ${w.hora}${w.metodo_pago ? ' · <span style="color:#6b5f52">'+w.metodo_pago+'</span>' : ''}
-        </p>
-        ${w.notas ? `<p style="font-size:9px;color:#4a4540;margin-top:2px;line-height:1.4">${w.notas}</p>` : ''}
-      </div>
-      <button onclick="eliminarWalkIn('${w.wi_id}')" style="
-        background:transparent;border:1px solid rgba(79,69,53,.22);color:#6b5f52;
-        width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0"
-        title="Eliminar">
-        <span class="material-symbols-outlined" style="font-size:13px">delete</span>
-      </button>`;
-    lista.appendChild(card);
-  });
-};
-
-/* Override registrarWalkIn con precio correcto */
-window.registrarWalkIn = async function() {
-  const servicio = document.getElementById('wi-servicio').value.trim();
-  if (!servicio) return toast('El servicio es obligatorio', true);
-
-  const now   = new Date();
-  const fecha = dateToISO(now);
-  const hora  = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  const precioRaw = String(document.getElementById('wi-precio').value || '').replace(/[^0-9.]/g,'');
-  const precio = parseFloat(precioRaw) || 0;
-  const barberoNombre = sesion.nombre_dueno || sesion.dueno || BAR_ID2;
-
-  const wi = {
-    wi_id       : 'WI-' + Math.random().toString(36).toUpperCase().slice(2,8),
-    barberia_id : BAR_ID,
-    barbero_id  : barberoNombre,
-    cliente     : document.getElementById('wi-cliente').value.trim() || 'Walk-in',
-    servicio,
-    precio,
-    metodo_pago : document.getElementById('wi-pago').value,
-    notas       : document.getElementById('wi-notas').value.trim(),
-    fecha, hora,
-  };
-
-  walkIns.unshift(wi);
-  renderWalkIns();
-
-  ['wi-cliente','wi-servicio','wi-precio','wi-notas'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  toast('✓ Walk-in · ' + wi.cliente + ' · ' + servicio + (precio > 0 ? ' · $' + precio.toLocaleString('es-CO') : ''));
-
-  try {
-    await gasPost({
-      accion:'registrarWalkIn', wi_id:wi.wi_id, barberia_id:wi.barberia_id,
-      barbero_id:wi.barbero_id, cliente:wi.cliente, servicio:wi.servicio,
-      precio:wi.precio, metodo_pago:wi.metodo_pago, notas:wi.notas,
-      fecha:wi.fecha, hora:wi.hora,
-    });
-  } catch(e) { toast('⚠ Guardado local, sin sincronizar', true); }
-};
-
-/* ══════════════════════════════════════════════════════════
-   FIX CLIENTES — Lee hoja Notificaciones:
-   B=barberia_id  C=cliente_id  D=reserva_id  I=fecha_envio
-   Agrupa por cliente_id, usa fecha_envio más reciente como
-   "fecha último corte". Muestra en la tabla de clientes.
-══════════════════════════════════════════════════════════ */
-
-let clientesData  = [];
-let clientesFiltro = 'todos';
-let _clientesReady = false;
-
-function _cliHoyISO() { return dateToISO(new Date()); }
-
-function _cliDiffDias(fechaISO) {
-  if (!fechaISO) return null;
-  const [y,m,d] = fechaISO.split('-').map(Number);
-  const f1 = new Date(y, m-1, d);
-  const hoy = new Date(); const f0 = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-  return Math.round((f1 - f0) / (1000*60*60*24));
-}
-
-function _cliFmtFecha(fechaISO) {
-  if (!fechaISO) return { d:'—', l:'' };
-  const [y,m,d] = fechaISO.split('-');
-  const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return { d: `${d} ${MESES[parseInt(m,10)-1]}`, l: y };
-}
-
-function _cliIniciales(nombre) {
-  const partes = String(nombre||'').trim().split(/\s+/);
-  if (!partes.length || !partes[0]) return '?';
-  return (partes[0][0] + (partes[1]?partes[1][0]:'')).toUpperCase();
-}
-
-/* Carga: lee hoja Notificaciones via GAS, agrupa por cliente_id */
-async function cargarClientes(silencioso=false) {
-  const ico = document.getElementById('cli-refresh-ico');
-  if (ico && !silencioso) ico.style.animation = 'rot 1s linear infinite';
-  try {
-    /* Primero intentamos leerClientes (hoja Clientes directa) */
-    const json = await gasGet({ accion:'leerClientes', barberia_id:BAR_ID });
-    const lista = json.clientes || [];
-
-    if (lista.length) {
-      /*
-        La hoja Clientes tiene:
-        A cliente_key  B barberia_id  C nombre  D telefono
-        E barbero_id   F ultima_visita G ultimo_servicio
-        H visitas_totales  I fecha_actualizacion
-
-        Pero el enunciado pide también mostrar datos de Notificaciones.
-        Mapeamos la hoja Clientes directamente y usamos ultima_visita
-        (col F / campo ultima_visita) como fecha del último corte.
-        Si el GAS manda reserva_id en el objeto lo guardamos,
-        si no, usamos cliente_key como referencia.
-      */
-      clientesData = lista.map(c => ({
-        cliente_key      : c.cliente_key      || '',
-        barberia_id      : c.barberia_id      || BAR_ID,
-        cliente_id       : c.cliente_key      || c.cliente_id || '',   // col C
-        reserva_id       : c.reserva_id       || '',                   // col D
-        nombre           : c.nombre           || 'Cliente',
-        telefono         : c.telefono         || '',
-        ultima_visita    : fechaToISO(c.ultima_visita) || '',          // col F → fecha corte
-        proxima_sugerida : _calcProxima(fechaToISO(c.ultima_visita)),
-        visitas_totales  : Number(c.visitas_totales) || 0,
-        ultimo_servicio  : c.ultimo_servicio  || '',
-        recordatorio_enviado: c.recordatorio_enviado || null,
-        // fecha_envio en Notificaciones = última fecha de visita
-        fecha_envio      : fechaToISO(c.ultima_visita) || '',          // col I
-      }));
-    } else {
-      clientesData = [];
-    }
-    renderClientes();
-    if (!silencioso) toast('✓ ' + clientesData.length + ' clientes cargados');
-  } catch(e) {
-    if (!silencioso) toast('Error cargando clientes: ' + e.message, true);
-  } finally {
-    if (ico) ico.style.animation = '';
-  }
-}
-
-function _calcProxima(ultimaVisitaISO) {
-  if (!ultimaVisitaISO) return '';
-  const [y,m,d] = ultimaVisitaISO.split('-').map(Number);
-  const f = new Date(y, m-1, d);
-  f.setDate(f.getDate() + 15);
-  return dateToISO(f);
-}
-
-async function recargarClientes() { await cargarClientes(false); }
-
-function filtrarClientes(tipo, btn) {
-  clientesFiltro = tipo;
-  document.querySelectorAll('.cli-fb').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  renderClientes();
-}
-
-function _cliAplicaFiltro(c) {
-  if (!c.proxima_sugerida) return clientesFiltro === 'todos';
-  const dias = _cliDiffDias(c.proxima_sugerida);
-  if (clientesFiltro === 'vencidos') return dias !== null && dias < 0;
-  if (clientesFiltro === 'proximos') return dias !== null && dias >= 0 && dias <= 7;
-  return true;
-}
-
-function renderClientes() {
-  const cont  = document.getElementById('clientes-tabla');
-  const empty = document.getElementById('clientes-empty');
-  if (!cont) return;
-
-  const lista = clientesData
-    .filter(_cliAplicaFiltro)
-    .sort((a,b) => (a.proxima_sugerida||'').localeCompare(b.proxima_sugerida||''));
-
-  cont.innerHTML = '';
-  if (!lista.length) { if (empty) empty.style.display = 'flex'; return; }
-  if (empty) empty.style.display = 'none';
-
-  lista.forEach(c => {
-    /*
-      Columnas a mostrar:
-      B barberia_id  → usado internamente
-      C cliente_id   → ID del cliente (código ATL-XXX)
-      D reserva_id   → última reserva
-      I fecha_envio  → fecha último corte (= ultima_visita de hoja Clientes)
-    */
-    const ultima  = _cliFmtFecha(c.ultima_visita);   // col I (fecha_envio = ultima_visita)
-    const proxima = _cliFmtFecha(c.proxima_sugerida);
-    const dias    = c.proxima_sugerida ? _cliDiffDias(c.proxima_sugerida) : null;
-
-    let dotClass = 'cli-estado-ok'; let etiqueta = '';
-    if (dias !== null) {
-      if (dias < 0)       { dotClass = 'cli-estado-vencido'; etiqueta = `${Math.abs(dias)}d atrás`; }
-      else if (dias <= 7) { dotClass = 'cli-estado-proximo'; etiqueta = dias===0?'Hoy':`en ${dias}d`; }
-      else                { dotClass = 'cli-estado-ok';      etiqueta = `en ${dias}d`; }
-    }
-
-    /* ID visible del cliente (col C) — mostramos bajo el nombre */
-    const clienteIdLabel = c.cliente_id
-      ? `<span style="font-size:8px;letter-spacing:.1em;color:rgba(233,193,118,.4);text-transform:uppercase">${c.cliente_id}</span>`
-      : '';
-
-    const row = document.createElement('div');
-    row.className = 'cli-row';
-    row.onclick = () => abrirModalRecordatorio(c.cliente_key);
-    row.innerHTML = `
-      <div class="cli-avatar">${_cliIniciales(c.nombre)}</div>
-      <div style="flex:1;min-width:0">
-        <p style="font-size:12px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</p>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:1px;flex-wrap:wrap">
-          ${clienteIdLabel}
-          <p style="font-size:9px;color:#6b5f52;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.ultimo_servicio||'—'} · ${c.visitas_totales} visita${c.visitas_totales!==1?'s':''}</p>
-        </div>
-      </div>
-      <!-- Col I: fecha_envio = última visita -->
-      <div class="cli-fecha-badge">
-        <span class="d">${ultima.d}</span>
-        <span class="l">${ultima.l}</span>
-      </div>
-      <!-- Próxima sugerida -->
-      <div class="cli-fecha-badge">
-        <span class="d" style="display:flex;align-items:center;justify-content:center;gap:4px">
-          <span class="cli-estado-dot ${dotClass}"></span>${proxima.d}
-        </span>
-        <span class="l">${etiqueta}</span>
-      </div>
-      <span class="material-symbols-outlined" style="font-size:16px;color:#25d366;flex-shrink:0">chat</span>`;
-    cont.appendChild(row);
-  });
-}
-
-/* ── Modal recordatorio WhatsApp ── */
-let _recClienteActual = null;
-
-function _buildMensajeRecordatorio(c) {
-  const barb = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
-  return `¡Hola ${c.nombre.split(' ')[0]}! 👋 Soy de *${barb}*.\n\n` +
-    `Notamos que ya va siendo hora de tu próxima visita ✂️\n\n` +
-    `¿Te gustaría agendar? Responde este mensaje o agenda aquí:\n` +
-    `${getUrlPublica()}\n\n¡Te esperamos! 💈`;
-}
-
-function abrirModalRecordatorio(clienteKey) {
-  const c = clientesData.find(x => x.cliente_key === clienteKey);
-  if (!c) return;
-  _recClienteActual = c;
-  document.getElementById('rec-nombre').textContent = c.nombre;
-  const ultima  = _cliFmtFecha(c.ultima_visita);
-  const proxima = _cliFmtFecha(c.proxima_sugerida);
-  document.getElementById('rec-meta').textContent =
-    `Último corte: ${ultima.d} ${ultima.l} · Próximo sugerido: ${proxima.d} ${proxima.l}`;
-
-  const mensaje = _buildMensajeRecordatorio(c);
-  document.getElementById('rec-mensaje').value = mensaje;
-
-  const telLimpio = String(c.telefono||'').replace(/\D/g,'');
-  const btn = document.getElementById('rec-btn-enviar');
-  const sinTel = document.getElementById('rec-sin-tel');
-  if (telLimpio) {
-    btn.href = `https://wa.me/${telLimpio}?text=${encodeURIComponent(mensaje)}`;
-    btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
-    sinTel.style.display = 'none';
-  } else {
-    btn.href = '#'; btn.style.opacity = '.4'; btn.style.pointerEvents = 'none';
-    sinTel.style.display = 'block';
-  }
-  document.getElementById('rec-mensaje').oninput = function() {
-    if (telLimpio) btn.href = `https://wa.me/${telLimpio}?text=${encodeURIComponent(this.value)}`;
-  };
-  btn.onclick = function() {
-    if (!telLimpio) return;
-    gasPost({
-      accion      : 'marcarRecordatorioEnviado',
-      barberia_id : BAR_ID,
-      cliente_key : c.cliente_key,
-      nombre      : c.nombre,
-      telefono    : c.telefono,
-    }).catch(()=>{});
-    setTimeout(cerrarModalRecordatorio, 400);
-  };
-  document.getElementById('modal-recordatorio').style.display = 'flex';
-}
-
-function cerrarModalRecordatorio() {
-  document.getElementById('modal-recordatorio').style.display = 'none';
-  _recClienteActual = null;
-}
-
-/* ── Hook dashboard para cargar clientes ── */
-const _origRenderDash = window.renderDashboard;
-window.renderDashboard = async function() {
-  await _origRenderDash();
-  // Cargar clientes la primera vez que se abre el dashboard
-  if (!_clientesReady) {
-    await cargarClientes(true);
-    _clientesReady = true;
-  } else {
-    renderClientes();
-  }
-};
-
-/* ── Forzar recarga al entrar al tab Dashboard ── */
-(function() {
-  const btn = document.getElementById('tb-dash');
-  if (btn) btn.setAttribute('onclick', "goTab(this,'t-dash');_dashReady=false;_clientesReady=false;renderDashboard()");
-})();
-
-console.log('%c✅ Patch v2 — Walk-in popup + Clientes fix aplicados', 'color:#7ecfa8;font-weight:bold');
 </script>
+
 
 </body>
 </html>
