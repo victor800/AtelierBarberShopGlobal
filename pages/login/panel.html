@@ -1635,7 +1635,8 @@ function buildWAMsg(cita) {
   return encodeURIComponent(
     `✅ *Cita Confirmada — ${barb}*\n\n` +
     `👤 *Cliente:* ${cita.nombre}\n` +
-    `✂️ *Servicio:* ${cita.servicio}\n` +
+    `✂️ *Servicio:* ${cita.Tipo_Corte || cita.servicio_nombre || cita.servicio || 'Corte'}\n` +
+
     `📅 *Fecha:* ${normFecha(cita.fecha)}\n` +
     `🕐 *Hora:* ${normHora(cita.hora)}\n` +
     (Number(cita.precio) > 0 ? `💰 *Precio:* $${Number(cita.precio).toLocaleString('es-CO')}\n` : '') +
@@ -1664,7 +1665,8 @@ function renderCitas(lista) {
     const horaFmt   = normHora(c.hora);
     const precio    = fmtCOP(c.precio);
     const notas     = (c.notas||'').trim();
-    const servicio  = c.servicio_nombre || c.servicio || c.servicio_id || 'Corte';
+    const servicio  = c.Tipo_Corte || c.servicio_nombre || c.servicio || 'Corte';
+
     const cliente   = c.nombre || c.cliente || c.cliente_id || 'Cliente';
     const telefono  = (c.telefono || c.tel || '').trim();
     const barbero   = c.barbero_id || c.barbero || '—';
@@ -1803,7 +1805,8 @@ async function cargarCitas(silencioso=false) {
       nombre     : String(c.nombre     || c.cliente    || c.cliente_id || 'Cliente'),
       telefono   : String(c.telefono   || c.tel        || ''),
       barbero_id : String(c.barbero_id || c.barbero    || BAR_ID2),
-      servicio   : String(c.servicio_nombre || c.servicio || c.servicio_id || 'Corte'),
+      servicio   : String(c.Tipo_Corte || c.servicio_nombre || c.servicio || 'Corte'),
+
       fecha      : c.fecha  || '',
       hora       : c.hora   || '',
       duracion   : c.duracion_min || c.duracion || '',
