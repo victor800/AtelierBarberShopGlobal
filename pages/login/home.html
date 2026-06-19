@@ -806,20 +806,39 @@ function renderMapa() {
   const p = perfil;
   const iframe = document.getElementById('mapa-iframe');
   const ph     = document.getElementById('mapa-ph');
-  document.getElementById('mapa-dir-label').textContent =
-    p.direccion ? p.direccion + (p.ciudad ? ', ' + p.ciudad : '') : 'Sin dirección registrada';
 
-  if (p.maps_url || p.direccion || p.nombre_barberia) {
-    let src = '';
-    if (p.maps_url && p.maps_url.includes('/maps/embed')) {
-      src = p.maps_url;
-    } else {
-      const q = encodeURIComponent([p.nombre_barberia, p.direccion, p.ciudad].filter(Boolean).join(', '));
-      src = 'https://maps.google.com/maps?q=' + q + '&output=embed&hl=es&z=16';
-    }
+  // Armar dirección limpia: solo dirección + ciudad
+  const dirLimpia = [p.direccion, p.ciudad, p.departamento]
+    .filter(Boolean).join(', ');
+
+  document.getElementById('mapa-dir-label').textContent =
+    dirLimpia || 'Sin dirección registrada';
+
+  if (dirLimpia || p.nombre_barberia) {
+    // Solo usamos dirección (NO el nombre) para el embed
+    // así Google Maps muestra el pin en la ubicación real
+    const queryEmbed = encodeURIComponent(
+      dirLimpia || p.nombre_barberia
+    );
+    const src = 'https://maps.google.com/maps?q='
+      + queryEmbed + '&output=embed&hl=es&z=16&iwloc=near';
+
     iframe.src = src;
     iframe.style.display = 'block';
     ph.style.display = 'none';
+
+    // Link externo: abre Google Maps con la dirección
+    const queryMaps = encodeURIComponent(dirLimpia || p.nombre_barberia);
+    const urlMaps = 'https://www.google.com/maps/search/?api=1&query=' + queryMaps;
+
+    const linkExt = document.getElementById('link-maps-ext');
+    if (linkExt) linkExt.href = urlMaps;
+
+    const linkExt2 = document.getElementById('mapa-ext-link');
+    if (linkExt2) {
+      linkExt2.href = urlMaps;
+      linkExt2.style.display = 'block';
+    }
   }
 }
 
