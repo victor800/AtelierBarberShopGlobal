@@ -815,19 +815,16 @@ function renderMapa() {
 
   let src = '';
 
-  // 1) Si hay lat/lng explícitas en el perfil -> lo más preciso (igual que en tienda)
+  // 1) Si hay lat/lng explícitas en el perfil -> lo más preciso
   if (p.lat && p.lng) {
     src = 'https://maps.google.com/maps?q=' + p.lat + ',' + p.lng +
           '&output=embed&hl=es&z=17';
   }
-  // 2) Si maps_url YA es un embed válido (contiene /maps/embed) -> usarlo directo
+  // 2) Si maps_url YA es un embed válido -> usarlo directo
   else if (p.maps_url && p.maps_url.includes('/maps/embed')) {
     src = p.maps_url;
   }
-  // 3) Si maps_url es un link "normal" (place, goo.gl, share, etc.) -> NO se puede
-  //    meter directo en un iframe (Google lo bloquea con X-Frame-Options).
-  //    Intentamos extraer coordenadas o el nombre del lugar desde la URL;
-  //    si no se puede, caemos a la query de texto (dirección/nombre/ciudad).
+  // 3) Si maps_url es un link normal (place, goo.gl, share) -> extraer coords o usar texto
   else if (p.maps_url) {
     const coordMatch = p.maps_url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (coordMatch) {
@@ -849,56 +846,19 @@ function renderMapa() {
     iframe.style.display = 'block';
     ph.style.display = 'none';
   } else {
-    // Sin ningún dato de ubicación -> dejar el placeholder visible
     iframe.style.display = 'none';
     ph.style.display = 'flex';
   }
-}
 
-/* ══════════════════════════════════════════════════════
-   SELECTOR DE SERVICIO
-══════════════════════════════════════════════════════ */
-function renderServicioSelector() {
-  const select = document.getElementById('serv-select');
-  const wrap   = document.getElementById('serv-wrap');
-  const empty  = document.getElementById('serv-empty');
+  // ★ Link externo "Ver en Maps" — usa maps_url si existe, si no genera uno con la dirección
+  const linkExterno = p.maps_url
+    ? p.maps_url
+    : (queryTexto ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(queryTexto) : '');
 
-  // Limpiar opciones previas excepto el placeholder
-  while (select.options.length > 1) select.remove(1);
-
-  // Si no hay cortes cargados del sheet, usar uno genérico
-  const lista = cortes.length
-    ? [...cortes].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado))
-    : [{ corte_id: 'generico', nombre: 'Corte The Atelier', estilo: 'Clásico', precio: '' }];
-
-  empty.style.display = 'none';
-  wrap.style.display  = 'block';
-
-  lista.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.corte_id || 'generico';
-
-    // ★ Armar texto visible: Nombre — Estilo · $Precio
-    const precio = fmtPrecio(c.precio);
-    let label = c.nombre || 'Corte';
-    if (c.estilo) label += ' — ' + c.estilo;
-    if (precio)   label += '  ·  ' + precio;
-    opt.textContent = label;
-
-    // Guardar datos para recuperarlos al seleccionar
-    opt.dataset.nombre = c.nombre  || 'Corte';
-    opt.dataset.precio = c.precio  || '';
-    opt.dataset.estilo = c.estilo  || '';
-    opt.dataset.id     = c.corte_id || 'generico';
-    opt.dataset.json   = JSON.stringify(c);
-
-    select.appendChild(opt);
-  });
-
-  // Si solo hay un servicio, seleccionarlo automáticamente
-  if (lista.length === 1) {
-    select.selectedIndex = 1;
-    selServicioDropdown(select);
+  if (linkExterno) {
+    document.getElementById('link-maps-ext').href = linkExterno;
+    document.getElementById('mapa-ext-link').href = linkExterno;
+    document.getElementById('mapa-ext-link').style.display = 'block';
   }
 }
 
