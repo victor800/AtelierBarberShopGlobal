@@ -6,6 +6,8 @@
 <title>The Atelier</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 .material-symbols-outlined{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" 0,"opsz" 24}
@@ -123,6 +125,43 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 .brow-precio{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(79,69,53,.1);background:rgba(233,193,118,.04)}
 /* ★ Fila resaltada nombre/telefono */
 .brow-highlight{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.1);background:rgba(233,193,118,.05)}
+#mapa-leaflet { width:100%; height:180px; background:#0e0c08; }
+.leaflet-container { background:#0e0c08 !important; }
+/* Pin palpitante */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(233,193,118,.7); }
+  70%  { box-shadow: 0 0 0 14px rgba(233,193,118,0); }
+  100% { box-shadow: 0 0 0 0 rgba(233,193,118,0); }
+}
+.pin-marker {
+  width: 22px; height: 22px;
+  background: #e9c176;
+  border: 3px solid #412d00;
+  border-radius: 50%;
+  animation: pulse 1.8s ease-out infinite;
+  cursor: pointer;
+}
+/* Popup personalizado */
+.leaflet-popup-content-wrapper {
+  background: #0d0b08 !important;
+  border: 1px solid rgba(233,193,118,.35) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.6) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+}
+.leaflet-popup-tip {
+  background: rgba(233,193,118,.35) !important;
+}
+.leaflet-popup-close-button {
+  color: #9c8f7b !important;
+  font-size: 18px !important;
+  top: 6px !important;
+  right: 8px !important;
+}
 </style>
 </head>
 <body>
@@ -322,23 +361,22 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
       <span class="material-symbols-outlined" style="font-size:10px;vertical-align:middle;margin-right:3px">location_on</span>Ubicación
     </p>
   </div>
-  <div id="mapa-wrap">
-    <div class="mapa-placeholder" id="mapa-ph">
-      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px)"></div>
-      <div class="pin-anim" style="position:relative;width:28px;height:28px;background:#e9c176;border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
-        <span class="material-symbols-outlined" style="font-size:13px;color:#412d00;transform:rotate(45deg)">content_cut</span>
-      </div>
-      <p id="mapa-dir-label" style="font-size:10px;color:#9c8f7b;letter-spacing:.08em;text-align:center;padding:0 20px;position:relative">Cargando ubicación...</p>
-      <a id="mapa-ext-link" href="#" target="_blank" style="display:none;margin-top:4px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,193,118,.5);text-decoration:none;position:relative">Abrir en Maps →</a>
-    </div>
-    <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:180px;border:0"></iframe>
+  <!-- MAPA LEAFLET -->
+<div id="mapa-wrap" style="width:100%;height:180px;position:relative;border-top:1px solid rgba(79,69,53,.16);border-bottom:1px solid rgba(79,69,53,.16);overflow:hidden">
+  <div id="mapa-leaflet"></div>
+</div>
+
+<!-- DIR + LINK MAPS -->
+<div style="padding:8px 18px 0;border-top:1px solid rgba(79,69,53,.1)">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <p id="dir-bajo-mapa" style="font-size:11px;color:#9c8f7b"></p>
+    <a id="link-maps-ext" href="https://maps.app.goo.gl/a4z5VCVzpa29L7vq9"
+       target="_blank"
+       style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.45);text-decoration:none;white-space:nowrap;padding-left:8px">
+      Ver en Maps ↗
+    </a>
   </div>
-  <div style="padding:8px 18px 0;border-top:1px solid rgba(79,69,53,.1)">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <p id="dir-bajo-mapa" style="font-size:11px;color:#9c8f7b"></p>
-      <a id="link-maps-ext" href="#" target="_blank" style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.45);text-decoration:none;white-space:nowrap;padding-left:8px">Ver en Maps ↗</a>
-    </div>
-  </div>
+</div>
 
   <!-- ══════════════════════════════════════════════════
        SECCIÓN AGENDAR CITA
@@ -801,45 +839,80 @@ function renderPerfil() {
   document.getElementById('bs-barber').textContent = p.nombre_dueno || nombre;
 }
 
-/* ══ MAPA ══ */
 function renderMapa() {
   const p = perfil;
-  const iframe = document.getElementById('mapa-iframe');
-  const ph     = document.getElementById('mapa-ph');
 
-  const lat = parseFloat(p.lat || p.latitud || '');
-  const lng = parseFloat(p.lng || p.longitud || '');
-  const tieneCoords = !isNaN(lat) && !isNaN(lng);
+  // Coordenadas: usa las del perfil si existen, si no usa las hardcodeadas
+  const lat = parseFloat(p.lat || p.latitud || '') || 6.320993;
+  const lng = parseFloat(p.lng || p.longitud || '') || -75.5593899;
 
-  const dirLimpia = [p.direccion, p.ciudad]
-    .filter(Boolean).join(', ');
+  const dirLimpia = [p.direccion, p.ciudad].filter(Boolean).join(', ')
+    || 'Cra. 53 #32-86, Bello, Antioquia';
 
-  document.getElementById('mapa-dir-label').textContent =
-    dirLimpia || 'Sin dirección registrada';
+  // Texto bajo el mapa
+  const dirEl = document.getElementById('dir-bajo-mapa');
+  if (dirEl) dirEl.textContent = p.direccion || dirLimpia;
 
-  let srcEmbed, urlExterno;
+  // Link externo
+  const linkExt = document.getElementById('link-maps-ext');
+  if (linkExt && p.maps_url) linkExt.href = p.maps_url;
 
-  if (tieneCoords) {
-    // Pin exacto con coordenadas — el más confiable
-    srcEmbed  = `https://maps.google.com/maps?q=${lat},${lng}&output=embed&hl=es&z=17`;
-    urlExterno = `https://www.google.com/maps?q=${lat},${lng}`;
-  } else if (dirLimpia) {
-    // Fallback: solo dirección + ciudad
-    const q = encodeURIComponent(dirLimpia);
-    srcEmbed  = `https://maps.google.com/maps?q=${q}&output=embed&hl=es&z=16`;
-    urlExterno = `https://www.google.com/maps/search/?api=1&query=${q}`;
-  } else {
-    return; // sin datos, no mostrar mapa
-  }
+  // Iniciar Leaflet
+  const mapEl = document.getElementById('mapa-leaflet');
+  if (!mapEl || mapEl._leaflet_id) return; // evitar doble init
 
-  iframe.src = srcEmbed;
-  iframe.style.display = 'block';
-  ph.style.display = 'none';
+  const map = L.map('mapa-leaflet', {
+    center: [lat, lng],
+    zoom: 17,
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false,
+    dragging: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+  });
 
-  const l1 = document.getElementById('link-maps-ext');
-  const l2 = document.getElementById('mapa-ext-link');
-  if (l1) { l1.href = urlExterno; }
-  if (l2) { l2.href = urlExterno; l2.style.display = 'block'; }
+  // Tiles oscuros estilo The Atelier
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+  }).addTo(map);
+
+  // Pin palpitante con DivIcon
+  const pinIcon = L.divIcon({
+    className: '',
+    html: '',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+    popupAnchor: [0, -14],
+  });
+
+  const nombreBar = p.nombre_barberia || 'The Atelier';
+  const dueno     = p.nombre_dueno ? '✦ ' + p.nombre_dueno : '';
+  const telWa     = (p.telefono || '').replace(/\D/g,'');
+  const waLink    = telWa
+    ? `<a href="https://wa.me/${telWa}" target="_blank"
+         style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+                color:#e9c176;text-decoration:none;display:inline-flex;
+                align-items:center;gap:4px;margin-top:6px;border:1px solid
+                rgba(233,193,118,.3);padding:4px 8px">
+         WhatsApp / Llamar</a>`
+    : '';
+
+  const popupHTML = `
+    <div style="padding:12px 14px 14px;min-width:180px">
+      <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;
+                color:rgba(233,193,118,.5);margin-bottom:4px">Ubicación</p>
+      <p style="font-family:'Noto Serif',serif;font-size:14px;color:#e5e2e1;
+                margin-bottom:2px">${nombreBar}</p>
+      ${dueno ? `<p style="font-size:10px;color:#e9c176;margin-bottom:4px">${dueno}</p>` : ''}
+      <p style="font-size:10px;color:#9c8f7b;line-height:1.5">${dirLimpia}</p>
+      ${waLink}
+    </div>`;
+
+  L.marker([lat, lng], { icon: pinIcon })
+    .addTo(map)
+    .bindPopup(popupHTML, { maxWidth: 240, closeButton: true })
+    .openPopup();
 }
 
 /* ══════════════════════════════════════════════════════
