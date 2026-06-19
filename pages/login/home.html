@@ -796,7 +796,6 @@ function renderPerfil() {
 }
 
 /* ══ MAPA ══ */
-/* ══ MAPA ══ */
 function renderMapa() {
   const p = perfil;
   const iframe = document.getElementById('mapa-iframe');
@@ -804,9 +803,14 @@ function renderMapa() {
   document.getElementById('mapa-dir-label').textContent =
     p.direccion ? p.direccion + (p.ciudad ? ', ' + p.ciudad : '') : 'Sin dirección registrada';
 
-  // Construir SIEMPRE una query de texto como respaldo confiable
-  const queryTexto = [p.nombre_barberia, p.direccion, p.ciudad, p.departamento]
+  // Query para el EMBED (mapa interno) -> puede llevar nombre + dirección, ayuda a ubicar el pin
+  const queryEmbed = [p.nombre_barberia, p.direccion, p.ciudad, p.departamento]
     .filter(Boolean).join(', ');
+
+  // ★ Query para el LINK EXTERNO "Ver en Maps" -> SOLO el campo dirección, SIN nombre de barbería
+  //   (se asume que "direccion" ya incluye barrio/ciudad completos, por eso no se concatena nada más
+  //   y se evitan duplicados como "Bello, Antioquia, MEDELLIN, ANTIOQUIA")
+  const queryDireccion = (p.direccion || '').trim();
 
   let src = '';
 
@@ -825,14 +829,14 @@ function renderMapa() {
     if (coordMatch) {
       src = 'https://maps.google.com/maps?q=' + coordMatch[1] + ',' + coordMatch[2] +
             '&output=embed&hl=es&z=17';
-    } else if (queryTexto) {
-      src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryTexto) +
+    } else if (queryEmbed) {
+      src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryEmbed) +
             '&output=embed&hl=es&z=16';
     }
   }
   // 4) Sin maps_url -> usar dirección/nombre/ciudad como texto
-  else if (queryTexto) {
-    src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryTexto) +
+  else if (queryEmbed) {
+    src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryEmbed) +
           '&output=embed&hl=es&z=16';
   }
 
@@ -845,10 +849,16 @@ function renderMapa() {
     ph.style.display = 'flex';
   }
 
-  // ★ Link externo "Ver en Maps" — usa maps_url si existe, si no genera uno con la dirección
-  const linkExterno = p.maps_url
-    ? p.maps_url
-    : (queryTexto ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(queryTexto) : '');
+  // ★ Link externo "Ver en Maps" — SIEMPRE generado con SOLO la dirección (sin nombre de barbería)
+  //   Si hay lat/lng, usar coordenadas (es lo más exacto y nunca da error de búsqueda)
+  let linkExterno = '';
+  if (p.lat && p.lng) {
+    linkExterno = 'https://www.google.com/maps/search/?api=1&query=' + p.lat + ',' + p.lng;
+  } else if (queryDireccion) {
+    linkExterno = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(queryDireccion);
+  } else if (p.maps_url) {
+    linkExterno = p.maps_url;
+  }
 
   if (linkExterno) {
     document.getElementById('link-maps-ext').href = linkExterno;
