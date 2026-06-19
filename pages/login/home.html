@@ -806,40 +806,21 @@ function renderMapa() {
   const p = perfil;
   const iframe = document.getElementById('mapa-iframe');
   const ph     = document.getElementById('mapa-ph');
-
-  const lat = parseFloat(p.lat || p.latitud || '');
-  const lng = parseFloat(p.lng || p.longitud || '');
-  const tieneCoords = !isNaN(lat) && !isNaN(lng);
-
-  const dirLimpia = [p.direccion, p.ciudad]
-    .filter(Boolean).join(', ');
-
   document.getElementById('mapa-dir-label').textContent =
-    dirLimpia || 'Sin dirección registrada';
+    p.direccion ? p.direccion + (p.ciudad ? ', ' + p.ciudad : '') : 'Sin dirección registrada';
 
-  let srcEmbed, urlExterno;
-
-  if (tieneCoords) {
-    // Pin exacto con coordenadas — el más confiable
-    srcEmbed  = `https://maps.google.com/maps?q=${lat},${lng}&output=embed&hl=es&z=17`;
-    urlExterno = `https://www.google.com/maps?q=${lat},${lng}`;
-  } else if (dirLimpia) {
-    // Fallback: solo dirección + ciudad
-    const q = encodeURIComponent(dirLimpia);
-    srcEmbed  = `https://maps.google.com/maps?q=${q}&output=embed&hl=es&z=16`;
-    urlExterno = `https://www.google.com/maps/search/?api=1&query=${q}`;
-  } else {
-    return; // sin datos, no mostrar mapa
+  if (p.maps_url || p.direccion || p.nombre_barberia) {
+    let src = '';
+    if (p.maps_url && p.maps_url.includes('/maps/embed')) {
+      src = p.maps_url;
+    } else {
+      const q = encodeURIComponent([p.nombre_barberia, p.direccion, p.ciudad].filter(Boolean).join(', '));
+      src = 'https://maps.google.com/maps?q=' + q + '&output=embed&hl=es&z=16';
+    }
+    iframe.src = src;
+    iframe.style.display = 'block';
+    ph.style.display = 'none';
   }
-
-  iframe.src = srcEmbed;
-  iframe.style.display = 'block';
-  ph.style.display = 'none';
-
-  const l1 = document.getElementById('link-maps-ext');
-  const l2 = document.getElementById('mapa-ext-link');
-  if (l1) { l1.href = urlExterno; }
-  if (l2) { l2.href = urlExterno; l2.style.display = 'block'; }
 }
 
 /* ══════════════════════════════════════════════════════
