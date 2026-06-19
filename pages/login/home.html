@@ -11,188 +11,118 @@
 .material-symbols-outlined{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" 0,"opsz" 24}
 .ms-filled{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
 html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;color:#e5e2e1;overflow-x:hidden}
-::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(233,193,118,.18);border-radius:2px}
-
-/* ── POLE ANIMATION ── */
 .pole-stripe{width:6px;height:100%;background:repeating-linear-gradient(180deg,#e9c176 0,#e9c176 12px,#1a1a1a 12px,#1a1a1a 24px,#c0392b 24px,#c0392b 36px,#1a1a1a 36px,#1a1a1a 48px);animation:poleScroll 2.5s linear infinite;border-radius:3px}
 @keyframes poleScroll{from{background-position:0 0}to{background-position:0 48px}}
 .spin{animation:rot 1s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
-
-/* ── LOADER ── */
 #loader{position:fixed;inset:0;background:#080604;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;transition:opacity .5s}
 #loader.hide{opacity:0;pointer-events:none}
-
-/* ── TOAST ── */
-#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:11px 22px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;border-radius:2px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 20px;background:#e9c176;color:#412d00;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;border-radius:2px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.on{opacity:1}
 #toast.err{background:#93000a;color:#ffb4ab}
-
-/* ── POPUP CÓDIGO ── */
-#popup-codigo{position:fixed;inset:0;background:rgba(5,3,1,.88);z-index:8000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s}
+#popup-codigo{position:fixed;inset:0;background:rgba(5,3,1,.9);z-index:8000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s}
 #popup-codigo.on{opacity:1;pointer-events:all}
-#popup-codigo-sheet{background:#0d0b08;border:1px solid rgba(79,69,53,.38);width:100%;max-width:440px;padding:32px 28px;transform:scale(.96);transition:transform .3s}
-#popup-codigo.on #popup-codigo-sheet{transform:scale(1)}
-.codigo-box{background:#161412;border:1px solid rgba(233,193,118,.24);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin:14px 0 16px}
-.codigo-val{font-family:'Noto Serif',serif;font-size:26px;color:#e9c176;letter-spacing:.3em}
-.btn-copiar{background:transparent;border:1px solid rgba(233,193,118,.28);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:9px 13px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .18s;flex-shrink:0}
+#popup-codigo-sheet{background:#0d0b08;border:1px solid rgba(79,69,53,.38);border-bottom:none;width:100%;max-width:480px;padding:24px 20px 38px;transform:translateY(60px);transition:transform .32s}
+#popup-codigo.on #popup-codigo-sheet{transform:translateY(0)}
+.codigo-box{background:#161412;border:1px solid rgba(233,193,118,.24);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin:12px 0 14px}
+.codigo-val{font-family:'Noto Serif',serif;font-size:24px;color:#e9c176;letter-spacing:.3em}
+.btn-copiar{background:transparent;border:1px solid rgba(233,193,118,.28);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .18s;flex-shrink:0}
 .btn-copiar:hover{border-color:rgba(233,193,118,.55);color:#e9c176}
-
-/* ── MODAL CITA ── */
-#modal-bg{position:fixed;inset:0;background:rgba(5,3,1,.86);z-index:80;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
-#modal-bg.on{opacity:1;pointer-events:all}
-#modal-sheet{background:#0e0c08;border:1px solid rgba(79,69,53,.28);width:100%;max-width:520px;padding:28px 24px 36px;transform:scale(.96);transition:transform .3s;max-height:90dvh;overflow-y:auto}
-#modal-bg.on #modal-sheet{transform:scale(1)}
-.m-inp{width:100%;background:#161412;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;outline:none;transition:border-color .2s;margin-bottom:10px}
-.m-inp:focus{border-color:rgba(233,193,118,.4)}
-.m-inp::placeholder{color:#2a2520}
-.m-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;margin-bottom:6px;display:block}
-
-/* ── LAYOUT PRINCIPAL ── */
-#app-wrap{display:flex;min-height:100dvh}
-
-/* SIDEBAR */
-#sidebar{width:340px;flex-shrink:0;border-right:1px solid rgba(79,69,53,.18);background:#090704;position:sticky;top:0;height:100dvh;overflow-y:auto;display:flex;flex-direction:column}
-#sidebar::-webkit-scrollbar{width:3px}
-#sidebar::-webkit-scrollbar-thumb{background:rgba(233,193,118,.1)}
-
-/* MAIN CONTENT */
-#content{flex:1;min-width:0;overflow-y:auto;height:100dvh}
-#content::-webkit-scrollbar{width:4px}
-#content::-webkit-scrollbar-thumb{background:rgba(233,193,118,.1)}
-
-/* ── SIDEBAR: HERO CUADRADO ── */
-#sb-hero{width:100%;aspect-ratio:1/1;background:#0e0c08;position:relative;overflow:hidden;flex-shrink:0}
-#sb-hero img{width:100%;height:100%;object-fit:cover;display:block}
-#sb-hero-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#0e0c08}
-.sb-hero-grid{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px)}
-#sb-hero-overlay{position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,rgba(9,7,4,1),transparent);pointer-events:none}
-
-/* ── SIDEBAR: INFO ── */
-.sb-info{padding:18px 20px 14px;border-bottom:1px solid rgba(79,69,53,.14);flex-shrink:0}
-.avatar-ring{width:48px;height:48px;border-radius:50%;border:2px solid rgba(233,193,118,.3);overflow:hidden;background:#1c1b1b;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.badge{font-size:7px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;font-weight:600}
+.hero-placeholder{width:100%;aspect-ratio:4/3;background:#0e0c08;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;border-bottom:1px solid rgba(79,69,53,.18);position:relative}
+.info-card{background:#0e0c08;border-bottom:1px solid rgba(79,69,53,.16);padding:16px 18px}
+.avatar-ring{width:54px;height:54px;border-radius:50%;border:2px solid rgba(233,193,118,.38);overflow:hidden;background:#1c1b1b;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.badge{font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;font-weight:600}
 .badge-open{color:#4ade80;border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.07)}
 .badge-closed{color:#9c8f7b;border-color:rgba(79,69,53,.25);background:rgba(79,69,53,.06)}
-
-/* ── SIDEBAR: MAPA ── */
-#sb-mapa{width:100%;height:160px;background:#0e0c08;position:relative;overflow:hidden;flex-shrink:0;border-top:1px solid rgba(79,69,53,.14);border-bottom:1px solid rgba(79,69,53,.14)}
-#sb-mapa iframe{width:100%;height:100%;border:0;display:block}
+#mapa-wrap{width:100%;height:180px;background:#0e0c08;position:relative;border-top:1px solid rgba(79,69,53,.16);border-bottom:1px solid rgba(79,69,53,.16);overflow:hidden}
+.mapa-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
 .pin-anim{animation:pinBounce 1.4s ease-in-out infinite}
 @keyframes pinBounce{0%,100%{transform:translateY(0) rotate(-45deg)}50%{transform:translateY(-7px) rotate(-45deg)}}
-
-/* ── SIDEBAR: NAV LINKS ── */
-.sb-nav{padding:14px 20px;border-bottom:1px solid rgba(79,69,53,.12);display:flex;flex-wrap:wrap;gap:7px;flex-shrink:0}
-.sb-nav-btn{background:transparent;border:1px solid rgba(79,69,53,.24);color:#9c8f7b;padding:6px 11px;cursor:pointer;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:4px;transition:all .18s;text-decoration:none}
-.sb-nav-btn:hover{border-color:rgba(233,193,118,.35);color:#e9c176}
-
-/* ── SIDEBAR: SERVICIOS ── */
-.sb-services{padding:16px 20px;flex-shrink:0}
-.sb-serv-title{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.45);margin-bottom:10px}
-.serv-select-wrap{position:relative;width:100%}
-.serv-select{width:100%;background:#131210;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:11px 36px 11px 13px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s}
-.serv-select:focus{border-color:rgba(233,193,118,.5)}
-.serv-select option{background:#131210;color:#e5e2e1;font-weight:500}
-.serv-select-arrow{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9c8f7b;font-size:18px}
-.serv-precio-badge{display:none;margin-top:8px;background:rgba(233,193,118,.06);border:1px solid rgba(233,193,118,.18);padding:10px 13px;align-items:center;justify-content:space-between}
-.serv-precio-badge.visible{display:flex}
-
-/* ── CONTENT: HEADER ── */
-#content-header{position:sticky;top:0;z-index:40;background:rgba(8,6,4,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(79,69,53,.14);padding:12px 28px;display:flex;align-items:center;justify-content:space-between}
-
-/* ── CONTENT: TABS ── */
-.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(79,69,53,.16);padding:0 28px;background:#080604;position:sticky;top:53px;z-index:30}
-.tab-btn{padding:12px 16px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;background:transparent;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-weight:600;border-bottom:2px solid transparent;transition:all .18s;white-space:nowrap}
-.tab-btn.active{color:#e9c176;border-bottom-color:#e9c176}
-.tab-btn:hover:not(.active){color:#e5e2e1}
-.tab-panel{display:none;padding:24px 28px}
-.tab-panel.active{display:block}
-
-/* ── CALENDARIO WEB ── */
-.cal-wrap-web{background:#0e0c08;border:1px solid rgba(79,69,53,.16);padding:22px 24px}
-.cal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.sec-label{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:rgba(233,193,118,.5);padding:14px 18px 8px}
+.cal-wrap{background:#0e0c08;border-top:1px solid rgba(79,69,53,.18);border-bottom:1px solid rgba(79,69,53,.18);padding:22px 18px}
+.cal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
 .cal-nav{background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s}
 .cal-nav:hover{border-color:rgba(233,193,118,.42);color:#e9c176}
 .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:8px}
-.cal-dow span{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9c8f7b;padding:4px 0;font-weight:600}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-family:'Manrope',sans-serif;font-weight:600;position:relative;transition:all .15s;border:1px solid transparent;border-radius:2px;user-select:none;-webkit-tap-highlight-color:transparent;max-width:44px;width:100%}
-.cal-grid{justify-items:center}
+.cal-dow span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9c8f7b;padding:4px 0;font-weight:600}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:'Manrope',sans-serif;font-weight:600;position:relative;transition:all .15s;border:1px solid transparent;border-radius:2px;user-select:none;-webkit-tap-highlight-color:transparent}
 .cd.oth{color:#2a2722;cursor:default;pointer-events:none;font-weight:400}
-.cd.past{color:#3a2020;cursor:not-allowed;pointer-events:none;text-decoration:line-through;text-decoration-color:rgba(147,0,10,.25)}
-.cd.nowork{color:#302d28;cursor:not-allowed;pointer-events:none;font-weight:400}
-.cd.blocked{color:#5a2828;cursor:not-allowed;pointer-events:none;background:rgba(147,0,10,.07);border-color:rgba(147,0,10,.14);text-decoration:line-through;text-decoration-color:rgba(147,0,10,.4)}
+.cd.past{color:#4a2828;cursor:not-allowed;pointer-events:none;background:rgba(147,0,10,.04);text-decoration:line-through;text-decoration-color:rgba(147,0,10,.3)}
+.cd.nowork{color:#3a3530;cursor:not-allowed;pointer-events:none;font-weight:400}
+.cd.blocked{color:#5a2828;cursor:not-allowed;pointer-events:none;background:rgba(147,0,10,.08);border-color:rgba(147,0,10,.15);text-decoration:line-through;text-decoration-color:rgba(147,0,10,.4)}
 .cd.avail{color:#f0ece6 !important;cursor:pointer !important;pointer-events:auto !important;background:rgba(74,222,128,.04);border-color:rgba(74,222,128,.12);font-weight:700;z-index:1}
-.cd.avail:hover{background:rgba(74,222,128,.16) !important;border-color:rgba(74,222,128,.5) !important;color:#4ade80 !important;transform:scale(1.12);z-index:2}
+.cd.avail:hover{background:rgba(74,222,128,.18) !important;border-color:rgba(74,222,128,.55) !important;color:#4ade80 !important;transform:scale(1.08);z-index:2}
 .cd.avail:active{transform:scale(0.96)}
 .cd.hoy{color:#e9c176 !important;font-weight:800 !important;border-color:rgba(233,193,118,.22) !important}
 .cd.hoy::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#e9c176;border-radius:50%}
-.cd.sel{background:#e9c176 !important;color:#412d00 !important;font-weight:800 !important;border-color:#e9c176 !important;transform:scale(1.12) !important;z-index:3;box-shadow:0 0 14px rgba(233,193,118,.3)}
+.cd.sel{background:#e9c176 !important;color:#412d00 !important;font-weight:800 !important;border-color:#e9c176 !important;transform:scale(1.1) !important;z-index:3;box-shadow:0 0 12px rgba(233,193,118,.35)}
 .cd.sel::after,.cd.sel::before{display:none !important}
 .cd.avail.proxima::before{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:#4ade80;border-radius:50%}
-
-/* ── SLOTS WEB ── */
-.slots-wrap-web{margin-top:20px;background:#0e0c08;border:1px solid rgba(79,69,53,.16);padding:20px 22px}
+.slots-section{padding:18px 18px 0}
 .slot-group-lbl{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:#9c8f7b;margin-bottom:8px;margin-top:14px}
 .slot-grid{display:flex;flex-wrap:wrap;gap:6px}
 .s-btn{background:#131210;border:1px solid rgba(79,69,53,.28);color:#c8bfb0;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.06em;padding:8px 14px;cursor:pointer;transition:all .15s;font-weight:600}
 .s-btn:hover{border-color:rgba(74,222,128,.38);color:#4ade80}
 .s-btn.sel{background:#e9c176;color:#412d00;border-color:#e9c176;font-weight:700}
 .s-btn.ocup{background:rgba(147,0,10,.10) !important;border:1px solid rgba(200,50,50,.35) !important;color:#7a3535 !important;cursor:not-allowed !important;font-weight:500;text-decoration:line-through;text-decoration-color:rgba(200,80,80,.6);text-decoration-thickness:1.5px;pointer-events:none;opacity:0.75}
-
-/* ── RESUMEN BOOKING ── */
-.booking-card-web{background:#131210;border:1px solid rgba(79,69,53,.22);margin-top:18px}
+.booking-card{background:#131210;border:1px solid rgba(79,69,53,.22);margin:16px 18px 0}
 .brow{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.1)}
 .brow:last-child{border-bottom:none}
 .bkey{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b}
 .bval{font-size:11px;color:#e5e2e1;font-weight:600;text-align:right;max-width:60%}
-
-/* ── CARRUSEL ── */
-.car-outer{position:relative;padding:0}
+.car-outer{position:relative;padding:0 18px 4px}
 .car-track-wrap{overflow:hidden;width:100%}
 .car-track{display:flex;gap:10px;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
-.carousel-card{flex:0 0 160px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
+.carousel-card{flex:0 0 138px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
 .carousel-card:hover{border-color:rgba(233,193,118,.35)}
-.tienda-card{flex:0 0 170px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
+.tienda-card{flex:0 0 150px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
 .tienda-card:hover{border-color:rgba(233,193,118,.35)}
-.car-arrow{position:absolute;top:50%;transform:translateY(-60%);width:30px;height:30px;background:rgba(8,6,4,.85);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s;padding:0}
-.car-arrow:disabled{opacity:.15;cursor:default}
-.car-arrow.prev{left:-4px}
-.car-arrow.next{right:-4px}
-.car-dots{display:flex;justify-content:center;gap:5px;margin:10px 0 4px}
+.car-arrow{position:absolute;top:50%;transform:translateY(-60%);width:28px;height:28px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s;padding:0}
+.car-arrow:disabled{opacity:.18;cursor:default}
+.car-arrow.prev{left:2px}
+.car-arrow.next{right:2px}
+.car-dots{display:flex;justify-content:center;gap:5px;margin:8px 0 14px}
 .car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.35);cursor:pointer;transition:background .2s;border:none;padding:0}
 .car-dot.on{background:#e9c176}
-
-/* ── LEYENDA CALENDARIO ── */
-.cal-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+#modal-bg{position:fixed;inset:0;background:rgba(5,3,1,.86);z-index:80;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+#modal-bg.on{opacity:1;pointer-events:all}
+#modal-sheet{background:#0e0c08;border:1px solid rgba(79,69,53,.28);border-bottom:none;width:100%;max-width:480px;padding:22px 18px 36px;transform:translateY(40px);transition:transform .3s;max-height:90dvh;overflow-y:auto}
+#modal-bg.on #modal-sheet{transform:translateY(0)}
+.m-inp{width:100%;background:#161412;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;padding:11px 13px;outline:none;transition:border-color .2s;margin-bottom:10px}
+.m-inp:focus{border-color:rgba(233,193,118,.4)}
+.m-inp::placeholder{color:#2a2520}
+.m-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b;margin-bottom:6px;display:block}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 10px;cursor:pointer;color:#9c8f7b;text-decoration:none}
+.nav-item.active{color:#e9c176}
+.nav-item p{font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.cal-legend{display:flex;align-items:center;gap:12px;padding:10px 18px;flex-wrap:wrap}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9c8f7b}
 .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .leg-past{background:rgba(147,0,10,.5)}
 .leg-avail{background:rgba(74,222,128,.6)}
 .leg-block{background:rgba(147,0,10,.4);border:1px solid rgba(147,0,10,.5)}
 .leg-nowork{background:#1e1c18;border:1px solid rgba(79,69,53,.3)}
+.data-estado{padding:8px 18px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.35);display:flex;align-items:center;gap:6px}
+.serv-wrap{padding:0 18px 4px}
+/* ★ Dropdown selector de corte */
+.serv-select-wrap{position:relative;width:100%}
+.serv-select{width:100%;background:#131210;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:12px 40px 12px 14px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s}
+.serv-select:focus{border-color:rgba(233,193,118,.5)}
+.serv-select option{background:#131210;color:#e5e2e1;font-weight:500}
+.serv-select-arrow{position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9c8f7b;font-size:18px}
+/* ★ Precio badge que aparece al seleccionar */
+.serv-precio-badge{display:none;margin-top:8px;background:rgba(233,193,118,.07);border:1px solid rgba(233,193,118,.22);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.serv-precio-badge.visible{display:flex}
+.req-serv-banner{background:rgba(233,193,118,.05);border:1px solid rgba(233,193,118,.14);margin:0 18px;padding:10px 13px;display:flex;align-items:center;gap:8px}
 
-/* ── SEC LABEL ── */
-.sec-label{font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:10px;display:block}
-
-/* ── ESTADO HORARIOS ── */
-.data-estado{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.35);display:flex;align-items:center;gap:6px;margin-bottom:12px}
-
-/* ── RESPONSIVE: mobile ─ sidebar se convierte en header ── */
-@media(max-width:768px){
-  #sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid rgba(79,69,53,.18)}
-  #app-wrap{flex-direction:column}
-  #content{height:auto;overflow-y:visible}
-  #content-header{position:sticky;top:0}
-  .tab-bar{top:53px;overflow-x:auto}
-  .tab-panel{padding:16px 16px}
-  #sb-hero{aspect-ratio:16/7}
-  #sb-mapa{height:140px}
-  .cal-wrap-web{padding:16px}
-  .cd{font-size:12px}
-}
+/* ★ Fila especial precio en modal */
+.brow-precio{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(79,69,53,.1);background:rgba(233,193,118,.04)}
+/* ★ Fila resaltada nombre/telefono */
+.brow-highlight{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.1);background:rgba(233,193,118,.05)}
 </style>
 </head>
 <body>
@@ -210,78 +140,97 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 <!-- POPUP CÓDIGO -->
 <div id="popup-codigo">
   <div id="popup-codigo-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
       <div>
         <p style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:5px">Tu acceso como cliente</p>
         <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1" id="popup-bar-nombre">—</p>
       </div>
-      <button onclick="cerrarPopupCodigo()" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:26px;line-height:1;padding:2px">&times;</button>
+      <button onclick="cerrarPopupCodigo()" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:24px;line-height:1;padding:2px">&times;</button>
     </div>
-    <p style="font-size:11px;color:#9c8f7b;line-height:1.65;margin-bottom:4px">Este es tu código de cliente. Guárdalo para acceder a tu perfil y citas.</p>
+    <p style="font-size:11px;color:#9c8f7b;line-height:1.65;margin-bottom:2px">Este es tu código de cliente. Guárdalo para acceder a tu perfil y citas.</p>
     <div class="codigo-box">
       <span class="codigo-val" id="popup-codigo-val">ATL-——</span>
       <button class="btn-copiar" onclick="copiarCodigo()">
         <span class="material-symbols-outlined" style="font-size:14px">content_copy</span>Copiar
       </button>
     </div>
-    <div style="display:flex;align-items:flex-start;gap:8px;background:#161412;border:1px solid rgba(79,69,53,.18);padding:10px 12px;margin-bottom:20px">
+    <div style="display:flex;align-items:flex-start;gap:8px;background:#161412;border:1px solid rgba(79,69,53,.18);padding:10px 12px;margin-bottom:18px">
       <span class="material-symbols-outlined" style="font-size:14px;color:rgba(233,193,118,.35);flex-shrink:0;margin-top:1px">info</span>
       <p style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9c8f7b;line-height:1.65">Comparte este código con tu barbero para que pueda encontrarte en el sistema</p>
     </div>
-    <button onclick="cerrarPopupCodigo()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:14px">
+    <button onclick="cerrarPopupCodigo()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:15px">
       Entendido &mdash; Ver mi barbería
     </button>
   </div>
 </div>
 
-<!-- MODAL AGENDAR -->
+<!-- ══════════════════════════════════════════════════
+     MODAL AGENDAR — ★ incluye nombre, teléfono y precio visibles
+══════════════════════════════════════════════════ -->
 <div id="modal-bg" onclick="cerrarModal(event)">
   <div id="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
       <div>
         <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:4px">Reserva tu experiencia</p>
-        <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1">Confirmar Cita</p>
+        <p style="font-family:'Noto Serif',serif;font-size:19px;color:#e5e2e1">Confirmar Cita</p>
       </div>
-      <button onclick="document.getElementById('modal-bg').classList.remove('on')" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:24px;line-height:1;padding:2px">&times;</button>
+      <button onclick="document.getElementById('modal-bg').classList.remove('on')" style="background:transparent;border:none;cursor:pointer;color:#9c8f7b;font-size:23px;line-height:1;padding:2px">&times;</button>
     </div>
 
-    <div id="modal-resumen" style="background:#131210;border:1px solid rgba(233,193,118,.18);margin-bottom:18px;display:none;overflow:hidden">
+    <!-- ★ RESUMEN COMPLETO: servicio + precio + fecha + hora + barbería + nombre + teléfono -->
+    <div id="modal-resumen" style="background:#131210;border:1px solid rgba(233,193,118,.18);margin-bottom:16px;display:none;overflow:hidden">
+
+      <!-- Encabezado del bloque resumen -->
       <div style="background:rgba(233,193,118,.07);border-bottom:1px solid rgba(233,193,118,.14);padding:8px 14px">
         <p style="font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:rgba(233,193,118,.6)">Resumen de tu reserva</p>
       </div>
+
+      <!-- Servicio -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.12)">
         <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Servicio</span>
-        <span style="font-size:11px;color:#e5e2e1;font-weight:600" id="mr-servicio">—</span>
+        <span style="font-size:11px;color:#e5e2e1;font-weight:600;text-align:right;max-width:60%" id="mr-servicio">—</span>
       </div>
+
+      <!-- ★ Precio — fila destacada en dorado -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.12);background:rgba(233,193,118,.05)">
         <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;font-weight:700">Precio</span>
         <span style="font-family:'Noto Serif',serif;font-size:15px;color:#e9c176;font-weight:700" id="mr-precio">—</span>
       </div>
+
+      <!-- Fecha -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.12)">
         <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Fecha</span>
         <span style="font-size:11px;color:#e9c176;font-weight:600" id="mr-fecha">—</span>
       </div>
+
+      <!-- Hora -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.12)">
         <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Hora</span>
-        <span style="font-size:14px;color:#e9c176;font-weight:700" id="mr-hora">—</span>
+        <span style="font-size:11px;color:#e9c176;font-weight:700;font-size:14px" id="mr-hora">—</span>
       </div>
+
+      <!-- Barbería -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(79,69,53,.12)">
         <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Barbería</span>
         <span style="font-size:11px;color:#e5e2e1;font-weight:600" id="mr-barberia">—</span>
       </div>
+
+      <!-- ★ Nombre cliente — fila resaltada -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.1);background:rgba(233,193,118,.04)">
         <div style="display:flex;align-items:center;gap:5px">
           <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.5)">person</span>
           <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;font-weight:700">Nombre</span>
         </div>
-        <span style="font-size:11px;color:#e5e2e1;font-weight:700" id="mr-nombre">—</span>
+        <span style="font-size:11px;color:#e5e2e1;font-weight:700;text-align:right;max-width:60%" id="mr-nombre">—</span>
       </div>
+
+      <!-- ★ Teléfono cliente — fila resaltada -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(233,193,118,.04)">
         <div style="display:flex;align-items:center;gap:5px">
           <span class="material-symbols-outlined" style="font-size:13px;color:rgba(233,193,118,.5)">phone</span>
           <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;font-weight:700">Teléfono</span>
         </div>
-        <span style="font-size:11px;color:#e5e2e1;font-weight:700" id="mr-telefono">—</span>
+        <span style="font-size:11px;color:#e5e2e1;font-weight:700;text-align:right;max-width:60%" id="mr-telefono">—</span>
       </div>
     </div>
 
@@ -306,310 +255,276 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     APP LAYOUT: sidebar + content
-══════════════════════════════════════════════════ -->
-<div id="app-wrap">
-
-  <!-- ── SIDEBAR ── -->
-  <aside id="sidebar">
-
-    <!-- HEADER SIDEBAR -->
-    <div style="padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(79,69,53,.14);flex-shrink:0">
-      <div style="display:flex;align-items:center;gap:9px">
-        <div style="width:7px;height:24px;overflow:hidden;border-radius:3px;border:1px solid rgba(79,69,53,.32)">
-          <div class="pole-stripe" style="height:160px"></div>
-        </div>
-        <h1 style="font-family:'Noto Serif',serif;font-size:15px;color:#e9c176;letter-spacing:.14em" id="top-nombre">—</h1>
+<!-- HEADER -->
+<header style="position:fixed;top:0;width:100%;z-index:50;background:rgba(8,6,4,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(79,69,53,.18)">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 18px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:7px;height:26px;overflow:hidden;border-radius:3px;border:1px solid rgba(79,69,53,.32)">
+        <div class="pole-stripe" style="height:180px"></div>
       </div>
+      <h1 style="font-family:'Noto Serif',serif;font-size:15px;color:#e9c176;letter-spacing:.14em" id="top-nombre">—</h1>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
       <button onclick="mostrarPopupCodigo()" style="background:transparent;border:1px solid rgba(79,69,53,.28);color:#9c8f7b;padding:5px 9px;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-family:'Manrope',sans-serif;transition:all .18s">
-        <span class="material-symbols-outlined" style="font-size:13px">key</span>Código
+        <span class="material-symbols-outlined" style="font-size:14px">key</span>Código
       </button>
     </div>
+  </div>
+</header>
 
-    <!-- FOTO LOCAL: 1:1 proporcional al sidebar -->
-    <div id="sb-hero">
-      <div class="sb-hero-grid" id="sb-hero-ph-bg"></div>
-      <div id="sb-hero-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
-        <div style="width:40px;height:40px;background:rgba(233,193,118,.07);border:1px solid rgba(233,193,118,.14);border-radius:50%;display:flex;align-items:center;justify-content:center">
-          <span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.22)">storefront</span>
-        </div>
-        <p style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(156,143,123,.22)">Foto del local</p>
-      </div>
-      <img id="hero-img" src="" alt="Foto del local" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none"/>
-      <div id="sb-hero-overlay"></div>
-    </div>
+<main style="padding-top:52px;padding-bottom:84px">
 
-    <!-- INFO BARBERÍA -->
-    <div class="sb-info">
-      <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px">
-        <div class="avatar-ring" id="avatar-cliente">
-          <span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.22)">person</span>
+  <!-- HERO -->
+  <div style="position:relative">
+    <div id="hero-placeholder" class="hero-placeholder">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 30px)"></div>
+      <div style="position:relative;text-align:center">
+        <div style="width:36px;height:36px;background:rgba(233,193,118,.07);border:1px solid rgba(233,193,118,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+          <span class="material-symbols-outlined" style="font-size:18px;color:rgba(233,193,118,.26)">storefront</span>
         </div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px">
-            <p style="font-family:'Noto Serif',serif;font-size:16px;color:#e5e2e1" id="c-nombre">—</p>
-            <span id="badge-estado" class="badge badge-open">Abierto</span>
-          </div>
-          <p id="c-dueno" style="font-size:10px;color:#e9c176;letter-spacing:.06em;margin-bottom:1px"></p>
-          <p id="c-ciudad" style="font-size:10px;color:#9c8f7b"></p>
-          <p id="c-dir" style="font-size:9px;color:#6b5f52;margin-top:1px"></p>
-        </div>
+        <p style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(156,143,123,.26)">Foto del local</p>
       </div>
     </div>
+    <img id="hero-img" src="" alt="Foto del local" style="display:none;width:100%;aspect-ratio:4/3;object-fit:cover"/>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(8,6,4,1),transparent);pointer-events:none"></div>
+  </div>
 
-    <!-- MAPA -->
-    <div id="sb-mapa">
-      <div id="mapa-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#0e0c08">
-        <div class="sb-hero-grid" style="position:absolute;inset:0"></div>
-        <div class="pin-anim" style="position:relative;width:24px;height:24px;background:#e9c176;border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;margin-bottom:6px">
-          <span class="material-symbols-outlined" style="font-size:11px;color:#412d00;transform:rotate(45deg)">content_cut</span>
-        </div>
-        <p id="mapa-dir-label" style="font-size:9px;color:#9c8f7b;letter-spacing:.08em;text-align:center;padding:0 16px;position:relative">Cargando ubicación...</p>
+  <!-- INFO CARD -->
+  <div class="info-card">
+    <div style="display:flex;align-items:center;gap:13px;margin-bottom:12px">
+      <div class="avatar-ring" id="avatar-cliente">
+        <span class="material-symbols-outlined" style="font-size:22px;color:rgba(233,193,118,.22)">person</span>
       </div>
-      <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:160px;border:0"></iframe>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px">
+          <p style="font-family:'Noto Serif',serif;font-size:17px;color:#e5e2e1" id="c-nombre">—</p>
+          <span id="badge-estado" class="badge badge-open">Abierto</span>
+        </div>
+        <p id="c-dueno" style="font-size:11px;color:#e9c176;letter-spacing:.06em;margin-bottom:2px"></p>
+        <p id="c-ciudad" style="font-size:11px;color:#9c8f7b"></p>
+        <p id="c-dir" style="font-size:10px;color:#6b5f52;margin-top:1px"></p>
+      </div>
     </div>
-
-    <!-- DIR + LINK MAPS -->
-    <div style="padding:8px 18px;border-bottom:1px solid rgba(79,69,53,.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-      <p id="dir-bajo-mapa" style="font-size:10px;color:#9c8f7b"></p>
-      <a id="link-maps-ext" href="#" target="_blank" style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.45);text-decoration:none;white-space:nowrap;padding-left:8px">Ver en Maps ↗</a>
-    </div>
-
-    <!-- BOTONES DE ACCIÓN -->
-    <div class="sb-nav">
-      <a id="link-redes" href="#" style="display:none" class="sb-nav-btn">
-        <span class="material-symbols-outlined" style="font-size:13px">alternate_email</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a id="link-redes" href="#" style="display:none;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;text-decoration:none;border:1px solid rgba(79,69,53,.22);padding:5px 9px">
+        <span class="material-symbols-outlined" style="font-size:12px">alternate_email</span>
         <span id="txt-redes">Instagram</span>
       </a>
-      <button onclick="abrirWhatsApp()" class="sb-nav-btn">
-        <span class="material-symbols-outlined" style="font-size:13px">phone</span>Llamar / WA
+      <button onclick="abrirWhatsApp()" style="display:flex;align-items:center;gap:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;background:transparent;border:1px solid rgba(79,69,53,.22);padding:5px 9px;cursor:pointer;font-family:'Manrope',sans-serif">
+        <span class="material-symbols-outlined" style="font-size:12px">phone</span>Llamar / WA
       </button>
     </div>
+  </div>
 
-    <!-- SELECTOR DE SERVICIO -->
-    <div class="sb-services">
-      <p class="sb-serv-title">
-        <span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:8px;font-weight:700;margin-right:5px;color:#e9c176">1</span>
-        Elige tu servicio
-      </p>
-      <div id="serv-empty" style="display:none;padding:8px 0 12px">
-        <p style="font-size:10px;color:#3d3730;letter-spacing:.1em">Sin servicios configurados aún.</p>
+  <!-- MAPA -->
+  <div style="padding:14px 18px 0">
+    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.42);margin-bottom:6px">
+      <span class="material-symbols-outlined" style="font-size:10px;vertical-align:middle;margin-right:3px">location_on</span>Ubicación
+    </p>
+  </div>
+  <div id="mapa-wrap">
+    <div class="mapa-placeholder" id="mapa-ph">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px),repeating-linear-gradient(90deg,rgba(79,69,53,.06) 0,rgba(79,69,53,.06) 1px,transparent 1px,transparent 26px)"></div>
+      <div class="pin-anim" style="position:relative;width:28px;height:28px;background:#e9c176;border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <span class="material-symbols-outlined" style="font-size:13px;color:#412d00;transform:rotate(45deg)">content_cut</span>
       </div>
-      <div id="serv-wrap">
-        <div class="serv-select-wrap">
-          <select class="serv-select" id="serv-select" onchange="selServicioDropdown(this)">
-            <option value="">— Selecciona un servicio —</option>
-          </select>
-          <span class="material-symbols-outlined serv-select-arrow">expand_more</span>
-        </div>
-        <div class="serv-precio-badge" id="serv-precio-badge">
-          <div>
-            <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:2px">Seleccionado</p>
-            <p style="font-size:12px;color:#e5e2e1;font-weight:600" id="serv-badge-nombre">—</p>
-          </div>
-          <div style="text-align:right">
-            <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:2px">Precio</p>
-            <p style="font-family:'Noto Serif',serif;font-size:17px;color:#e9c176;font-weight:700" id="serv-badge-precio">—</p>
-          </div>
-        </div>
+      <p id="mapa-dir-label" style="font-size:10px;color:#9c8f7b;letter-spacing:.08em;text-align:center;padding:0 20px;position:relative">Cargando ubicación...</p>
+      <a id="mapa-ext-link" href="#" target="_blank" style="display:none;margin-top:4px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,193,118,.5);text-decoration:none;position:relative">Abrir en Maps →</a>
+    </div>
+    <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:180px;border:0"></iframe>
+  </div>
+  <div style="padding:8px 18px 0;border-top:1px solid rgba(79,69,53,.1)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <p id="dir-bajo-mapa" style="font-size:11px;color:#9c8f7b"></p>
+      <a id="link-maps-ext" href="#" target="_blank" style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(233,193,118,.45);text-decoration:none;white-space:nowrap;padding-left:8px">Ver en Maps ↗</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SECCIÓN AGENDAR CITA
+  ══════════════════════════════════════════════════ -->
+  <p class="sec-label" style="margin-top:6px">Reserva tu experiencia</p>
+  <div style="padding:0 18px 10px">
+    <p style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;margin-bottom:5px">Agendar Cita</p>
+    <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Elige tu servicio y selecciona fecha y horario.</p>
+  </div>
+
+  <!-- PASO 1: ELEGIR SERVICIO -->
+  <div style="padding:0 18px 6px">
+    <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:10px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:9px;font-weight:700;margin-right:5px;color:#e9c176">1</span>
+      Elige tu servicio
+    </p>
+  </div>
+  <div id="serv-empty" style="display:none;padding:10px 18px 14px">
+    <p style="font-size:10px;color:#3d3730;letter-spacing:.1em">Sin servicios configurados aún.</p>
+  </div>
+  <div class="serv-wrap" id="serv-wrap">
+    <div class="serv-select-wrap">
+      <select class="serv-select" id="serv-select" onchange="selServicioDropdown(this)">
+        <option value="">— Selecciona un servicio —</option>
+      </select>
+      <span class="material-symbols-outlined serv-select-arrow">expand_more</span>
+    </div>
+    <!-- ★ Badge de precio que aparece al seleccionar -->
+    <div class="serv-precio-badge" id="serv-precio-badge">
+      <div>
+        <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:3px">Servicio seleccionado</p>
+        <p style="font-size:12px;color:#e5e2e1;font-weight:600" id="serv-badge-nombre">—</p>
+      </div>
+      <div style="text-align:right">
+        <p style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(233,193,118,.5);margin-bottom:3px">Precio</p>
+        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e9c176;font-weight:700" id="serv-badge-precio">—</p>
       </div>
     </div>
+  </div>
 
-    <!-- SPACER + FOOTER -->
-    <div style="flex:1"></div>
-    <div style="padding:14px 18px;border-top:1px solid rgba(79,69,53,.1);flex-shrink:0">
-      <p style="font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(79,69,53,.4);text-align:center">The Atelier · Sistema de Reservas</p>
-    </div>
-  </aside>
+  <!-- PASO 2: ELEGIR FECHA -->
+  <div style="padding:14px 18px 6px">
+    <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48)">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:9px;font-weight:700;margin-right:5px;color:#e9c176">2</span>
+      Elige la fecha
+    </p>
+  </div>
 
-  <!-- ── CONTENT ── -->
-  <div id="content">
+  <div id="horarios-estado" class="data-estado" style="display:none">
+    <span class="material-symbols-outlined" style="font-size:13px">schedule</span>
+    <span id="horarios-estado-txt">Cargando horarios...</span>
+  </div>
 
-    <!-- CONTENT HEADER -->
-    <div id="content-header">
-      <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(233,193,118,.5)">
-        <span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:4px">storefront</span>
-        Panel de Reservas
-      </p>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div id="horarios-estado" class="data-estado" style="display:none">
-          <span class="material-symbols-outlined" style="font-size:12px">schedule</span>
-          <span id="horarios-estado-txt">Cargando...</span>
-        </div>
+  <div class="cal-legend">
+    <div class="leg-item"><div class="leg-dot leg-avail"></div>Disponible</div>
+    <div class="leg-item"><div class="leg-dot leg-past"></div>Pasado</div>
+    <div class="leg-item"><div class="leg-dot leg-block"></div>No disponible</div>
+    <div class="leg-item"><div class="leg-dot leg-nowork"></div>Sin servicio</div>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-hdr">
+      <div>
+        <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:4px">Selecciona la fecha</p>
+        <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1" id="cal-mes-label">—</p>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="cal-nav" onclick="calNav(-1)"><span class="material-symbols-outlined" style="font-size:18px">chevron_left</span></button>
+        <button class="cal-nav" onclick="calNav(1)"><span class="material-symbols-outlined" style="font-size:18px">chevron_right</span></button>
       </div>
     </div>
-
-    <!-- TABS -->
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('agendar',this)">
-        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">calendar_month</span>Agendar Cita
-      </button>
-      <button class="tab-btn" onclick="switchTab('portafolio',this)">
-        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">photo_library</span>Portafolio
-      </button>
-      <button class="tab-btn" onclick="switchTab('tienda',this)">
-        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">storefront</span>Tienda
-      </button>
+    <div class="cal-dow">
+      <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
     </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
 
-    <!-- TAB: AGENDAR -->
-    <div class="tab-panel active" id="tab-agendar">
-
-      <div style="margin-bottom:18px">
-        <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1;margin-bottom:4px">Reserva tu cita</p>
-        <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Selecciona fecha y hora disponible. Paso 1: elige el servicio en la barra lateral.</p>
-      </div>
-
-      <!-- LAYOUT: calendario + slots en 2 columnas en desktop -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
-
-        <!-- COL IZQUIERDA: CALENDARIO -->
+  <!-- PASO 3: ELEGIR HORA -->
+  <div class="slots-section" id="slots-section" style="display:none">
+    <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:4px">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:9px;font-weight:700;margin-right:5px;color:#e9c176">3</span>
+      Elige la hora
+    </p>
+    <p style="font-size:10px;color:#9c8f7b;margin-bottom:12px" id="slots-fecha-label">—</p>
+    <div id="sg-manana" style="display:none"><p class="slot-group-lbl">Mañana</p><div class="slot-grid" id="sg-manana-grid" style="margin-bottom:4px"></div></div>
+    <div id="sg-tarde"  style="display:none"><p class="slot-group-lbl">Tarde</p><div class="slot-grid" id="sg-tarde-grid"  style="margin-bottom:4px"></div></div>
+    <div id="sg-noche"  style="display:none"><p class="slot-group-lbl">Noche</p><div class="slot-grid" id="sg-noche-grid"  style="margin-bottom:4px"></div></div>
+    <div id="sg-empty" style="display:none;padding:14px 0;text-align:center"><p style="font-size:10px;color:#3d3730;letter-spacing:.14em">No disponible este día</p></div>
+    <div id="sg-blocked" style="display:none;padding:16px 0">
+      <div style="background:rgba(147,0,10,.08);border:1px solid rgba(147,0,10,.2);padding:12px 14px;display:flex;align-items:flex-start;gap:10px">
+        <span class="material-symbols-outlined" style="font-size:18px;color:rgba(233,118,118,.5);flex-shrink:0;margin-top:1px">event_busy</span>
         <div>
-          <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:12px">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:8px;font-weight:700;margin-right:5px;color:#e9c176">2</span>
-            Elige la fecha
-          </p>
-          <div class="cal-legend">
-            <div class="leg-item"><div class="leg-dot leg-avail"></div>Disponible</div>
-            <div class="leg-item"><div class="leg-dot leg-past"></div>Pasado</div>
-            <div class="leg-item"><div class="leg-dot leg-block"></div>No disponible</div>
-            <div class="leg-item"><div class="leg-dot leg-nowork"></div>Sin servicio</div>
-          </div>
-          <div class="cal-wrap-web">
-            <div class="cal-hdr">
-              <div>
-                <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:4px">Mes</p>
-                <p style="font-family:'Noto Serif',serif;font-size:17px;color:#e5e2e1" id="cal-mes-label">—</p>
-              </div>
-              <div style="display:flex;gap:6px;align-items:center">
-                <button class="cal-nav" onclick="calNav(-1)"><span class="material-symbols-outlined" style="font-size:17px">chevron_left</span></button>
-                <button class="cal-nav" onclick="calNav(1)"><span class="material-symbols-outlined" style="font-size:17px">chevron_right</span></button>
-              </div>
-            </div>
-            <div class="cal-dow">
-              <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
-            </div>
-            <div class="cal-grid" id="cal-grid"></div>
-          </div>
-        </div>
-
-        <!-- COL DERECHA: SLOTS + RESUMEN -->
-        <div>
-          <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.48);margin-bottom:12px">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;background:rgba(233,193,118,.12);border:1px solid rgba(233,193,118,.2);font-size:8px;font-weight:700;margin-right:5px;color:#e9c176">3</span>
-            Elige la hora
-          </p>
-
-          <div class="slots-wrap-web" id="slots-section" style="display:none">
-            <p style="font-size:10px;color:#9c8f7b;margin-bottom:14px" id="slots-fecha-label">—</p>
-            <div id="sg-blocked" style="display:none">
-              <div style="background:rgba(147,0,10,.08);border:1px solid rgba(147,0,10,.2);padding:12px 14px;display:flex;align-items:flex-start;gap:10px">
-                <span class="material-symbols-outlined" style="font-size:17px;color:rgba(233,118,118,.5);flex-shrink:0;margin-top:1px">event_busy</span>
-                <div>
-                  <p style="font-size:10px;font-weight:600;color:#e97676;margin-bottom:3px">Día no disponible</p>
-                  <p id="sg-blocked-nota" style="font-size:9px;color:#9c8f7b;letter-spacing:.08em;line-height:1.5">Este día no hay servicio disponible.</p>
-                </div>
-              </div>
-            </div>
-            <div id="sg-empty" style="display:none;padding:14px 0;text-align:center">
-              <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">No disponible este día</p>
-            </div>
-            <div id="sg-manana" style="display:none"><p class="slot-group-lbl">Mañana</p><div class="slot-grid" id="sg-manana-grid"></div></div>
-            <div id="sg-tarde"  style="display:none;margin-top:4px"><p class="slot-group-lbl">Tarde</p><div class="slot-grid" id="sg-tarde-grid"></div></div>
-            <div id="sg-noche"  style="display:none;margin-top:4px"><p class="slot-group-lbl">Noche</p><div class="slot-grid" id="sg-noche-grid"></div></div>
-            <div style="display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(79,69,53,.1)">
-              <div style="width:7px;height:7px;border-radius:50%;background:rgba(147,0,10,.35);flex-shrink:0"></div>
-              <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9c8f7b">Tachado = hora ya reservada</p>
-            </div>
-          </div>
-
-          <!-- Sin fecha seleccionada -->
-          <div id="slots-placeholder" style="background:#0e0c08;border:1px solid rgba(79,69,53,.14);padding:32px 22px;text-align:center">
-            <span class="material-symbols-outlined" style="font-size:28px;color:rgba(233,193,118,.1);display:block;margin-bottom:8px">event</span>
-            <p style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#3d3730">Selecciona una fecha en el calendario</p>
-          </div>
-
-          <!-- RESUMEN + CONFIRMAR -->
-          <div id="booking-summary-inline" style="display:none;margin-top:18px">
-            <div class="booking-card-web">
-              <div class="brow" style="padding:10px 14px 6px;border-bottom:none">
-                <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:#9c8f7b">Resumen de tu cita</p>
-              </div>
-              <div style="height:1px;background:rgba(79,69,53,.14);margin:0 14px"></div>
-              <div class="brow"><span class="bkey">Servicio</span><span class="bval" id="bs-servicio">—</span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.12);background:rgba(233,193,118,.05)">
-                <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;font-weight:700">Precio</span>
-                <span style="font-family:'Noto Serif',serif;font-size:14px;color:#e9c176;font-weight:700" id="bs-precio">—</span>
-              </div>
-              <div class="brow"><span class="bkey">Fecha</span><span class="bval" id="bs-fecha">—</span></div>
-              <div class="brow"><span class="bkey">Hora</span><span class="bval" style="color:#e9c176;font-size:13px;font-weight:700" id="bs-hora">—</span></div>
-              <div class="brow"><span class="bkey">Barbero</span><span class="bval" id="bs-barber">—</span></div>
-            </div>
-            <button onclick="abrirModal()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:16px;display:block;margin-top:10px">
-              <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:6px">calendar_month</span>Confirmar Cita
-            </button>
-          </div>
-
-          <div id="btn-agendar-wrap" style="margin-top:18px">
-            <button onclick="abrirModal()" style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:14px;display:flex;align-items:center;justify-content:center;gap:7px">
-              <span class="material-symbols-outlined" style="font-size:15px">calendar_month</span>Agendar Cita
-            </button>
-          </div>
+          <p style="font-size:10px;font-weight:600;color:#e97676;margin-bottom:3px">Día no disponible</p>
+          <p id="sg-blocked-nota" style="font-size:9px;color:#9c8f7b;letter-spacing:.08em;line-height:1.5">Este día no hay servicio disponible.</p>
         </div>
       </div>
     </div>
-
-    <!-- TAB: PORTAFOLIO -->
-    <div class="tab-panel" id="tab-portafolio">
-      <div style="margin-bottom:20px">
-        <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1;margin-bottom:4px">Portafolio</p>
-        <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Trabajos realizados por el barbero.</p>
-      </div>
-      <div id="corte-outer" style="position:relative;padding:0 30px">
-        <button class="car-arrow prev" id="corte-prev" onclick="carNav('corte',-1)" disabled>
-          <span class="material-symbols-outlined" style="font-size:16px">chevron_left</span>
-        </button>
-        <div class="car-track-wrap">
-          <div class="car-track" id="corte-track"></div>
-        </div>
-        <button class="car-arrow next" id="corte-next" onclick="carNav('corte',1)">
-          <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
-        </button>
-      </div>
-      <div class="car-dots" id="corte-dots"></div>
-      <div id="carousel-empty" style="display:none;text-align:center;padding:40px 18px">
-        <span class="material-symbols-outlined" style="font-size:36px;color:rgba(233,193,118,.1);display:block;margin-bottom:8px">photo_library</span>
-        <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">Sin fotos publicadas aún</p>
-      </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(79,69,53,.1)">
+      <div style="width:8px;height:8px;border-radius:50%;background:rgba(147,0,10,.35);flex-shrink:0"></div>
+      <p style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9c8f7b">Tachado = hora ya reservada</p>
     </div>
+  </div>
 
-    <!-- TAB: TIENDA -->
-    <div class="tab-panel" id="tab-tienda">
-      <div style="margin-bottom:20px">
-        <p style="font-family:'Noto Serif',serif;font-size:22px;color:#e5e2e1;margin-bottom:4px">Tienda</p>
-        <p style="font-size:11px;color:#9c8f7b;line-height:1.65">Productos disponibles para ti.</p>
+  <!-- ★ RESUMEN INLINE — muestra todos los datos antes de confirmar -->
+  <div id="booking-summary-inline" style="display:none">
+    <div class="booking-card">
+      <div class="brow" style="padding:10px 14px 6px;border-bottom:none">
+        <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:#9c8f7b">Resumen de tu cita</p>
       </div>
-      <div id="tienda-outer" style="position:relative;padding:0 30px;display:none">
-        <button class="car-arrow prev" id="tienda-prev" onclick="carNav('tienda',-1)" disabled>
-          <span class="material-symbols-outlined" style="font-size:16px">chevron_left</span>
-        </button>
-        <div class="car-track-wrap">
-          <div class="car-track" id="tienda-track"></div>
-        </div>
-        <button class="car-arrow next" id="tienda-next" onclick="carNav('tienda',1)">
-          <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
-        </button>
+      <div style="height:1px;background:rgba(79,69,53,.14);margin:0 14px"></div>
+      <div class="brow"><span class="bkey">Servicio</span><span class="bval" id="bs-servicio">—</span></div>
+      <!-- ★ precio resaltado -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(233,193,118,.12);background:rgba(233,193,118,.05)">
+        <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#e9c176;font-weight:700">Precio</span>
+        <span style="font-family:'Noto Serif',serif;font-size:14px;color:#e9c176;font-weight:700" id="bs-precio">—</span>
       </div>
-      <div class="car-dots" id="tienda-dots"></div>
-      <div id="tienda-empty" style="text-align:center;padding:40px 18px">
-        <span class="material-symbols-outlined" style="font-size:36px;color:rgba(233,193,118,.1);display:block;margin-bottom:8px">storefront</span>
-        <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">Sin productos publicados aún</p>
-      </div>
+      <div class="brow"><span class="bkey">Fecha</span><span class="bval" id="bs-fecha">—</span></div>
+      <div class="brow"><span class="bkey">Hora</span><span class="bval" style="color:#e9c176;font-size:13px;font-weight:700" id="bs-hora">—</span></div>
+      <div class="brow"><span class="bkey">Barbero</span><span class="bval" id="bs-barber">—</span></div>
     </div>
+    <div style="padding:16px 18px 4px">
+      <button onclick="abrirModal()" style="width:100%;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;cursor:pointer;padding:16px;display:block">
+        <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:6px">calendar_month</span>Confirmar Cita
+      </button>
+    </div>
+  </div>
 
-  </div><!-- /content -->
-</div><!-- /app-wrap -->
+  <div id="btn-agendar-wrap" style="padding:16px 18px 4px">
+    <button onclick="abrirModal()" style="width:100%;background:transparent;border:1px solid rgba(79,69,53,.35);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:14px;display:flex;align-items:center;justify-content:center;gap:7px">
+      <span class="material-symbols-outlined" style="font-size:15px">calendar_month</span>Agendar Cita
+    </button>
+  </div>
+
+  <!-- CARRUSEL CORTES -->
+  <p class="sec-label" style="margin-top:10px">Trabajos del barbero</p>
+  <p style="font-size:10px;color:#9c8f7b;padding:0 18px 10px;line-height:1.6">Portafolio del barbero</p>
+  <div class="car-outer" id="corte-outer">
+    <button class="car-arrow prev" id="corte-prev" onclick="carNav('corte',-1)" disabled>
+      <span class="material-symbols-outlined" style="font-size:16px">chevron_left</span>
+    </button>
+    <div class="car-track-wrap">
+      <div class="car-track" id="corte-track"></div>
+    </div>
+    <button class="car-arrow next" id="corte-next" onclick="carNav('corte',1)">
+      <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
+    </button>
+  </div>
+  <div class="car-dots" id="corte-dots"></div>
+  <div id="carousel-empty" style="display:none;text-align:center;padding:24px 18px">
+    <span class="material-symbols-outlined" style="font-size:28px;color:rgba(233,193,118,.1);display:block;margin-bottom:6px">photo_library</span>
+    <p style="font-size:10px;color:#3d3730;letter-spacing:.14em">Sin fotos publicadas aún</p>
+  </div>
+
+  <!-- TIENDA -->
+  <p class="sec-label" id="tienda-sec-label" style="display:none;margin-top:10px">Tienda</p>
+  <p style="font-size:10px;color:#9c8f7b;padding:0 18px 10px;line-height:1.6;display:none" id="tienda-sec-sub">Productos disponibles para ti</p>
+  <div class="car-outer" id="tienda-outer" style="display:none">
+    <button class="car-arrow prev" id="tienda-prev" onclick="carNav('tienda',-1)" disabled>
+      <span class="material-symbols-outlined" style="font-size:16px">chevron_left</span>
+    </button>
+    <div class="car-track-wrap">
+      <div class="car-track" id="tienda-track"></div>
+    </div>
+    <button class="car-arrow next" id="tienda-next" onclick="carNav('tienda',1)">
+      <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
+    </button>
+  </div>
+  <div class="car-dots" id="tienda-dots" style="display:none"></div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.93);backdrop-filter:blur(16px);border-top:1px solid rgba(79,69,53,.18);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:8px 0 14px">
+  <a href="#" class="nav-item active">
+    <span class="material-symbols-outlined ms-filled" style="font-size:21px">explore</span><p>Inicio</p>
+  </a>
+  <a href="citas.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">event_available</span><p>Mis Citas</p>
+  </a>
+  <a href="tienda.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">storefront</span><p>Tienda</p>
+  </a>
+  <a href="panel-barbero.html" class="nav-item">
+    <span class="material-symbols-outlined" style="font-size:21px">person</span><p>Panel</p>
+  </a>
+</nav>
 
 <script>
 /* ══════════════════════════════════════════════════════
@@ -642,16 +557,9 @@ let slotActivo     = null;
 let fechaSel       = null;
 let servicioActivo = null;
 
-/* ══ TABS ══ */
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  btn.classList.add('active');
-}
-
-/* ══ CÓDIGO ══ */
+/* ══ CÓDIGO DE ACCESO ══ */
 const VISTO_KEY = 'atelier_visto_' + BAR_ID + '_' + new Date().toDateString();
+
 function initCodigo() {
   const codigo = perfil.codigo_acceso_cliente || perfil.codigo_acceso || '—';
   document.getElementById('popup-codigo-val').textContent = codigo;
@@ -701,7 +609,9 @@ function toast(msg, err) {
   _tt = setTimeout(() => t.className = '', 3400);
 }
 
-/* ══ GAS ══ */
+/* ══════════════════════════════════════════════════════
+   CARGA DESDE SHEET
+══════════════════════════════════════════════════════ */
 async function gasGet(accion, extra) {
   const qs  = new URLSearchParams({ accion, barberia_id: BAR_ID, ...extra }).toString();
   const res = await fetch(GAS_URL + '?' + qs, { signal: AbortSignal.timeout(10000) });
@@ -727,6 +637,7 @@ async function cargarDesdeSheet() {
     fetch1('leerProductos'),
     fetch1('leerCitas'),
   ]);
+  console.log('[DEBUG RAW CITAS]', JSON.stringify(rCitas).slice(0, 2000));
 
   perfil = rPerfil.perfil || (Array.isArray(rPerfil.data) && rPerfil.data.find(r => r.barberia_id === BAR_ID)) || {};
   if (perfil.nombre_barberia) localStorage.setItem('atelier_nombre_' + BAR_ID, perfil.nombre_barberia);
@@ -755,7 +666,9 @@ async function cargarDesdeSheet() {
           const offset = d.getTimezoneOffset();
           const local  = new Date(d.getTime() - offset * 60000);
           rawFecha = local.toISOString().split('T')[0];
-        } catch(e) { rawFecha = rawFecha.split('T')[0]; }
+        } catch(e) {
+          rawFecha = rawFecha.split('T')[0];
+        }
       } else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(rawFecha)) {
         const [d, m, y] = rawFecha.split('/');
         rawFecha = y + '-' + m.padStart(2,'0') + '-' + d.padStart(2,'0');
@@ -764,37 +677,49 @@ async function cargarDesdeSheet() {
         epoch.setDate(epoch.getDate() + parseInt(rawFecha));
         rawFecha = epoch.toISOString().split('T')[0];
       }
+
       let rawHora = (function parseHora(raw) {
-        const s = String(raw || '').trim();
-        if (!s) return '';
-        if (s.includes('T')) {
-          try {
-            const d = new Date(s);
-            return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-          } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
-        }
-        const num = parseFloat(s);
-        if (!isNaN(num) && num > 0 && num < 1) {
-          const totalMinBruto = Math.round(num * 24 * 60);
-          const offsetMin = new Date().getTimezoneOffset();
-          const corregido = totalMinBruto + offsetMin;
-          const intervalo = 30;
-          const redondeado = Math.round(corregido / intervalo) * intervalo;
-          const hh = ((Math.floor(redondeado / 60)) % 24 + 24) % 24;
-          const mm = redondeado % 60;
-          return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
-        }
-        if (/^\d{1,2}:\d{2}/.test(s)) {
-          const part = s.slice(0,5);
-          return part.length === 4 ? '0' + part : part;
-        }
-        return s.slice(0,5);
-      })(c.hora);
+  const s = String(raw || '').trim();
+  if (!s) return '';
+
+  // Caso 1: ISO timestamp "...T10:00:00..."
+  if (s.includes('T')) {
+    try {
+      const d = new Date(s);
+      // GAS convierte la hora local a UTC sumando el offset — revertimos con getHours() local
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
+  }
+
+  // Caso 2: decimal Excel (0.4166... = 10:00)
+   const num = parseFloat(s);
+  if (!isNaN(num) && num > 0 && num < 1) {
+    const totalMinBruto = Math.round(num * 24 * 60);
+    const offsetMin = new Date().getTimezoneOffset(); // +300 en Colombia
+    const corregido = totalMinBruto + offsetMin;
+    const intervalo = 30;
+    const redondeado = Math.round(corregido / intervalo) * intervalo;
+    const hh = ((Math.floor(redondeado / 60)) % 24 + 24) % 24;
+    const mm = redondeado % 60;
+    return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+  }
+
+  // Caso 3: "10:00:00" o "10:00"
+  if (/^\d{1,2}:\d{2}/.test(s)) {
+    const part = s.slice(0,5);
+    return part.length === 4 ? '0' + part : part;
+  }
+
+  return s.slice(0,5);
+})(c.hora);
+
+console.log('[HORA RAW]', JSON.stringify(c.hora), '→', rawHora, '| fecha:', rawFecha);
+
       return { ...c, _fecha: rawFecha, _hora: rawHora };
     });
 
   estTx.textContent = horarios.length + ' horario(s) · ' + cortes.length + ' servicio(s) · ' + citas.length + ' reserva(s)';
-  setTimeout(() => { estEl.style.display = 'none'; }, 3000);
+  setTimeout(() => { estEl.style.display = 'none'; }, 2500);
 
   renderPerfil();
   renderMapa();
@@ -823,10 +748,7 @@ function renderPerfil() {
   if (p.foto_local_url) {
     const raw = normDriveUrl(p.foto_local_url);
     const img = document.getElementById('hero-img');
-    img.onload = () => {
-      img.style.display = 'block';
-      document.getElementById('sb-hero-ph').style.display = 'none';
-    };
+    img.onload = () => { img.style.display = 'block'; document.getElementById('hero-placeholder').style.display = 'none'; };
     img.onerror = () => { if (img.src !== p.foto_local_url) img.src = p.foto_local_url; };
     img.src = raw;
   }
@@ -842,7 +764,7 @@ function renderPerfil() {
     avEl.appendChild(imgAv);
   }
 
-  const hoy    = new Date();
+  const hoy = new Date();
   const dowJS  = hoy.getDay();
   const dKeys  = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
   const hoyDia = dKeys[dowJS];
@@ -872,6 +794,8 @@ function renderPerfil() {
 
   if (p.maps_url) {
     document.getElementById('link-maps-ext').href = p.maps_url;
+    document.getElementById('mapa-ext-link').href = p.maps_url;
+    document.getElementById('mapa-ext-link').style.display = 'block';
   }
 
   document.getElementById('bs-barber').textContent = p.nombre_dueno || nombre;
@@ -899,14 +823,18 @@ function renderMapa() {
   }
 }
 
-/* ══ SERVICIO SELECTOR ══ */
+/* ══════════════════════════════════════════════════════
+   SELECTOR DE SERVICIO
+══════════════════════════════════════════════════════ */
 function renderServicioSelector() {
   const select = document.getElementById('serv-select');
   const wrap   = document.getElementById('serv-wrap');
   const empty  = document.getElementById('serv-empty');
 
+  // Limpiar opciones previas excepto el placeholder
   while (select.options.length > 1) select.remove(1);
 
+  // Si no hay cortes cargados del sheet, usar uno genérico
   const lista = cortes.length
     ? [...cortes].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado))
     : [{ corte_id: 'generico', nombre: 'Corte The Atelier', estilo: 'Clásico', precio: '' }];
@@ -917,19 +845,25 @@ function renderServicioSelector() {
   lista.forEach(c => {
     const opt = document.createElement('option');
     opt.value = c.corte_id || 'generico';
+
+    // ★ Armar texto visible: Nombre — Estilo · $Precio
     const precio = fmtPrecio(c.precio);
     let label = c.nombre || 'Corte';
     if (c.estilo) label += ' — ' + c.estilo;
     if (precio)   label += '  ·  ' + precio;
     opt.textContent = label;
+
+    // Guardar datos para recuperarlos al seleccionar
     opt.dataset.nombre = c.nombre  || 'Corte';
     opt.dataset.precio = c.precio  || '';
     opt.dataset.estilo = c.estilo  || '';
     opt.dataset.id     = c.corte_id || 'generico';
     opt.dataset.json   = JSON.stringify(c);
+
     select.appendChild(opt);
   });
 
+  // Si solo hay un servicio, seleccionarlo automáticamente
   if (lista.length === 1) {
     select.selectedIndex = 1;
     selServicioDropdown(select);
@@ -939,21 +873,35 @@ function renderServicioSelector() {
 function selServicioDropdown(sel) {
   const opt = sel.options[sel.selectedIndex];
   const badge = document.getElementById('serv-precio-badge');
+
   if (!opt.value) {
     servicioActivo = null;
     badge.classList.remove('visible');
     return;
   }
+
   try { servicioActivo = JSON.parse(opt.dataset.json); } catch(e) { servicioActivo = null; }
+
+  // Mostrar badge con nombre y precio
   const precio = fmtPrecio(opt.dataset.precio);
   document.getElementById('serv-badge-nombre').textContent = opt.dataset.nombre || '—';
   document.getElementById('serv-badge-precio').textContent = precio || 'En consulta';
   badge.classList.add('visible');
+
   toast('✓ ' + (opt.dataset.nombre || 'Servicio') + (precio ? ' · ' + precio : '') + ' seleccionado');
+
   if (fechaSel && slotActivo) actualizarResumen();
 }
 
-/* ══ CALENDARIO ══ */
+function selServicio(c, card) {
+  // Alias para compatibilidad — ya no se usa con cards pero se mantiene
+  servicioActivo = c;
+  if (fechaSel && slotActivo) actualizarResumen();
+}
+
+/* ══════════════════════════════════════════════════════
+   CALENDARIO
+══════════════════════════════════════════════════════ */
 const MESES  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const MESES3 = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const DIAS3  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -1010,12 +958,13 @@ function renderCalGrid() {
   const hoy     = new Date();
   const hoyNorm = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
   const hoyStr  = hoy.toDateString();
+
   let startDow = new Date(calAno, calMes, 1).getDay() - 1;
   if (startDow < 0) startDow = 6;
+
   const diasMes  = new Date(calAno, calMes + 1, 0).getDate();
   const prevDias = new Date(calAno, calMes, 0).getDate();
   grid.innerHTML = '';
-  const sinHorarios = Object.keys(horarioMap).length === 0;
 
   for (let i = startDow - 1; i >= 0; i--) {
     const c = document.createElement('div');
@@ -1024,6 +973,8 @@ function renderCalGrid() {
     grid.appendChild(c);
   }
 
+  const sinHorarios = Object.keys(horarioMap).length === 0;
+
   for (let d = 1; d <= diasMes; d++) {
     const fecha    = new Date(calAno, calMes, d);
     const fechaStr = calAno + '-' + String(calMes + 1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
@@ -1031,11 +982,12 @@ function renderCalGrid() {
     const diaKey   = DKEYS[dowJS];
     const hd       = horarioMap[diaKey];
     const esPas    = fecha < hoyNorm;
+    const esHoy    = fecha.toDateString() === hoyStr;
+    const esFuturo = fecha > hoyNorm;
     const esLaboral = dowJS >= 1 && dowJS <= 6;
     const disp     = sinHorarios ? esLaboral : (hd && isTruthy(hd.activo !== undefined ? hd.activo : true));
     const hesp     = getHorarioEspecial(fechaStr);
-    const esHoy    = fecha.toDateString() === hoyStr;
-    const esFuturo = fecha > hoyNorm;
+
     const c = document.createElement('div');
     c.textContent = d;
 
@@ -1052,9 +1004,11 @@ function renderCalGrid() {
       else if (esFuturo) cls += ' proxima';
       if (fechaSel && fecha.toDateString() === fechaSel.toDateString()) cls += ' sel';
       c.className = cls;
+
       ;(function(f, fs, dk, horDia, heEsp, celda) {
         function onSel(e) {
-          e.preventDefault(); e.stopPropagation();
+          e.preventDefault();
+          e.stopPropagation();
           selFecha(f, fs, dk, horDia || getHorarioFallback(dk), heEsp, celda);
         }
         celda.addEventListener('click', onSel);
@@ -1079,21 +1033,24 @@ function selFecha(fecha, fechaStr, diaKey, horario, hesp, celda) {
   slotActivo = null;
   document.querySelectorAll('.cd.sel').forEach(c => c.classList.remove('sel'));
   celda.classList.add('sel');
-  document.getElementById('slots-placeholder').style.display = 'none';
   renderSlots(diaActivo.horario, hesp, fecha, fechaStr);
   document.getElementById('booking-summary-inline').style.display = 'none';
   document.getElementById('btn-agendar-wrap').style.display = 'none';
 }
 
-/* ══ SLOTS ══ */
+/* ══════════════════════════════════════════════════════
+   SLOTS — con bloqueo de horas reservadas
+══════════════════════════════════════════════════════ */
 function horasBloqueadas(fechaStr) {
   const bloqueadas = new Set();
+  console.log('[BLOQUEO] Buscando fecha:', fechaStr, '| Citas disponibles:', citas.map(c => c._fecha + ' ' + c._hora + ' estado:' + c.estado));
   citas
     .filter(c => c._fecha === fechaStr && c.estado !== 'cancelada')
     .forEach(c => {
       const h = String(c._hora || '').trim().slice(0,5);
       if (/^\d{2}:\d{2}$/.test(h)) bloqueadas.add(h);
     });
+  console.log('[BLOQUEO] Resultado para', fechaStr, ':', [...bloqueadas]);
   return bloqueadas;
 }
 
@@ -1116,23 +1073,22 @@ function renderSlots(h, hesp, fecha, fechaStr) {
   }
 
   function extractHHMM(raw) {
-    const s = String(raw || '').trim();
-    if (!s) return null;
-    if (s.includes('T')) {
-      try {
-        const d = new Date(s);
-        return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-      } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
-    }
-    if (/^\d{1,2}:\d{2}/.test(s)) {
-      const p = s.slice(0,5);
-      return p.length === 4 ? '0' + p : p;
-    }
-    return null;
+  const s = String(raw || '').trim();
+  if (!s) return null;
+  if (s.includes('T')) {
+    try {
+      const d = new Date(s);
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1] || '').slice(0,5); }
   }
-
-  let hiStr = extractHHMM(h && h.hora_inicio) || '08:00';
-  let hfStr = extractHHMM(h && h.hora_fin)    || '20:00';
+  if (/^\d{1,2}:\d{2}/.test(s)) {
+    const p = s.slice(0,5);
+    return p.length === 4 ? '0' + p : p;
+  }
+  return null;
+}
+let hiStr = extractHHMM(h && h.hora_inicio) || '08:00';
+let hfStr = extractHHMM(h && h.hora_fin)    || '20:00';
   if (hesp && hesp.tipo !== 'cierre' && hesp.hora_inicio && hesp.hora_fin) {
     hiStr = hesp.hora_inicio.toString().slice(0,5);
     hfStr = hesp.hora_fin.toString().slice(0,5);
@@ -1160,6 +1116,9 @@ function renderSlots(h, hesp, fecha, fechaStr) {
   llenarSG('manana', man);
   llenarSG('tarde',  tar);
   llenarSG('noche',  noc);
+  setTimeout(() => {
+    document.getElementById('slots-section').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 80);
 }
 
 const toMin  = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
@@ -1177,6 +1136,7 @@ function llenarSG(id, slots) {
       b.className = 's-btn ocup';
       b.title = 'Hora ya reservada';
       b.disabled = true;
+      b.setAttribute('aria-disabled', 'true');
     } else {
       b.className = 's-btn';
       b.addEventListener('click', () => selSlot(hora, b));
@@ -1190,8 +1150,14 @@ function selSlot(s, btn) {
   btn.classList.add('sel');
   slotActivo = s;
   actualizarResumen();
+  setTimeout(() => {
+    document.getElementById('booking-summary-inline').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 80);
 }
 
+/* ══════════════════════════════════════════════════════
+   ★ SYNC RESUMEN MODAL — actualiza nombre y teléfono en tiempo real
+══════════════════════════════════════════════════════ */
 function syncResumenModal() {
   const nombre = document.getElementById('m-nombre').value.trim();
   const tel    = document.getElementById('m-tel').value.trim();
@@ -1199,30 +1165,37 @@ function syncResumenModal() {
   document.getElementById('mr-telefono').textContent = tel    || '—';
 }
 
+/* ══ Actualizar resumen ══ */
 function actualizarResumen() {
   if (!fechaSel || !slotActivo) return;
   const fStr    = DIAS3[fechaSel.getDay()] + ' ' + fechaSel.getDate() + ' ' + MESES3[fechaSel.getMonth()] + ' ' + fechaSel.getFullYear();
   const sNombre = servicioActivo ? (servicioActivo.nombre || 'Corte') : 'Corte The Atelier';
   const sPrecio = servicioActivo ? fmtPrecio(servicioActivo.precio) : null;
 
+  // Resumen inline
   document.getElementById('bs-servicio').textContent = sNombre;
   document.getElementById('bs-precio').textContent   = sPrecio || 'En consulta';
   document.getElementById('bs-fecha').textContent    = fStr;
   document.getElementById('bs-hora').textContent     = slotActivo;
+
+  // Resumen modal
   document.getElementById('mr-servicio').textContent = sNombre;
   document.getElementById('mr-precio').textContent   = sPrecio || 'En consulta';
   document.getElementById('mr-fecha').textContent    = fStr;
   document.getElementById('mr-hora').textContent     = slotActivo;
   document.getElementById('mr-barberia').textContent = perfil.nombre_barberia || '—';
+  // nombre y tel se sincronizan en tiempo real con syncResumenModal()
 
   document.getElementById('booking-summary-inline').style.display = 'block';
   document.getElementById('btn-agendar-wrap').style.display = 'none';
 }
 
+/* ══ MODAL ══ */
 function abrirModal() {
   const ok = diaActivo && slotActivo && fechaSel;
   document.getElementById('modal-resumen').style.display = ok ? 'block' : 'none';
   document.getElementById('modal-aviso').style.display   = ok ? 'none'  : 'block';
+  // Sincronizar datos actuales del formulario al abrir
   syncResumenModal();
   document.getElementById('modal-bg').classList.add('on');
 }
@@ -1230,9 +1203,16 @@ function cerrarModal(e) {
   if (e.target.id === 'modal-bg') document.getElementById('modal-bg').classList.remove('on');
 }
 
-/* ══ REGISTRAR CLIENTE ══ */
+/* ══════════════════════════════════════════════════════
+   ★ REGISTRAR CLIENTE en hoja Clientes
+   Encabezados: noti_id | barberia_id | cliente_id | reserva_id |
+                tipo | canal | mensaje | estado | fecha_envio
+   Columnas:    A        B            C           D
+                E        F            G           H    I
+══════════════════════════════════════════════════════ */
 async function registrarClienteEnSheet({ nombre, telefono, reserva_id, cliente_id }) {
   const mensaje = nombre + ' · ' + telefono;
+
   const payload = {
     accion      : 'registrarCliente',
     barberia_id : BAR_ID,
@@ -1245,16 +1225,40 @@ async function registrarClienteEnSheet({ nombre, telefono, reserva_id, cliente_i
     estado      : 'enviado',
     fecha_envio : new Date().toISOString(),
   };
+
+  // Intento GET
   try {
-    const r = await fetch(GAS_URL + '?' + new URLSearchParams({ datos: JSON.stringify(payload) }), { signal: AbortSignal.timeout(8000) });
-    if (r.ok) { const json = await r.json().catch(() => ({})); if (json.ok) return; }
+    const r = await fetch(
+      GAS_URL + '?' + new URLSearchParams({ datos: JSON.stringify(payload) }),
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (r.ok) {
+      const json = await r.json().catch(() => ({}));
+      if (json.ok) { console.log('[Clientes] Registrado OK'); return; }
+    }
   } catch(e) { console.warn('[Clientes] GET falló:', e.message); }
+
+  // Intento POST
   try {
-    await fetch(GAS_URL, { method:'POST', redirect:'follow', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'}, signal: AbortSignal.timeout(8000) });
+    await fetch(GAS_URL, {
+      method  : 'POST',
+      redirect: 'follow',
+      body    : JSON.stringify(payload),
+      headers : { 'Content-Type': 'text/plain;charset=utf-8' },
+      signal  : AbortSignal.timeout(8000),
+    });
+    console.log('[Clientes] POST enviado');
   } catch(e2) { console.error('[Clientes] POST falló:', e2); }
 }
 
-/* ══ CONFIRMAR CITA ══ */
+
+/* ══════════════════════════════════════════════════════
+   ★ CONFIRMAR CITA → GAS
+   Orden de columnas en la hoja:
+   reserva_id | barberia_id | cliente_id | barbero_id | servicio_id |
+   fecha | hora | duracion_min | estado | precio | notas |
+   fecha_creacion | nombre | telefono
+══════════════════════════════════════════════════════ */
 async function confirmarCita() {
   const nombre = document.getElementById('m-nombre').value.trim();
   const tel    = document.getElementById('m-tel').value.trim();
@@ -1266,46 +1270,67 @@ async function confirmarCita() {
   btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:5px">hourglass_empty</span>Enviando...';
 
   const codigoCliente = perfil.codigo_acceso_cliente || perfil.codigo_acceso || 'SIN-CODIGO';
-  const fechaISO = fechaSel.getFullYear() + '-' + String(fechaSel.getMonth() + 1).padStart(2, '0') + '-' + String(fechaSel.getDate()).padStart(2, '0');
+
+  // ★ Fecha como YYYY-MM-DD string puro (sin conversión a Date que puede desfasar)
+  const fechaISO = fechaSel.getFullYear() + '-'
+    + String(fechaSel.getMonth() + 1).padStart(2, '0') + '-'
+    + String(fechaSel.getDate()).padStart(2, '0');
+
   const fStr = fechaSel.getDate() + ' ' + MESES3[fechaSel.getMonth()] + ' ' + fechaSel.getFullYear();
+
   const sNombre = servicioActivo ? (servicioActivo.nombre || 'Corte') : 'Corte The Atelier';
+  // ★ Precio siempre como número limpio
   const sPrecioNum = servicioActivo ? (parseFloat(String(servicioActivo.precio).replace(/[^0-9.]/g, '')) || 0) : 0;
   const sId        = servicioActivo ? (servicioActivo.corte_id || 'corte-the-atelier') : 'corte-the-atelier';
-  const horaFinal  = String(slotActivo).trim().slice(0, 5);
+
+  // ★ horaFinal: garantiza string "HH:MM" sin ninguna transformación
+  const horaFinal = String(slotActivo).trim().slice(0, 5);
 
   const reserva = {
     accion         : 'agendarCita',
-    reserva_id     : 'RES-' + Date.now(),
+    reserva_id     : 'RES-' + Date.now(),   // solo se usa como ID texto
     barberia_id    : BAR_ID,
     cliente_id     : codigoCliente,
     barbero_id     : perfil.nombre_dueno || 'barbero-1',
     servicio_id    : sId,
-    fecha          : fechaISO,
-    hora           : horaFinal,
+    fecha          : fechaISO,              // ★ "YYYY-MM-DD"
+    hora           : horaFinal,             // ★ "HH:MM" sin ninguna ambigüedad
     duracion_min   : diaActivo?.horario?.intervalo_min || 30,
     estado         : 'pendiente',
-    precio         : sPrecioNum,
+    precio         : sPrecioNum,            // ★ número puro
     notas          : document.getElementById('m-nota').value.trim(),
     fecha_creacion : new Date().toISOString(),
     nombre         : nombre,
     telefono       : tel,
+    // aliases legacy
     cliente        : nombre,
     servicio_nombre: sNombre,
     codigo_cliente : codigoCliente,
   };
 
   let enviado = false;
+
+  // Intento 1: GET con datos serializados
   try {
-    const r = await fetch(GAS_URL + '?' + new URLSearchParams({ datos: JSON.stringify(reserva) }), { signal: AbortSignal.timeout(10000) });
+    const r = await fetch(GAS_URL + '?' + new URLSearchParams({ datos: JSON.stringify(reserva) }), {
+      signal: AbortSignal.timeout(10000)
+    });
     if (r.ok) {
       const json = await r.json().catch(() => ({}));
       enviado = json.ok === true;
     }
   } catch(e) { console.warn('GET falló:', e.message); }
 
+  // Intento 2: POST si GET no confirmó
   if (!enviado) {
     try {
-      const r2 = await fetch(GAS_URL, { method:'POST', redirect:'follow', body:JSON.stringify(reserva), headers:{'Content-Type':'text/plain;charset=utf-8'}, signal: AbortSignal.timeout(10000) });
+      const r2 = await fetch(GAS_URL, {
+        method  : 'POST',
+        redirect: 'follow',
+        body    : JSON.stringify(reserva),
+        headers : { 'Content-Type': 'text/plain;charset=utf-8' },
+        signal  : AbortSignal.timeout(10000),
+      });
       if (r2.ok) {
         const json2 = await r2.json().catch(() => ({}));
         enviado = json2.ok === true;
@@ -1314,13 +1339,29 @@ async function confirmarCita() {
   }
 
   if (enviado) {
-    citas.push({ barberia_id: BAR_ID, _fecha: fechaISO, _hora: horaFinal, estado: 'pendiente' });
-    if (diaActivo) renderSlots(diaActivo.horario, diaActivo.hesp, fechaSel, diaActivo.fechaStr || fechaISO);
-    registrarClienteEnSheet({ nombre, telefono: tel, reserva_id: reserva.reserva_id, cliente_id: codigoCliente });
+    citas.push({
+      barberia_id: BAR_ID,
+      _fecha: fechaISO,
+      _hora : horaFinal,
+      estado: 'pendiente',
+    });
+    if (diaActivo) {
+      renderSlots(diaActivo.horario, diaActivo.hesp, fechaSel, diaActivo.fechaStr || fechaISO);
+    }
+
+    // ★ Registrar cliente en hoja Clientes (sin esperar — fire & forget)
+    registrarClienteEnSheet({
+      nombre,
+      telefono: tel,
+      reserva_id: reserva.reserva_id,
+      cliente_id: codigoCliente,
+    });
   }
 
   document.getElementById('modal-bg').classList.remove('on');
-  toast(enviado ? '✓ Cita confirmada · ' + fStr + ' ' + horaFinal : '⚠ Cita enviada (verificando conexión)', !enviado);
+  toast(enviado
+    ? '✓ Cita confirmada · ' + fStr + ' ' + horaFinal
+    : '⚠ Cita enviada (verificando conexión)', !enviado);
 
   ['m-nombre','m-tel','m-nota'].forEach(id => document.getElementById(id).value = '');
   btn.disabled = false;
@@ -1332,18 +1373,19 @@ async function confirmarCita() {
   document.getElementById('booking-summary-inline').style.display = 'none';
   document.getElementById('btn-agendar-wrap').style.display = 'block';
   document.getElementById('slots-section').style.display = 'none';
-  document.getElementById('slots-placeholder').style.display = 'block';
   document.getElementById('mr-nombre').textContent   = '—';
   document.getElementById('mr-telefono').textContent = '—';
 }
 
-/* ══ CARRUSELES ══ */
+/* ══ MOTOR DE CARRUSEL GENÉRICO ══ */
 const carState = {};
 
 function carInit(id, items, cardW) {
   carState[id] = { idx: 0, items, cardW };
-  const dots = document.getElementById(id + '-dots');
-  dots.innerHTML = '';
+  const track = document.getElementById(id + '-track');
+  const dots  = document.getElementById(id + '-dots');
+  track.innerHTML = '';
+  dots.innerHTML  = '';
   items.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'car-dot' + (i === 0 ? ' on' : '');
@@ -1356,7 +1398,7 @@ function carInit(id, items, cardW) {
 function visibles(id) {
   const track = document.getElementById(id + '-track');
   const wrap  = track.parentElement;
-  const cardW = carState[id]?.cardW || 160;
+  const cardW = carState[id]?.cardW || 138;
   return Math.max(1, Math.floor(wrap.offsetWidth / (cardW + 10)));
 }
 function carNav(id, dir) {
@@ -1374,7 +1416,7 @@ function carGoTo(id, i) {
   carApply(id);
 }
 function carApply(id) {
-  const st    = carState[id]; if (!st) return;
+  const st   = carState[id]; if (!st) return;
   const track = document.getElementById(id + '-track');
   const vis   = visibles(id);
   const max   = Math.max(0, st.items.length - vis);
@@ -1387,21 +1429,25 @@ function carApply(id) {
   document.getElementById(id + '-next').disabled = st.idx >= max;
 }
 
+/* ══ CARRUSEL CORTES ══ */
 function renderCarrusel() {
   const outer = document.getElementById('corte-outer');
   const empty = document.getElementById('carousel-empty');
   const track = document.getElementById('corte-track');
+  const dots  = document.getElementById('corte-dots');
 
   if (!cortes.length) {
     outer.style.display = 'none';
+    dots.style.display  = 'none';
     empty.style.display = 'block';
     return;
   }
   empty.style.display = 'none';
   outer.style.display = 'block';
+  dots.style.display  = 'flex';
 
   const ordenados = [...cortes].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado));
-  carInit('corte', ordenados, 160);
+  carInit('corte', ordenados, 138);
 
   ordenados.forEach(c => {
     const card = document.createElement('div');
@@ -1425,16 +1471,19 @@ function renderCarrusel() {
   });
 }
 
+/* ══ TIENDA ══ */
 function renderTienda() {
   if (!productos.length) return;
+  document.getElementById('tienda-sec-label').style.display = 'block';
+  document.getElementById('tienda-sec-sub').style.display   = 'block';
   const outer = document.getElementById('tienda-outer');
-  const empty = document.getElementById('tienda-empty');
+  const dots  = document.getElementById('tienda-dots');
   const track = document.getElementById('tienda-track');
   outer.style.display = 'block';
-  empty.style.display = 'none';
+  dots.style.display  = 'flex';
 
   const ordenados = [...productos].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado));
-  carInit('tienda', ordenados, 170);
+  carInit('tienda', ordenados, 150);
 
   ordenados.forEach(p => {
     const card = document.createElement('div');
@@ -1456,12 +1505,14 @@ function renderTienda() {
   });
 }
 
+/* ══ WHATSAPP ══ */
 function abrirWhatsApp() {
   const tel = (perfil.telefono || '').replace(/\D/g, '');
   if (tel) window.open('https://wa.me/' + tel + '?text=' + encodeURIComponent('Hola! Vi tu perfil y quiero agendar una cita.'), '_blank');
   else toast('Teléfono no configurado aún', true);
 }
 
+/* ══ INIT ══ */
 cargarDesdeSheet();
 </script>
 </body>
