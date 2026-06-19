@@ -37,8 +37,7 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 .badge{font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;font-weight:600}
 .badge-open{color:#4ade80;border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.07)}
 .badge-closed{color:#9c8f7b;border-color:rgba(79,69,53,.25);background:rgba(79,69,53,.06)}
-#mapa-wrap{width:100%;height:180px;background:#0e0c08;position:relative;border-top:1px solid rgba(79,69,53,.16);border-bottom:1px solid rgba(79,69,53,.16);overflow:hidden}
-.mapa-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+#mapa-wrap{width:100%;height:240px;background:#0e0c08;position:relative;border-top:1px solid rgba(79,69,53,.16);border-bottom:1px solid rgba(79,69,53,.16);overflow:hidden}
 .pin-anim{animation:pinBounce 1.4s ease-in-out infinite}
 @keyframes pinBounce{0%,100%{transform:translateY(0) rotate(-45deg)}50%{transform:translateY(-7px) rotate(-45deg)}}
 .sec-label{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:rgba(233,193,118,.5);padding:14px 18px 8px}
@@ -331,7 +330,7 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
       <p id="mapa-dir-label" style="font-size:10px;color:#9c8f7b;letter-spacing:.08em;text-align:center;padding:0 20px;position:relative">Cargando ubicación...</p>
       <a id="mapa-ext-link" href="#" target="_blank" style="display:none;margin-top:4px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(233,193,118,.5);text-decoration:none;position:relative">Abrir en Maps →</a>
     </div>
-    <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:180px;border:0"></iframe>
+   <iframe id="mapa-iframe" src="" title="Mapa" style="display:none;width:100%;height:240px;border:0"></iframe>
   </div>
   <div style="padding:8px 18px 0;border-top:1px solid rgba(79,69,53,.1)">
     <div style="display:flex;align-items:center;justify-content:space-between">
@@ -802,6 +801,7 @@ function renderPerfil() {
 }
 
 /* ══ MAPA ══ */
+/* ══ MAPA ══ */
 function renderMapa() {
   const p = perfil;
   const iframe = document.getElementById('mapa-iframe');
@@ -809,17 +809,49 @@ function renderMapa() {
   document.getElementById('mapa-dir-label').textContent =
     p.direccion ? p.direccion + (p.ciudad ? ', ' + p.ciudad : '') : 'Sin dirección registrada';
 
-  if (p.maps_url || p.direccion || p.nombre_barberia) {
-    let src = '';
-    if (p.maps_url && p.maps_url.includes('/maps/embed')) {
-      src = p.maps_url;
-    } else {
-      const q = encodeURIComponent([p.nombre_barberia, p.direccion, p.ciudad].filter(Boolean).join(', '));
-      src = 'https://maps.google.com/maps?q=' + q + '&output=embed&hl=es&z=16';
+  // Construir SIEMPRE una query de texto como respaldo confiable
+  const queryTexto = [p.nombre_barberia, p.direccion, p.ciudad, p.departamento]
+    .filter(Boolean).join(', ');
+
+  let src = '';
+
+  // 1) Si hay lat/lng explícitas en el perfil -> lo más preciso (igual que en tienda)
+  if (p.lat && p.lng) {
+    src = 'https://maps.google.com/maps?q=' + p.lat + ',' + p.lng +
+          '&output=embed&hl=es&z=17';
+  }
+  // 2) Si maps_url YA es un embed válido (contiene /maps/embed) -> usarlo directo
+  else if (p.maps_url && p.maps_url.includes('/maps/embed')) {
+    src = p.maps_url;
+  }
+  // 3) Si maps_url es un link "normal" (place, goo.gl, share, etc.) -> NO se puede
+  //    meter directo en un iframe (Google lo bloquea con X-Frame-Options).
+  //    Intentamos extraer coordenadas o el nombre del lugar desde la URL;
+  //    si no se puede, caemos a la query de texto (dirección/nombre/ciudad).
+  else if (p.maps_url) {
+    const coordMatch = p.maps_url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (coordMatch) {
+      src = 'https://maps.google.com/maps?q=' + coordMatch[1] + ',' + coordMatch[2] +
+            '&output=embed&hl=es&z=17';
+    } else if (queryTexto) {
+      src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryTexto) +
+            '&output=embed&hl=es&z=16';
     }
+  }
+  // 4) Sin maps_url -> usar dirección/nombre/ciudad como texto
+  else if (queryTexto) {
+    src = 'https://maps.google.com/maps?q=' + encodeURIComponent(queryTexto) +
+          '&output=embed&hl=es&z=16';
+  }
+
+  if (src) {
     iframe.src = src;
     iframe.style.display = 'block';
     ph.style.display = 'none';
+  } else {
+    // Sin ningún dato de ubicación -> dejar el placeholder visible
+    iframe.style.display = 'none';
+    ph.style.display = 'flex';
   }
 }
 
