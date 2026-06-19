@@ -159,6 +159,49 @@ input:checked+.slid:before{transform:translateX(16px);background:#e9c176}
 .preview-sep{border-top:1px solid rgba(79,69,53,.18);margin:14px 0 12px;padding-top:14px}
 .preview-lbl{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(233,193,118,.5);display:flex;align-items:center;gap:6px;margin-bottom:10px}
 .preview-lbl::before{content:'';flex:1;height:1px;background:rgba(79,69,53,.2)}
+/* ═══════════════════════════════════════════════════════════
+   CSS — pegar dentro de tu bloque <style> existente
+   (cerca de .hesp-card / .pbadge, por ejemplo)
+═══════════════════════════════════════════════════════════ */
+
+.cli-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 12px;
+  border-bottom:1px solid rgba(79,69,53,.1);
+  cursor:pointer;
+  transition:background .15s;
+}
+.cli-row:last-child{border-bottom:none}
+.cli-row:hover{background:rgba(233,193,118,.05)}
+.cli-row:active{background:rgba(233,193,118,.09)}
+
+.cli-avatar{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:rgba(233,193,118,.08);
+  border:1px solid rgba(233,193,118,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif',serif;font-size:12px;color:#e9c176;
+}
+
+.cli-fecha-badge{
+  width:78px;
+  text-align:center;
+  font-size:10.5px;
+  flex-shrink:0;
+}
+.cli-fecha-badge .d{display:block;font-weight:600;color:#e5e2e1;line-height:1.3}
+.cli-fecha-badge .l{display:block;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;margin-top:1px}
+
+.cli-estado-dot{
+  width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;
+}
+.cli-estado-vencido{background:#e97676}
+.cli-estado-proximo{background:#e9c176}
+.cli-estado-ok{background:#4ade80}
+
+.cli-fb.on{background:#e9c176!important;color:#412d00!important;border-color:#e9c176!important;font-weight:700}
 .hesp-card{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22);margin-bottom:8px}
 .hesp-tipo-c{font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:2px 7px;border:1px solid}
 .ht-cierre{color:#e97676;border-color:rgba(233,118,118,.3);background:rgba(233,118,118,.07)}
@@ -817,6 +860,80 @@ input[type=date],input[type=time]{font-size:14px!important}
       <p style="font-size:10px;color:#2e2b27;letter-spacing:.1em">Sin datos en el período</p>
     </div>
   </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+     SECCIÓN CLIENTES — pegar DENTRO de <div id="t-dash" class="tc">
+     Sugerido: justo ANTES del bloque "WALK-INS" (antes de
+     <p class="sec-lbl" style="margin-bottom:3px">Sin agenda</p>)
+     o justo DESPUÉS del bloque "Top servicios · período".
+═══════════════════════════════════════════════════════════ -->
+
+<!-- CLIENTES -->
+<p class="sec-lbl" style="margin-bottom:3px">Fidelización</p>
+<p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Clientes</p>
+<p style="font-size:11px;color:#9c8f7b;margin-bottom:14px;line-height:1.65">
+  Último corte de cada cliente y fecha sugerida para su próxima visita (+15 días). Toca un cliente para enviarle un recordatorio por WhatsApp.
+</p>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+  <div style="display:flex;gap:6px">
+    <button id="cf-todos"     class="cli-fb" onclick="filtrarClientes('todos',this)"   style="padding:7px 10px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:#e9c176;color:#412d00;border:1px solid #e9c176;cursor:pointer;font-weight:700">Todos</button>
+    <button id="cf-vencidos"  class="cli-fb" onclick="filtrarClientes('vencidos',this)" style="padding:7px 10px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer">Vencidos</button>
+    <button id="cf-proximos"  class="cli-fb" onclick="filtrarClientes('proximos',this)" style="padding:7px 10px;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:#9c8f7b;border:1px solid rgba(79,69,53,.3);cursor:pointer">Próximos 7d</button>
+  </div>
+  <button onclick="recargarClientes()" id="btn-refresh-clientes"
+    style="display:flex;align-items:center;gap:4px;background:transparent;border:1px solid rgba(233,193,118,.22);color:#e9c176;font-family:'Manrope',sans-serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;padding:6px 9px">
+    <span class="material-symbols-outlined" id="cli-refresh-ico" style="font-size:13px">refresh</span>
+  </button>
+</div>
+
+<div style="background:#161412;border:1px solid rgba(79,69,53,.18);overflow:hidden;margin-bottom:8px">
+  <div style="display:flex;align-items:center;padding:9px 12px;border-bottom:1px solid rgba(79,69,53,.16);gap:8px">
+    <span style="flex:1;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:#6b5f52">Cliente</span>
+    <span style="width:78px;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;text-align:center">Últ. corte</span>
+    <span style="width:78px;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:#6b5f52;text-align:center">Próximo</span>
+    <span style="width:20px"></span>
+  </div>
+  <div id="clientes-tabla"></div>
+</div>
+
+<div id="clientes-empty" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px 0;margin-bottom:18px">
+  <span class="material-symbols-outlined" style="font-size:26px;color:rgba(233,193,118,.14)">groups</span>
+  <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em;text-align:center">Aún no hay clientes con visitas registradas.<br>Aparecerán aquí desde tus citas y walk-ins.</p>
+</div>
+
+<!-- ══ MODAL RECORDATORIO WHATSAPP ══ -->
+<div id="modal-recordatorio" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.93);backdrop-filter:blur(18px);align-items:flex-end;justify-content:center">
+  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(37,211,102,.28);padding:26px 20px 40px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+
+    <div style="width:50px;height:50px;border:1px solid rgba(37,211,102,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.126 1.527 5.866L.057 23.927l6.263-1.644A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.358-.213-3.722.976.993-3.63-.233-.373A9.818 9.818 0 1112 21.818z"/></svg>
+    </div>
+
+    <p style="font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:rgba(37,211,102,.5);text-align:center;margin-bottom:8px">Recordatorio de corte</p>
+    <p id="rec-nombre" style="font-family:'Noto Serif',serif;font-size:20px;color:#e5e2e1;text-align:center;margin-bottom:4px;font-weight:400">—</p>
+    <p id="rec-meta" style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.6;margin-bottom:22px">—</p>
+
+    <div style="width:32px;height:1px;background:rgba(37,211,102,.25);margin:0 auto 20px"></div>
+
+    <label class="lbl">Mensaje a enviar</label>
+    <textarea id="rec-mensaje" rows="5" class="inp" style="resize:vertical;line-height:1.5;margin-bottom:18px"></textarea>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a id="rec-btn-enviar" target="_blank" href="#"
+        style="width:100%;padding:15px;background:rgba(37,211,102,.14);border:1px solid rgba(37,211,102,.45);color:#25d366;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.126 1.527 5.866L.057 23.927l6.263-1.644A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.358-.213-3.722.976.993-3.63-.233-.373A9.818 9.818 0 1112 21.818z"/></svg>
+        Enviar por WhatsApp
+      </a>
+      <button onclick="cerrarModalRecordatorio()" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
+    </div>
+
+    <p id="rec-sin-tel" style="display:none;font-size:10px;color:#e97676;text-align:center;margin-top:14px;line-height:1.6">
+      Este cliente no tiene teléfono registrado — no se puede enviar por WhatsApp automáticamente. Puedes copiar el mensaje y enviarlo manualmente.
+    </p>
+  </div>
+</div>
 
   <!-- WALK-INS -->
   <p class="sec-lbl" style="margin-bottom:3px">Sin agenda</p>
@@ -2806,6 +2923,222 @@ window.cargarWalkIns = async function() {
 })();
 
 console.log('%c✅ Patch panel-barbero — 7 fixes aplicados', 'color:#e9c176;font-weight:bold;');
+
+
+/* ═══════════════════════════════════════════════════════════
+   JS — CLIENTES + RECORDATORIO WHATSAPP — v1.0
+   Pegar dentro de tu <script> principal, junto a las demás
+   funciones (por ejemplo después de la sección "DASHBOARD").
+   Requiere que el backend GAS tenga las acciones:
+     - GET  leerClientes
+     - POST marcarRecordatorioEnviado
+   (ver Code.gs v4.5)
+═══════════════════════════════════════════════════════════ */
+
+let clientesData   = [];
+let clientesFiltro  = 'todos';
+let _clientesReady  = false;
+
+/* ── Helpers de fecha (reutilizan el mismo estilo que el resto del panel) ── */
+function _cliHoyISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function _cliDiffDias(fechaISO) {
+  // diferencia en días entre fechaISO y hoy (positivo = futuro, negativo = pasado)
+  const [y,m,d] = fechaISO.split('-').map(Number);
+  const f1 = new Date(y, m-1, d);
+  const hoy = new Date(); const f0 = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  return Math.round((f1 - f0) / (1000*60*60*24));
+}
+function _cliFmtFecha(fechaISO) {
+  if (!fechaISO) return { d:'—', l:'' };
+  const [y,m,d] = fechaISO.split('-');
+  const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return { d: `${d} ${MESES[parseInt(m,10)-1]}`, l: y };
+}
+function _cliIniciales(nombre) {
+  const partes = String(nombre||'').trim().split(/\s+/);
+  if (!partes.length || !partes[0]) return '?';
+  return (partes[0][0] + (partes[1]?partes[1][0]:'')).toUpperCase();
+}
+
+/* ── Cargar clientes desde el backend ── */
+async function cargarClientes(silencioso=false) {
+  const ico = document.getElementById('cli-refresh-ico');
+  if (ico && !silencioso) ico.style.animation = 'rot 1s linear infinite';
+  try {
+    const json = await gasGet({ accion:'leerClientes', barberia_id:BAR_ID });
+    clientesData = (json.clientes || []).map(c => ({
+      cliente_key      : c.cliente_key,
+      nombre           : c.nombre || 'Cliente',
+      telefono         : c.telefono || '',
+      ultima_visita    : c.ultima_visita || '',
+      proxima_sugerida : c.proxima_sugerida || '',
+      visitas_totales  : Number(c.visitas_totales)||0,
+      ultimo_servicio  : c.ultimo_servicio || '',
+      recordatorio_enviado: c.recordatorio_enviado || null,
+    }));
+    renderClientes();
+  } catch(e) {
+    if (!silencioso) toast('Error cargando clientes: ' + e.message, true);
+  } finally {
+    if (ico) ico.style.animation = '';
+  }
+}
+
+async function recargarClientes() { await cargarClientes(false); }
+
+/* ── Filtro ── */
+function filtrarClientes(tipo, btn) {
+  clientesFiltro = tipo;
+  document.querySelectorAll('.cli-fb').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  renderClientes();
+}
+
+function _cliAplicaFiltro(c) {
+  if (!c.proxima_sugerida) return clientesFiltro === 'todos';
+  const dias = _cliDiffDias(c.proxima_sugerida);
+  if (clientesFiltro === 'vencidos') return dias < 0;
+  if (clientesFiltro === 'proximos') return dias >= 0 && dias <= 7;
+  return true; // todos
+}
+
+/* ── Render de la tabla ── */
+function renderClientes() {
+  const cont  = document.getElementById('clientes-tabla');
+  const empty = document.getElementById('clientes-empty');
+  if (!cont) return;
+
+  const lista = clientesData
+    .filter(_cliAplicaFiltro)
+    .sort((a,b) => (a.proxima_sugerida||'').localeCompare(b.proxima_sugerida||''));
+
+  cont.innerHTML = '';
+  if (!lista.length) {
+    if (empty) empty.style.display = 'flex';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  lista.forEach(c => {
+    const ultima  = _cliFmtFecha(c.ultima_visita);
+    const proxima = _cliFmtFecha(c.proxima_sugerida);
+    const dias    = c.proxima_sugerida ? _cliDiffDias(c.proxima_sugerida) : null;
+
+    let dotClass = 'cli-estado-ok';
+    let etiqueta = '';
+    if (dias !== null) {
+      if (dias < 0)      { dotClass = 'cli-estado-vencido'; etiqueta = `${Math.abs(dias)}d atrás`; }
+      else if (dias <= 7){ dotClass = 'cli-estado-proximo'; etiqueta = dias===0?'Hoy':`en ${dias}d`; }
+      else               { dotClass = 'cli-estado-ok';      etiqueta = `en ${dias}d`; }
+    }
+
+    const row = document.createElement('div');
+    row.className = 'cli-row';
+    row.onclick = () => abrirModalRecordatorio(c.cliente_key);
+    row.innerHTML = `
+      <div class="cli-avatar">${_cliIniciales(c.nombre)}</div>
+      <div style="flex:1;min-width:0">
+        <p style="font-size:12px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</p>
+        <p style="font-size:9px;color:#6b5f52;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px">${c.ultimo_servicio||'—'} · ${c.visitas_totales} visita${c.visitas_totales!==1?'s':''}</p>
+      </div>
+      <div class="cli-fecha-badge">
+        <span class="d">${ultima.d}</span><span class="l">${ultima.l}</span>
+      </div>
+      <div class="cli-fecha-badge">
+        <span class="d" style="display:flex;align-items:center;justify-content:center;gap:4px">
+          <span class="cli-estado-dot ${dotClass}"></span>${proxima.d}
+        </span>
+        <span class="l">${etiqueta}</span>
+      </div>
+      <span class="material-symbols-outlined" style="font-size:16px;color:#25d366;flex-shrink:0">chat</span>`;
+    cont.appendChild(row);
+  });
+}
+
+/* ── Modal de recordatorio WhatsApp ── */
+let _recClienteActual = null;
+
+function _buildMensajeRecordatorio(c) {
+  const barb = sesion.nombre_barberia || sesion.nombre || 'The Atelier';
+  const proxima = _cliFmtFecha(c.proxima_sugerida);
+  return `¡Hola ${c.nombre.split(' ')[0]}! 👋 Soy de *${barb}*.\n\n` +
+    `Notamos que tu último corte fue hace un tiempo y ya va siendo hora de tu próxima visita ✂️\n\n` +
+    `¿Te gustaría agendar tu cita? Responde este mensaje o agenda directamente aquí:\n` +
+    `${getUrlPublica()}\n\n` +
+    `¡Te esperamos! 💈`;
+}
+
+function abrirModalRecordatorio(clienteKey) {
+  const c = clientesData.find(x => x.cliente_key === clienteKey);
+  if (!c) return;
+  _recClienteActual = c;
+
+  document.getElementById('rec-nombre').textContent = c.nombre;
+  const ultima  = _cliFmtFecha(c.ultima_visita);
+  const proxima = _cliFmtFecha(c.proxima_sugerida);
+  document.getElementById('rec-meta').textContent =
+    `Último corte: ${ultima.d} ${ultima.l} · Próximo sugerido: ${proxima.d} ${proxima.l}`;
+
+  const mensaje = _buildMensajeRecordatorio(c);
+  document.getElementById('rec-mensaje').value = mensaje;
+
+  const telLimpio = String(c.telefono||'').replace(/\D/g,'');
+  const btn = document.getElementById('rec-btn-enviar');
+  const sinTel = document.getElementById('rec-sin-tel');
+  if (telLimpio) {
+    btn.href = `https://wa.me/${telLimpio}?text=${encodeURIComponent(mensaje)}`;
+    btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+    sinTel.style.display = 'none';
+  } else {
+    btn.href = '#';
+    btn.style.opacity = '.4'; btn.style.pointerEvents = 'none';
+    sinTel.style.display = 'block';
+  }
+
+  // Actualizar el link si el usuario edita el mensaje a mano
+  document.getElementById('rec-mensaje').oninput = function() {
+    if (telLimpio) btn.href = `https://wa.me/${telLimpio}?text=${encodeURIComponent(this.value)}`;
+  };
+
+  // Al hacer click en enviar, marcamos el recordatorio como enviado (no bloqueante)
+  btn.onclick = function() {
+    if (!telLimpio) return;
+    gasPost({
+      accion      : 'marcarRecordatorioEnviado',
+      barberia_id : BAR_ID,
+      cliente_key : c.cliente_key,
+      nombre      : c.nombre,
+      telefono    : c.telefono,
+    }).catch(()=>{});
+    setTimeout(cerrarModalRecordatorio, 400);
+  };
+
+  document.getElementById('modal-recordatorio').style.display = 'flex';
+}
+
+function cerrarModalRecordatorio() {
+  document.getElementById('modal-recordatorio').style.display = 'none';
+  _recClienteActual = null;
+}
+
+/* ── Hook: cargar clientes cuando se entra al Dashboard ──
+   Si ya tienes una función renderDashboard(), añade dentro de ella:
+     cargarClientes(true);
+   Aquí se deja también un wrapper independiente por si prefieres
+   llamarlo aparte. */
+async function initClientesEnDashboard() {
+  if (!_clientesReady) {
+    await cargarClientes(true);
+    _clientesReady = true;
+  } else {
+    renderClientes();
+  }
+}
+
+
   </script>
 
 </body>

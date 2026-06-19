@@ -530,7 +530,7 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 /* ══════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbye7-Al_Q7G4JGGCzc2RyovFpCA8WoQsv-KK0IU-IZIqiYotXAPpXoK83Zwqkpvm2R8/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyUc4cO6Spdj_ii8dnGhDsVwTB1B1KKxuiK2zX_iRN-8_5khNZTMaBAyL6UbJHQTEqr/exec";
 
 const params = new URLSearchParams(location.search);
 const BAR_ID = (function() {
@@ -1204,6 +1204,55 @@ function cerrarModal(e) {
 }
 
 /* ══════════════════════════════════════════════════════
+   ★ REGISTRAR CLIENTE en hoja Clientes
+   Encabezados: noti_id | barberia_id | cliente_id | reserva_id |
+                tipo | canal | mensaje | estado | fecha_envio
+   Columnas:    A        B            C           D
+                E        F            G           H    I
+══════════════════════════════════════════════════════ */
+async function registrarClienteEnSheet({ nombre, telefono, reserva_id, cliente_id }) {
+  const mensaje = nombre + ' · ' + telefono;
+
+  const payload = {
+    accion      : 'registrarCliente',
+    barberia_id : BAR_ID,
+    noti_id     : 'NOTI-' + Date.now(),
+    cliente_id  : cliente_id || 'SIN-CODIGO',
+    reserva_id  : reserva_id || '',
+    tipo        : 'reserva',
+    canal       : 'web',
+    mensaje     : mensaje,
+    estado      : 'enviado',
+    fecha_envio : new Date().toISOString(),
+  };
+
+  // Intento GET
+  try {
+    const r = await fetch(
+      GAS_URL + '?' + new URLSearchParams({ datos: JSON.stringify(payload) }),
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (r.ok) {
+      const json = await r.json().catch(() => ({}));
+      if (json.ok) { console.log('[Clientes] Registrado OK'); return; }
+    }
+  } catch(e) { console.warn('[Clientes] GET falló:', e.message); }
+
+  // Intento POST
+  try {
+    await fetch(GAS_URL, {
+      method  : 'POST',
+      redirect: 'follow',
+      body    : JSON.stringify(payload),
+      headers : { 'Content-Type': 'text/plain;charset=utf-8' },
+      signal  : AbortSignal.timeout(8000),
+    });
+    console.log('[Clientes] POST enviado');
+  } catch(e2) { console.error('[Clientes] POST falló:', e2); }
+}
+
+
+/* ══════════════════════════════════════════════════════
    ★ CONFIRMAR CITA → GAS
    Orden de columnas en la hoja:
    reserva_id | barberia_id | cliente_id | barbero_id | servicio_id |
@@ -1293,13 +1342,20 @@ async function confirmarCita() {
     citas.push({
       barberia_id: BAR_ID,
       _fecha: fechaISO,
-      
       _hora : horaFinal,
       estado: 'pendiente',
     });
     if (diaActivo) {
       renderSlots(diaActivo.horario, diaActivo.hesp, fechaSel, diaActivo.fechaStr || fechaISO);
     }
+
+    // ★ Registrar cliente en hoja Clientes (sin esperar — fire & forget)
+    registrarClienteEnSheet({
+      nombre,
+      telefono: tel,
+      reserva_id: reserva.reserva_id,
+      cliente_id: codigoCliente,
+    });
   }
 
   document.getElementById('modal-bg').classList.remove('on');
