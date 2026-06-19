@@ -1051,16 +1051,28 @@ function selFecha(fecha, fechaStr, diaKey, horario, hesp, celda) {
 /* ══════════════════════════════════════════════════════
    SLOTS — con bloqueo de horas reservadas
 ══════════════════════════════════════════════════════ */
-function horasBloqueadas(fechaStr) {
+function horasBloqueadas(fechaStr, intervaloMin) {
   const bloqueadas = new Set();
-  console.log('[BLOQUEO] Buscando fecha:', fechaStr, '| Citas disponibles:', citas.map(c => c._fecha + ' ' + c._hora + ' estado:' + c.estado));
+
   citas
     .filter(c => c._fecha === fechaStr && c.estado !== 'cancelada')
     .forEach(c => {
-      const h = String(c._hora || '').trim().slice(0,5);
+      const h = String(c._hora || '').trim().slice(0, 5);
       if (/^\d{2}:\d{2}$/.test(h)) bloqueadas.add(h);
     });
-  console.log('[BLOQUEO] Resultado para', fechaStr, ':', [...bloqueadas]);
+
+  const hoy = new Date();
+  const hoyStr = hoy.getFullYear() + '-'
+    + String(hoy.getMonth() + 1).padStart(2, '0') + '-'
+    + String(hoy.getDate()).padStart(2, '0');
+
+  if (fechaStr === hoyStr) {
+    const ahoraMin = hoy.getHours() * 60 + hoy.getMinutes();
+    for (let m = 0; m < 24 * 60; m += intervaloMin) {
+      if (m <= ahoraMin) bloqueadas.add(minStr(m));
+    }
+  }
+
   return bloqueadas;
 }
 
@@ -1107,7 +1119,8 @@ let hfStr = extractHHMM(h && h.hora_fin)    || '20:00';
   const inv  = parseInt((h && h.intervalo_min) || 30);
   let cur    = toMin(hiStr);
   const end  = toMin(hfStr);
-  const bloq = horasBloqueadas(fechaStr || (fecha.toISOString().slice(0,10)));
+  const bloq = horasBloqueadas(fechaStr || (fecha.toISOString().slice(0,10)), inv);
+
   const man = [], tar = [], noc = [];
 
   while (cur < end) {
