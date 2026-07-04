@@ -206,44 +206,18 @@ body { min-height: max(884px, 100dvh); }
 
           <!-- Rol -->
           <div style="background:#0e0e0e;padding:4px;display:flex;">
-            <button type="button" id="rol-cliente" onclick="activarRol(this,'cliente')"
-              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:#2a2a2a;color:#e9c176;transition:all .2s;">
-              CLIENTE
-            </button>
             <button type="button" id="rol-barbero" onclick="activarRol(this,'barbero')"
               style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
               BARBERO
             </button>
             <button type="button" id="rol-dueno" onclick="activarRol(this,'dueno')"
-              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
+              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:#2a2a2a;color:#e9c176;transition:all .2s;">
               DUEÑO
             </button>
           </div>
 
-          <!-- CLIENTE: nombre barbería + código -->
-          <div id="campos-cliente">
-            <div style="margin-bottom:16px;">
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
-                Nombre de tu Barbería
-              </label>
-              <div style="position:relative;">
-                <input id="cliente-nombre-barberia" class="inp" type="text" placeholder="Ej. The Julius Barber Shop"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.14);font-size:16px;">storefront</span>
-              </div>
-            </div>
-            <div>
-              <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
-                Código de Acceso
-              </label>
-              <div style="position:relative;">
-                <input id="cliente-codigo" class="inp" type="text" placeholder="Ej. JULIUS-4X9K" style="text-transform:uppercase;letter-spacing:.1em;"/>
-                <span class="material-symbols-outlined" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:rgba(156,143,123,.14);font-size:16px;">key</span>
-              </div>
-            </div>
-          </div>
-
           <!-- BARBERO/DUEÑO: sede + contraseña -->
-          <div id="campos-admin" style="display:none;">
+          <div id="campos-admin">
             <div style="margin-bottom:16px;">
               <label style="display:block;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#9c8f7b;margin-bottom:10px;">
                 Nombre de tu Barbería
@@ -317,6 +291,33 @@ body { min-height: max(884px, 100dvh); }
             <a href="#" onclick="cambiarTabNombre('registrar');return false;" style="color:#e9c176;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(233,193,118,.3);">Únete a la comunidad</a>
           </p>
         </div>
+
+        <!-- Footer desarrollador -->
+        <footer style="width:100%;padding-bottom:40px;padding-top:36px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <p style="display:flex;align-items:center;justify-content:center;gap:8px;line-height:1;margin:0;">
+              <span style="font-size:8px;text-transform:uppercase;letter-spacing:0.3em;color:rgba(255,255,255,0.3);">
+                Desarrollado por
+              </span>
+              <span
+                style="font-family:monospace;font-size:13px;font-weight:700;letter-spacing:0.05em;display:inline-flex;align-items:center;">
+                <span style="color:#e91e8c;">&lt;</span>
+                <span
+                  style="background:linear-gradient(90deg, #2196f3, #9c27b0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">
+                  VΛ
+                </span>
+                <span style="color:#00bcd4;margin:0 3px;">:</span>
+                <span style="color:#ffffff;">labs</span>
+                <span style="color:#e91e8c;">/&gt;</span>
+              </span>
+            </p>
+            <p
+              style="font-size:8px;text-transform:uppercase;letter-spacing:0.25em;color:#00bcd4;opacity:0.8;margin:0;">
+              Mobile &amp; Backend Engineering
+            </p>
+          </div>
+          <p style="font-size:7px;text-transform:uppercase;letter-spacing:0.3em;color:rgba(255,255,255,0.2);margin:0;">Copyright 2026</p>
+        </footer>
 
       </div><!-- /panel-ingresar -->
 
@@ -480,7 +481,7 @@ const PANEL_URL  = "panel.html";
 /* ════════════════════════════════════════════
    ROL ACTIVO
 ════════════════════════════════════════════ */
-let rolActivo = "cliente";
+let rolActivo = "dueno";
 
 function activarRol(btn, rol) {
   rolActivo = rol;
@@ -488,8 +489,6 @@ function activarRol(btn, rol) {
     b.style.background = 'transparent'; b.style.color = '#9c8f7b';
   });
   btn.style.background = '#2a2a2a'; btn.style.color = '#e9c176';
-  document.getElementById('campos-cliente').style.display = rol === 'cliente' ? 'block' : 'none';
-  document.getElementById('campos-admin').style.display   = rol !== 'cliente'  ? 'block' : 'none';
 }
 
 /* ════════════════════════════════════════════
@@ -616,35 +615,7 @@ function guardarSesion(datos) {
 ════════════════════════════════════════════ */
 async function handleIngresar() {
   if (rolActivo === 'barbero') { toast("Login de barbero próximamente", "err"); return; }
-  if (rolActivo === 'dueno')   { await handleIngresarDueno(); return; }
-
-  // ── CLIENTE ──────────────────────────────
-  const nombre = document.getElementById('cliente-nombre-barberia').value.trim();
-  const codigo = document.getElementById('cliente-codigo').value.trim().toUpperCase();
-  if (!nombre || !codigo) { toast("Ingresa el nombre de tu barbería y el código", "err"); return; }
-
-  setBtnLoading('btn-ingresar-submit', true, 'INGRESAR');
-  try {
-    const respuesta = await gasGet({ accion: 'leerBarberias' });
-    const filas = respuesta.filas || [];
-    const barberia = filas.slice(1).find(f => {
-      const nombreSheet = String(f[4] || '').toLowerCase().trim();
-      const codigoSheet = String(f[16] || '').toUpperCase().trim();
-      const activo      = f[17];
-      const estaActivo  = activo === true || String(activo).toUpperCase() === 'TRUE';
-      return nombreSheet === nombre.toLowerCase() && codigoSheet === codigo && estaActivo;
-    });
-    if (!barberia) {
-      toast("Barbería o código incorrecto", "err");
-      setBtnLoading('btn-ingresar-submit', false, 'INGRESAR'); return;
-    }
-    guardarSesion({ barberia_id: barberia[0], nombre: barberia[4], ciudad: barberia[9], plan: barberia[2], rol: 'cliente' });
-    toast(`Bienvenido a ${barberia[4]} ✓`);
-    setTimeout(() => window.location.href = HOME_URL, 1200);
-  } catch (e) {
-    toast("Error: " + e.message, "err");
-    setBtnLoading('btn-ingresar-submit', false, 'INGRESAR');
-  }
+  await handleIngresarDueno();
 }
 
 /* ════════════════════════════════════════════
@@ -801,8 +772,8 @@ async function handleRegistrar() {
 
     mostrarPopupRegistro(nombre, codigo_acceso, () => {
       cambiarTabNombre('ingresar');
-      document.getElementById('cliente-nombre-barberia').value = nombre;
-      document.getElementById('cliente-codigo').value = codigo_acceso || '';
+      activarRol(document.getElementById('rol-dueno'), 'dueno');
+      document.getElementById('admin-sede').value = nombre;
     });
 
   } catch (e) {
