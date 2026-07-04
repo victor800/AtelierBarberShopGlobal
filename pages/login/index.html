@@ -204,18 +204,6 @@ body { min-height: max(884px, 100dvh); }
 
         <form onsubmit="return false;" style="display:flex;flex-direction:column;gap:18px;">
 
-          <!-- Rol -->
-          <div style="background:#0e0e0e;padding:4px;display:flex;">
-            <button type="button" id="rol-barbero" onclick="activarRol(this,'barbero')"
-              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:transparent;color:#9c8f7b;transition:all .2s;">
-              BARBERO
-            </button>
-            <button type="button" id="rol-dueno" onclick="activarRol(this,'dueno')"
-              style="flex:1;padding:11px 4px;font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;background:#2a2a2a;color:#e9c176;transition:all .2s;">
-              DUEÑO
-            </button>
-          </div>
-
           <!-- BARBERO/DUEÑO: sede + contraseña -->
           <div id="campos-admin">
             <div style="margin-bottom:16px;">
@@ -437,8 +425,7 @@ body { min-height: max(884px, 100dvh); }
 
           <!-- Botón registrar -->
           <button id="btn-registrar-submit" type="button" onclick="handleRegistrar()"
-            style="width:100%;padding:16px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;"
-            onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
+            style="width:100%;padding:16px;background:#e9c176;border:none;color:#412d00;font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s;">
             CONFIRMAR REGISTRO
           </button>
 
@@ -479,17 +466,9 @@ const HOME_URL   = "home.html";
 const PANEL_URL  = "panel.html";
 
 /* ════════════════════════════════════════════
-   ROL ACTIVO
+   ROL ACTIVO (solo Dueño)
 ════════════════════════════════════════════ */
 let rolActivo = "dueno";
-
-function activarRol(btn, rol) {
-  rolActivo = rol;
-  btn.closest('div').querySelectorAll('button').forEach(b => {
-    b.style.background = 'transparent'; b.style.color = '#9c8f7b';
-  });
-  btn.style.background = '#2a2a2a'; btn.style.color = '#e9c176';
-}
 
 /* ════════════════════════════════════════════
    TABS
@@ -614,7 +593,6 @@ function guardarSesion(datos) {
    HANDLE INGRESAR
 ════════════════════════════════════════════ */
 async function handleIngresar() {
-  if (rolActivo === 'barbero') { toast("Login de barbero próximamente", "err"); return; }
   await handleIngresarDueno();
 }
 
@@ -772,7 +750,6 @@ async function handleRegistrar() {
 
     mostrarPopupRegistro(nombre, codigo_acceso, () => {
       cambiarTabNombre('ingresar');
-      activarRol(document.getElementById('rol-dueno'), 'dueno');
       document.getElementById('admin-sede').value = nombre;
     });
 
