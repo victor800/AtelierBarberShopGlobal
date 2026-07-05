@@ -412,6 +412,90 @@ input[type=date],input[type=time]{font-size:14px!important}
     <input type="hidden" id="f-plan" value="Pro"/>
   </div>
 
+  <!-- SUSCRIPCIÓN / RENOVACIÓN -->
+<div id="sec-suscripcion" style="background:#161412;border:1px solid rgba(233,193,118,.18);padding:14px">
+  <p style="font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:#9c8f7b;margin-bottom:12px">Suscripción</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    <div>
+      <label class="lbl">Fecha inicio</label>
+      <p id="sus-fecha-inicio" style="font-size:13px;color:#e5e2e1;font-weight:600">—</p>
+    </div>
+    <div>
+      <label class="lbl">Fecha fin</label>
+      <p id="sus-fecha-fin" style="font-size:13px;color:#e9c176;font-weight:600">—</p>
+    </div>
+  </div>
+  <div id="sus-estado-wrap" style="display:none;align-items:center;gap:6px;margin-bottom:12px;padding:8px 10px;background:rgba(233,193,118,.05);border:1px solid rgba(233,193,118,.18)">
+    <span class="material-symbols-outlined" style="font-size:13px;color:#e9c176">hourglass_top</span>
+    <p id="sus-estado-txt" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#e9c176">—</p>
+  </div>
+  <button class="btn-g" onclick="abrirModalRenovar()" style="width:100%;padding:13px">
+    <span class="material-symbols-outlined" style="font-size:14px">autorenew</span>Renovar plan
+  </button>
+</div>
+ 
+<!-- MODAL RENOVAR PLAN -->
+<div id="modal-renovar" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.92);backdrop-filter:blur(12px);align-items:flex-end;justify-content:center">
+  <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;animation:slideUp .3s cubic-bezier(.22,1,.36,1);max-height:92dvh;overflow-y:auto">
+    <p style="font-size:8px;letter-spacing:.36em;text-transform:uppercase;color:rgba(233,193,118,.45);text-align:center;margin-bottom:20px">Renovar plan</p>
+ 
+    <p class="lbl" style="margin-bottom:8px">Elige el plan</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <div class="plan-opt-ren" data-val="Básico" data-txt="Básico — $50.000/mes" onclick="selPlanRenovar(this)"
+        style="padding:14px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Básico</p>
+          <p style="font-family:'Noto Serif',serif;font-size:16px;color:#e5e2e1">$50.000<span style="font-size:10px;color:#9c8f7b">/mes</span></p>
+        </div>
+      </div>
+      <div class="plan-opt-ren" data-val="Pro" data-txt="Pro — $89.000/mes" onclick="selPlanRenovar(this)"
+        style="padding:14px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Pro</p>
+          <p style="font-family:'Noto Serif',serif;font-size:16px;color:#e5e2e1">$89.000<span style="font-size:10px;color:#9c8f7b">/mes</span></p>
+        </div>
+      </div>
+      <div class="plan-opt-ren" data-val="Élite" data-txt="Élite — $149.000/mes" onclick="selPlanRenovar(this)"
+        style="padding:14px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9c8f7b">Élite</p>
+          <p style="font-family:'Noto Serif',serif;font-size:16px;color:#e5e2e1">$149.000<span style="font-size:10px;color:#9c8f7b">/mes</span></p>
+        </div>
+      </div>
+      <div class="plan-opt-ren" data-val="Prueba" data-txt="Prueba gratuita — 15 días" onclick="selPlanRenovar(this)"
+        style="padding:14px;background:#1c1b1b;border:1px solid rgba(79,69,53,.3);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#7ecfa8">Prueba</p>
+          <p style="font-family:'Noto Serif',serif;font-size:16px;color:#7ecfa8">Gratis<span style="font-size:10px;color:rgba(126,207,168,.5)"> 15 días</span></p>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" id="ren-plan" value=""/>
+ 
+    <div style="margin-bottom:16px">
+      <label class="lbl">Comprobante de pago *</label>
+      <div class="fu" id="fu-comprobante" style="width:100%;aspect-ratio:4/3">
+        <input type="file" accept="image/*" onchange="onComprobante(this)"/>
+        <img id="img-comprobante" src="" alt=""/>
+        <div class="ph">
+          <span class="material-symbols-outlined" style="font-size:26px;color:rgba(233,193,118,.2)">receipt_long</span>
+          <span style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(156,143,123,.28)">Toca para subir comprobante</span>
+        </div>
+        <div class="cam"><span class="material-symbols-outlined" style="font-size:10px">photo_camera</span>Cambiar</div>
+      </div>
+      <div class="upbar" id="upbar-comprobante"><div class="upfill" id="upfill-comprobante"></div></div>
+    </div>
+ 
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-g" id="btn-renovar-enviar" onclick="enviarRenovacion()" style="width:100%;padding:14px">
+        <span class="material-symbols-outlined" style="font-size:14px">send</span>Enviar solicitud
+      </button>
+      <button onclick="cerrarModalRenovar()" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
   <!-- MODAL PLAN -->
   <div id="modal-plan" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(5,3,1,.92);backdrop-filter:blur(12px);align-items:flex-end;justify-content:center">
     <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.2);padding:24px 18px 40px;transform:translateY(0);animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
@@ -980,7 +1064,7 @@ input[type=date],input[type=time]{font-size:14px!important}
 /* ══════════════════════════════════════
    CONFIG
 ══════════════════════════════════════ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxwbQQpidnSXxIZzSwu_taVJuqw1O7GudWG9Tbp6hcvD7lxtw0b4L8axbZezmN2mRrX/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxwVIdqykDn8vPKWrxr9lvsO9zqxGoOA0k0sC-E9grzdQTElQPVwjuwIsEGrFTroNJc/exec";
 
 const _urlBar    = new URLSearchParams(location.search).get('bar');
 const _storedSes = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
@@ -2607,6 +2691,125 @@ document.addEventListener('click', function(e) {
   conf.style.pointerEvents='all'; conf.style.opacity='1';
   document.getElementById('_conf-del-sheet').style.transform='translateY(0)';
 });
+
+
+
+/* ══ RENOVAR PLAN — modal ══ */
+function abrirModalRenovar() {
+  document.getElementById('modal-renovar').style.display = 'flex';
+}
+function cerrarModalRenovar() {
+  document.getElementById('modal-renovar').style.display = 'none';
+}
+function selPlanRenovar(el) {
+  document.querySelectorAll('.plan-opt-ren').forEach(o => {
+    o.style.borderColor = 'rgba(79,69,53,.3)';
+    o.style.background  = '#1c1b1b';
+  });
+  el.style.borderColor = 'rgba(233,193,118,.5)';
+  el.style.background  = 'rgba(233,193,118,.06)';
+  document.getElementById('ren-plan').value = el.dataset.val;
+}
+function onComprobante(input) {
+  const file = input.files[0]; if (!file) return;
+  imgs.comprobante_file = file;
+  filePreview(file, url => {
+    document.getElementById('img-comprobante').src = url;
+    document.getElementById('fu-comprobante').classList.add('loaded');
+  });
+}
+ 
+/* ══ ENVIAR SOLICITUD DE RENOVACIÓN ══
+   1) El comprobante se sube igual que las demás fotos: se
+      comprime y se envía como base64 a "subirImagen" (GAS lo
+      guarda en Drive y devuelve una URL corta).
+   2) Con esa URL corta + el plan elegido, se llama a
+      "renovarPlan" que registra la solicitud en la hoja
+      "Suscripciones" y calcula fecha_inicio / fecha_fin.       */
+async function enviarRenovacion() {
+  const plan = document.getElementById('ren-plan').value;
+  if (!plan) return toast('Selecciona un plan', true);
+  if (!imgs.comprobante_file) return toast('Sube el comprobante de pago', true);
+ 
+  const btn = document.getElementById('btn-renovar-enviar');
+  btn.disabled = true;
+ 
+  let comprobante_url = '';
+  try {
+    comprobante_url = await subirImagenDrive(
+      imgs.comprobante_file, 'comprobante', BAR_ID,
+      'upbar-comprobante', 'upfill-comprobante'
+    );
+  } catch (e) {
+    toast('No se pudo subir el comprobante', true);
+    btn.disabled = false;
+    return;
+  }
+ 
+  showOv('Enviando solicitud...');
+  try {
+    const json = await gasPost({
+      accion: 'renovarPlan',
+      barberia_id: BAR_ID,
+      plan,
+      comprobante_url,
+    });
+    hideOv();
+    if (json.error) throw new Error(json.error);
+ 
+    if (json.fecha_inicio) document.getElementById('sus-fecha-inicio').textContent = fmtFechaCorta(json.fecha_inicio);
+    if (json.fecha_fin)    document.getElementById('sus-fecha-fin').textContent    = fmtFechaCorta(json.fecha_fin);
+    mostrarEstadoSuscripcion(json.estado);
+ 
+    toast('✓ Solicitud de renovación enviada');
+    cerrarModalRenovar();
+ 
+    imgs.comprobante_file = null;
+    document.getElementById('img-comprobante').src = '';
+    document.getElementById('fu-comprobante').classList.remove('loaded');
+    document.getElementById('ren-plan').value = '';
+    document.querySelectorAll('.plan-opt-ren').forEach(o => {
+      o.style.borderColor = 'rgba(79,69,53,.3)'; o.style.background = '#1c1b1b';
+    });
+  } catch (e) {
+    hideOv();
+    toast('Error: ' + e.message, true);
+  }
+  btn.disabled = false;
+}
+ 
+function fmtFechaCorta(iso) {
+  if (!iso) return '—';
+  const s = String(iso).split('T')[0];
+  const [y, m, d] = s.split('-');
+  if (!y) return iso;
+  return `${d}/${m}/${y}`;
+}
+ 
+function mostrarEstadoSuscripcion(estado) {
+  const wrap = document.getElementById('sus-estado-wrap');
+  const txt  = document.getElementById('sus-estado-txt');
+  if (!wrap || !txt) return;
+  if (!estado || estado === 'activa') { wrap.style.display = 'none'; return; }
+  const labels = {
+    pendiente_verificacion: 'Comprobante en revisión',
+    rechazada: 'Comprobante rechazado — vuelve a intentar',
+  };
+  txt.textContent = labels[estado] || estado;
+  wrap.style.display = 'flex';
+}
+ 
+async function cargarSuscripcion() {
+  try {
+    const json = await gasGet({ accion: 'leerSuscripcion', barberia_id: BAR_ID });
+    if (json.suscripcion) {
+      document.getElementById('sus-fecha-inicio').textContent = fmtFechaCorta(json.suscripcion.fecha_inicio);
+      document.getElementById('sus-fecha-fin').textContent    = fmtFechaCorta(json.suscripcion.fecha_fin);
+      mostrarEstadoSuscripcion(json.suscripcion.estado);
+    }
+  } catch (e) {}
+}
+
 
 /* ══ INIT ══ */
 async function init() {
