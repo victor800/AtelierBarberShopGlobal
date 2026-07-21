@@ -1089,7 +1089,7 @@ input[type=date],input[type=time]{font-size:14px!important}
   <a href="#" class="nav-i" id="nav-cortes" onclick="goTabByName('t-cortes');return false">
     <span class="material-symbols-outlined" style="font-size:21px">content_cut</span><p>Cortes</p>
   </a>
-  <a href="#" class="nav-i" id="nav-colab" onclick="goTabByName('t-colab');recargarColaboradores();return false">
+  <a href="#" class="nav-i" id="nav-colab" onclick="goTabByName('t-colab');buildColabHorarios();return false">
     <span class="material-symbols-outlined" style="font-size:21px">groups</span><p>Equipo</p>
   </a>
   <a href="#" class="nav-i on" id="nav-datos" onclick="goTabByName('t-datos');return false">
@@ -1631,6 +1631,37 @@ function buildHorarios() {
     cont.appendChild(div);
   });
 }
+
+/* ══ HORARIOS — COLABORADOR (usa mismo array DIAS, ids con prefijo colab-) ══ */
+function buildColabHorarios() {
+  const cont = document.getElementById('colab-hor-rows');
+  if (!cont || cont.dataset.built === '1') return; // evita duplicar filas si se abre el tab varias veces
+  DIAS.forEach(d => {
+    const div = document.createElement('div'); div.className = 'dia-row';
+    div.innerHTML = `
+      <span style="width:28px;font-size:9.5px;letter-spacing:.1em;color:#9c8f7b;text-transform:uppercase;flex-shrink:0">${d.l}</span>
+      <label class="tog"><input type="checkbox" id="colab-d-${d.k}" ${d.on?'checked':''} onchange="togColabDia('${d.k}')"/><span class="slid"></span></label>
+      <div id="colab-dc-${d.k}" style="display:flex;align-items:center;gap:5px;flex:1;${!d.on?'opacity:.2;pointer-events:none':''}">
+        <input class="time-inp" id="colab-hi-${d.k}" type="time" value="08:00"/>
+        <span style="font-size:9px;color:#2e2b27">–</span>
+        <input class="time-inp" id="colab-hf-${d.k}" type="time" value="20:00"/>
+        <select class="int-sel" id="colab-iv-${d.k}">
+          <option value="15">15m</option><option value="20">20m</option>
+          <option value="30" selected>30m</option><option value="45">45m</option><option value="60">60m</option>
+        </select>
+      </div>`;
+    cont.appendChild(div);
+  });
+  cont.dataset.built = '1';
+}
+function togColabDia(k) {
+  const on = document.getElementById('colab-d-'+k).checked;
+  const dc = document.getElementById('colab-dc-'+k);
+  dc.style.opacity = on ? '1' : '.2';
+  dc.style.pointerEvents = on ? 'auto' : 'none';
+}
+
+
 function togDia(k) {
   const on = document.getElementById('d-'+k).checked;
   const dc = document.getElementById('dc-'+k);
@@ -2876,6 +2907,7 @@ async function cargarSuscripcion() {
 /* ══ INIT ══ */
 async function init() {
   buildHorarios(); updateSlots();
+  buildColabHorarios(); 
   initHeader(); calcProg();
   buildCarousel('prod',[]); buildCarousel('corte',[]);
   renderCitas([]); renderHorariosEspeciales();
