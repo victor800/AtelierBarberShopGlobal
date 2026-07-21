@@ -868,6 +868,61 @@ input[type=date],input[type=time]{font-size:14px!important}
   </div>
 </div>
 
+
+<!-- ══════════════════════════ COLABORADORES ══════════════════════════ -->
+<div id="t-colab" class="tc" style="padding:18px;gap:0">
+  <p class="sec-lbl" style="margin-bottom:3px">Equipo</p>
+  <p style="font-family:'Noto Serif',serif;font-size:18px;color:#e5e2e1;margin-bottom:6px;font-weight:400">Colaboradores</p>
+  <p style="font-size:11px;color:#9c8f7b;margin-bottom:18px;line-height:1.6">Agrega a los barberos de tu equipo. Cada uno obtiene su propia URL de agenda, mostrando solo sus citas y horario.</p>
+
+  <!-- ═══ LISTA DE COLABORADORES PUBLICADOS ═══ -->
+  <div class="preview-lbl">Equipo actual</div>
+  <div id="colab-lista" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
+  <div id="colab-empty" style="display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:18px">
+    <span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.12)">groups</span>
+    <p style="font-size:10px;color:#2e2b27;letter-spacing:.12em">Sin colaboradores creados aún</p>
+  </div>
+
+  <!-- ═══ FORM NUEVO COLABORADOR ═══ -->
+  <div style="background:#161412;border:1px solid rgba(233,193,118,.13);padding:16px;margin-bottom:18px">
+    <p style="font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:#e9c176;margin-bottom:14px">+ Nuevo colaborador</p>
+
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <div class="av-wrap" style="width:64px;height:64px" onclick="openPicker('colab')">
+        <div class="av-inner" id="colab-av-inner" style="border-color:rgba(233,193,118,.25)">
+          <span class="material-symbols-outlined" id="colab-av-icon" style="font-size:22px;color:rgba(233,193,118,.22)">person</span>
+          <img id="colab-av-img" src="" alt=""/>
+        </div>
+        <div class="av-cam"><span class="material-symbols-outlined" style="font-size:10px;color:#412d00">photo_camera</span></div>
+      </div>
+      <div style="flex:1">
+        <label class="lbl">Foto del colaborador</label>
+        <p style="font-size:10px;color:#6b5f52">Toca el círculo para subir foto</p>
+      </div>
+    </div>
+    <div class="upbar" id="upbar-colab"><div class="upfill" id="upfill-colab"></div></div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+      <div><label class="lbl">Nombre completo *</label><input class="inp" id="col-nombre" type="text" placeholder="Juan Pérez"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="lbl">Teléfono / WhatsApp</label><input class="inp" id="col-tel" type="tel" placeholder="+57 300 000 0000"/></div>
+        <div><label class="lbl">% Comisión</label><input class="inp" id="col-pct" type="number" placeholder="50" min="0" max="100"/></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <label class="lbl" style="margin-bottom:8px;display:block">Horario de trabajo</label>
+      <div style="background:#1c1b1b;border:1px solid rgba(79,69,53,.18);padding:10px">
+        <div id="colab-hor-rows"></div>
+      </div>
+    </div>
+
+    <button class="btn-g" id="btn-colab" onclick="publicarColaborador()" style="width:100%;padding:14px;margin-top:16px">
+      <span class="material-symbols-outlined" style="font-size:15px">person_add</span>Crear colaborador
+    </button>
+  </div>
+</div>
+
 <!-- ══════════════════════════ DASHBOARD ══════════════════════════ -->
 <div id="t-dash" class="tc" style="padding:18px;gap:0">
   <p class="sec-lbl" style="margin-bottom:3px">Análisis</p>
@@ -1025,16 +1080,19 @@ input[type=date],input[type=time]{font-size:14px!important}
 
 <!-- NAV BOTTOM -->
 <nav style="position:fixed;bottom:0;left:0;width:100%;background:rgba(8,6,4,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(79,69,53,.14);z-index:50;display:flex;justify-content:space-around;align-items:flex-end;padding:7px 0 11px;padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))">
-  <a href="#" class="nav-i" onclick="goTabByName('t-citas');return false">
+  <a href="#" class="nav-i" id="nav-citas" onclick="goTabByName('t-citas');return false">
     <span class="material-symbols-outlined" style="font-size:21px">event_available</span><p>Citas</p>
   </a>
-  <a href="#" class="nav-i" onclick="goTabByName('t-tienda');return false">
+  <a href="#" class="nav-i" id="nav-tienda" onclick="goTabByName('t-tienda');return false">
     <span class="material-symbols-outlined" style="font-size:21px">storefront</span><p>Tienda</p>
   </a>
-  <a href="#" class="nav-i" onclick="goTabByName('t-cortes');return false">
+  <a href="#" class="nav-i" id="nav-cortes" onclick="goTabByName('t-cortes');return false">
     <span class="material-symbols-outlined" style="font-size:21px">content_cut</span><p>Cortes</p>
   </a>
-  <a href="#" class="nav-i on">
+  <a href="#" class="nav-i" id="nav-colab" onclick="goTabByName('t-colab');recargarColaboradores();return false">
+    <span class="material-symbols-outlined" style="font-size:21px">groups</span><p>Equipo</p>
+  </a>
+  <a href="#" class="nav-i on" id="nav-datos" onclick="goTabByName('t-datos');return false">
     <span class="material-symbols-outlined ms-f" style="font-size:21px">person</span><p>Perfil</p>
   </a>
 </nav>
@@ -1324,14 +1382,18 @@ function filePreview(file, cb) {
 function goTab(btn, id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
   document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
-  if (btn) btn.classList.add('on');
+  if (btn) btn.classList.add('on');   // ← ya tolera null, no toques nada aquí
   const el = document.getElementById(id);
   if (el) el.classList.add('on');
   if (id === 't-horarios') updateSlots();
 }
+
 function goTabByName(id) {
-  const map = { 't-datos':'tb-datos','t-horarios':'tb-horarios','t-citas':'tb-citas','t-tienda':'tb-tienda','t-cortes':'tb-cortes' };
+  const map = { 't-datos':'tb-datos','t-horarios':'tb-horarios','t-citas':'tb-citas','t-tienda':'tb-tienda','t-cortes':'tb-cortes','t-colab':'tb-colab' };
   goTab(document.getElementById(map[id]), id);
+  document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('on'));
+  const navMap = { 't-citas':'nav-citas','t-tienda':'nav-tienda','t-cortes':'nav-cortes','t-colab':'nav-colab','t-datos':'nav-datos' };
+  document.getElementById(navMap[id])?.classList.add('on');
 }
 
 /* ══ MAPA ══ */
