@@ -1122,7 +1122,7 @@ input[type=date],input[type=time]{font-size:14px!important}
 /* ══════════════════════════════════════
    CONFIG
 ══════════════════════════════════════ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxwVIdqykDn8vPKWrxr9lvsO9zqxGoOA0k0sC-E9grzdQTElQPVwjuwIsEGrFTroNJc/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzKUTzkJxPRaSldkriYL5IY2X2fCFqn6bmqH522U5zojl-AXWEu_y5KCDYTg71GQYN5/exec";
 
 const _urlBar    = new URLSearchParams(location.search).get('bar');
 const _storedSes = JSON.parse(sessionStorage.getItem('atelier_sesion') || '{}');
@@ -3428,6 +3428,214 @@ async function initClientesEnDashboard() {
     renderClientes();
   }
 }
+</script>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PATCH — Colaboradores (Equipo) v2 — render instantáneo
+   Envía el formulario "+ Nuevo colaborador" al backend.
+   Guarda en hoja "Colaboradores" (A→I):
+   colaborador_id | barberia_id | nombre | telefono | porcentaje |
+   foto_url | horarios | fecha_creacion | activo
+
+   Mejora v2: la tarjeta del colaborador se pinta de inmediato
+   en el DOM usando los datos ya disponibles en memoria (sin
+   esperar el round-trip de leerColaboradores tras guardar).
+═══════════════════════════════════════════════════════════ */
+
+const imgsColab = { url: '', file: null };
+let colaboradoresData = [];
+
+// Captura de foto del colaborador
+function onFotoColab(input) {
+  const file = input.files[0]; if (!file) return;
+  imgsColab.file = file;
+  filePreview(file, url => {
+    const img = document.getElementById('colab-av-img');
+    img.src = url;
+    img.classList.add('on');
+    const icon = document.getElementById('colab-av-icon');
+    if (icon) icon.style.display = 'none';
+  });
+}
+
+// openPicker('colab') existente llamaba onFotoCorte por defecto — se corrige
+// para que enrute correctamente a onFotoColab sin tocar el resto de la función.
+if (typeof window.openPicker === 'function') {
+  const _openPickerOriginal = window.openPicker;
+  window.openPicker = function(tipo) {
+    _openPickerOriginal(tipo);
+    if (tipo === 'colab') {
+      setTimeout(() => {
+        ['_fp_colab_cam', '_fp_colab_gal'].forEach(id => {
+          const inp = document.getElementById(id);
+          if (inp && !inp._colabPatched) {
+            inp._colabPatched = true;
+            inp.onchange = () => { onFotoColab(inp); inp.value = ''; };
+          }
+        });
+      }, 0);
+    }
+  };
+}
+
+/* ── Construir array de horarios desde las filas colab-d-* ── */
+function _buildHorariosColab() {
+  return DIAS.map(d => ({
+    dia_semana   : d.k,
+    hora_inicio  : document.getElementById('colab-hi-'+d.k)?.value || '08:00',
+    hora_fin     : document.getElementById('colab-hf-'+d.k)?.value || '20:00',
+    intervalo_min: parseInt(document.getElementById('colab-iv-'+d.k)?.value || '30'),
+    activo       : document.getElementById('colab-d-'+d.k)?.checked || false,
+  }));
+}
+
+/* ── Render de una sola tarjeta de colaborador (reutilizable) ── */
+function _renderColabCard(c) {
+  const card = document.createElement('div');
+  card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:#1c1b1b;border:1px solid rgba(79,69,53,.22)';
+  card.dataset.colaboradorId = c.colaborador_id || '';
+  card.innerHTML = `
+    <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;background:rgba(233,193,118,.08);border:1px solid rgba(233,193,118,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      ${c.foto_url
+        ? `<img src="${c.foto_url}" style="width:100%;height:100%;object-fit:cover" onerror="if(this.src!=='${c.foto_url_original||c.foto_url}')this.src='${c.foto_url_original||c.foto_url}';else this.style.display='none'"/>`
+        : `<span class="material-symbols-outlined" style="font-size:20px;color:rgba(233,193,118,.4)">person</span>`}
+    </div>
+    <div style="flex:1;min-width:0">
+      <p style="font-size:13px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</p>
+      <p style="font-size:10px;color:#9c8f7b;margin-top:2px">${c.telefono || 'Sin teléfono'} · ${c.porcentaje}% comisión</p>
+    </div>`;
+  return card;
+}
+
+/* ── Publicar colaborador (render instantáneo) ── */
+async function publicarColaborador() {
+  const nombre = document.getElementById('col-nombre').value.trim();
+  const tel    = document.getElementById('col-tel').value.trim();
+  const pct    = document.getElementById('col-pct').value.trim();
+  if (!nombre) return toast('El nombre completo es obligatorio', true);
+
+  const btn = document.getElementById('btn-colab');
+  btn.disabled = true;
+
+  if (imgsColab.file) {
+    toast('Subiendo foto del colaborador...');
+    try {
+      imgsColab.url = await subirImagenDrive(imgsColab.file, 'colab', BAR_ID, 'upbar-colab', 'upfill-colab');
+      imgsColab.file = null;
+    } catch(e) {
+      toast('⚠ No se pudo subir la foto', true);
+    }
+  }
+
+  const colaborador_id = 'COL-' + Math.random().toString(36).toUpperCase().slice(2,8);
+  const horariosArr     = _buildHorariosColab();
+
+  const payload = {
+    accion         : 'agregarColaborador',
+    colaborador_id : colaborador_id,
+    barberia_id    : BAR_ID,
+    nombre         : nombre,
+    telefono       : tel,
+    porcentaje     : Number(pct) || 0,
+    foto_url       : imgsColab.url || '',
+    horarios       : JSON.stringify(horariosArr),
+    fecha_creacion : new Date().toISOString(),
+    activo         : true,
+  };
+
+  // ★ RENDER INSTANTÁNEO — se pinta ya, con los datos que tenemos en memoria,
+  // sin esperar la respuesta del backend ni volver a leer el Sheet.
+  const nuevoColab = {
+    colaborador_id : colaborador_id,
+    barberia_id    : BAR_ID,
+    nombre         : nombre,
+    telefono       : tel,
+    porcentaje     : Number(pct) || 0,
+    foto_url       : imgsColab.url || '',
+    horarios       : payload.horarios,
+    fecha_creacion : payload.fecha_creacion,
+  };
+  colaboradoresData.unshift(nuevoColab);
+  const empty = document.getElementById('colab-empty');
+  if (empty) empty.style.display = 'none';
+  const lista = document.getElementById('colab-lista');
+  if (lista) lista.prepend(_renderColabCard(nuevoColab));
+
+  // Limpiar formulario de inmediato (no hace falta esperar al backend)
+  ['col-nombre','col-tel','col-pct'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  imgsColab.url = ''; imgsColab.file = null;
+  const avImg = document.getElementById('colab-av-img');
+  if (avImg) { avImg.src = ''; avImg.classList.remove('on'); }
+  const avIcon = document.getElementById('colab-av-icon');
+  if (avIcon) avIcon.style.display = '';
+
+  showOv('Creando colaborador...');
+  try {
+    const json = await gasPost(payload);
+    hideOv();
+    if (json.error) throw new Error(json.error);
+    toast('✓ Colaborador creado');
+    // Si el backend normalizó la foto_url (p.ej. subió base64 tardío),
+    // actualizamos la tarjeta ya pintada con la URL definitiva.
+    if (json.foto_url && json.foto_url !== nuevoColab.foto_url) {
+      nuevoColab.foto_url = normDriveUrl(json.foto_url);
+      const card = lista?.querySelector(`[data-colaborador-id="${colaborador_id}"]`);
+      if (card) {
+        const img = card.querySelector('img');
+        if (img) img.src = nuevoColab.foto_url;
+      }
+    }
+  } catch(e) {
+    hideOv();
+    toast('⚠ Guardado local, no sincronizado con el servidor: ' + e.message, true);
+    // No revertimos la tarjeta: recargarColaboradores() sincronizará
+    // el estado real la próxima vez que se abra el tab Equipo.
+  }
+
+  btn.disabled = false;
+}
+
+/* ── Cargar y renderizar lista completa de colaboradores (desde el Sheet) ── */
+async function cargarColaboradores() {
+  try {
+    const json = await gasGet({ accion:'leerColaboradores', barberia_id:BAR_ID });
+    colaboradoresData = (json.colaboradores || []).map(c => ({
+      colaborador_id : c.colaborador_id,
+      barberia_id    : c.barberia_id,
+      nombre         : c.nombre || '',
+      telefono       : c.telefono || '',
+      porcentaje     : Number(c.porcentaje) || 0,
+      foto_url       : normDriveUrl(c.foto_url || ''),
+      horarios       : c.horarios || '[]',
+      fecha_creacion : c.fecha_creacion || '',
+    }));
+    renderColaboradores();
+  } catch(e) {
+    toast('Error cargando equipo: ' + e.message, true);
+  }
+}
+
+function renderColaboradores() {
+  const cont  = document.getElementById('colab-lista');
+  const empty = document.getElementById('colab-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+  if (!colaboradoresData.length) { if (empty) empty.style.display = 'flex'; return; }
+  if (empty) empty.style.display = 'none';
+  colaboradoresData.forEach(c => cont.appendChild(_renderColabCard(c)));
+}
+
+/* ── Cargar la lista al entrar al tab Equipo (sin tocar el HTML) ── */
+(function() {
+  const navColab = document.getElementById('nav-colab');
+  if (navColab) {
+    navColab.addEventListener('click', () => { cargarColaboradores(); });
+  }
+})();
+
+console.log('%c✅ Patch Colaboradores (Equipo) v2 — render instantáneo aplicado', 'color:#e9c176;font-weight:bold;');
 </script>
 
 
