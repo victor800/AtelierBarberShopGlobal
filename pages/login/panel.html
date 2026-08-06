@@ -3708,28 +3708,30 @@ console.log('%c✅ Patch anti-borrado de citas en refrescos silenciosos aplicado
 
 
 <!-- ═══════════════════════════════════════════════════════════
-   PATCH — Modal de activación de notificaciones al iniciar sesión
-   Pégalo antes de </body>, DESPUÉS de todos tus otros <script>.
-   No toca nada existente: solo agrega la función y la llama
-   dentro de init().
+   PATCH SIMPLE — Notificaciones + Badge en segundo plano
+   Sin Service Worker, sin Vercel, sin cambios en Apps Script.
+   Usa el mismo polling que ya tienes (cargarCitas cada 10s).
+   
+   Pégalo antes de </body> en panel-barbero.html.
+   Reemplaza cualquier patch anterior de notificaciones que
+   hayas pegado — este ya incluye todo en un solo bloque.
 ═══════════════════════════════════════════════════════════ -->
 <script>
-/* ══ Detección de plataforma ══ */
+/* ══ Detección de plataforma (para el mensaje correcto en iOS) ══ */
 function _esIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS moderno
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 function _esStandalonePWA() {
   return window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true; // Safari iOS lo expone así
+    window.navigator.standalone === true;
 }
 
-/* ══ Modal de notificaciones ══ */
+/* ══ Modal — pide activar notificaciones al iniciar sesión ══ */
 function mostrarModalNotificaciones() {
-  // Ya decidido antes (aceptó, rechazó, o cerró "no ahora") → no volver a insistir
   if (localStorage.getItem('atelier_notif_decidido') === '1') return;
-  // Ya tiene permiso concedido por otro medio → no hace falta
   if (typeof Notification !== 'undefined' && Notification.permission === 'granted') return;
+  if (typeof Notification === 'undefined') return; // navegador sin soporte, no insistir
 
   const iosNoInstalado = _esIOS() && !_esStandalonePWA();
 
@@ -3742,7 +3744,6 @@ function mostrarModalNotificaciones() {
   }
 
   if (iosNoInstalado) {
-    // En Safari iOS normal el permiso ni aparece: hay que guiar a "Agregar a inicio"
     modal.innerHTML = `
       <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.25);padding:26px 20px 40px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
         <div style="width:52px;height:52px;border:1px solid rgba(233,193,118,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
@@ -3768,7 +3769,7 @@ function mostrarModalNotificaciones() {
         <p style="font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:rgba(233,193,118,.5);text-align:center;margin-bottom:10px">Notificaciones</p>
         <p style="font-family:'Noto Serif',serif;font-size:19px;color:#e5e2e1;text-align:center;margin-bottom:10px;font-weight:400">Entérate al instante de tus citas</p>
         <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:24px">
-          Activa las notificaciones para recibir un aviso con sonido apenas un cliente agende, aunque tengas el panel en segundo plano.
+          Activa las notificaciones para recibir un aviso con sonido y ver el número de citas pendientes en el ícono, aunque tengas el panel en segundo plano.
         </p>
         <div style="display:flex;flex-direction:column;gap:10px">
           <button id="btn-notif-activar" style="width:100%;padding:14px;background:rgba(233,193,118,.14);border:1px solid rgba(233,193,118,.4);color:#e9c176;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
@@ -3779,7 +3780,6 @@ function mostrarModalNotificaciones() {
       </div>`;
     document.getElementById('btn-notif-activar').onclick = async () => {
       try {
-        // Desbloquea el audio en el mismo gesto del usuario (requisito de iOS/Android)
         const ctx = getAudioCtx();
         if (ctx.state === 'suspended') await ctx.resume();
         const osc = ctx.createOscillator(); const gain = ctx.createGain();
@@ -3789,23 +3789,21 @@ function mostrarModalNotificaciones() {
       let permiso = 'denied';
       try { permiso = await Notification.requestPermission(); } catch(e) {}
       _cerrarModalNotif(true);
-      if (permiso === 'granted') toast('✓ Notificaciones activadas');
+      if (permiso === 'granted') { toast('✓ Notificaciones activadas'); actualizarBadgeApp(todasCitas.filter(c=>c.estado==='pendiente').length); }
       else toast('Notificaciones desactivadas — puedes activarlas luego desde el navegador', true);
     };
   }
-
   modal.style.display = 'flex';
 }
-
 function _cerrarModalNotif(marcarDecidido) {
   const modal = document.getElementById('modal-notif');
   if (modal) modal.style.display = 'none';
   if (marcarDecidido) localStorage.setItem('atelier_notif_decidido', '1');
 }
 
-/* ══ Badge en el ícono de la app / pestaña (Badging API) ══
-   Soportado en Chrome/Edge Android y en PWAs instaladas de escritorio.
-   iOS no lo soporta aún — se degrada solo, sin romper nada. */
+/* ══ Badge sobre el ícono de la app + título de la pestaña ══
+   Funciona mientras el navegador siga corriendo el panel en segundo
+   plano (sin Service Worker, no sobrevive a que el SO mate el proceso). */
 function actualizarBadgeApp(count) {
   if ('setAppBadge' in navigator) {
     try {
@@ -3813,34 +3811,41 @@ function actualizarBadgeApp(count) {
       else navigator.clearAppBadge().catch(()=>{});
     } catch(e) {}
   }
-  // Además, refleja el pendiente en el <title> de la pestaña como respaldo universal
   const base = 'THE ATELIER | Panel';
   document.title = count > 0 ? `(${count}) ${base}` : base;
 }
 
-/* ══ Enganchar el badge cada vez que se recalculan los badges de tabs ══ */
-const _actualizarBadgesOriginal = window.actualizarBadges;
-window.actualizarBadges = function() {
-  _actualizarBadgesOriginal();
-  const pend = todasCitas.filter(c => c.estado === 'pendiente').length;
-  actualizarBadgeApp(pend);
-};
+/* ══ Engancha el badge cada vez que se recalculan los badges de tabs ══ */
+if (typeof window.actualizarBadges === 'function' && !window._badgeAppEnganchado) {
+  window._badgeAppEnganchado = true;
+  const _original = window.actualizarBadges;
+  window.actualizarBadges = function() {
+    _original();
+    const pend = todasCitas.filter(c => c.estado === 'pendiente').length;
+    actualizarBadgeApp(pend);
+  };
+}
 
-/* ══ Al hacer click/tap en la notificación del sistema, ya navega a Citas
-   y limpia el badge (esto ya estaba en detectarCitasNuevas, solo añadimos
-   el clear del badge de app) ══ */
-const _detectarCitasNuevasOriginal = window.detectarCitasNuevas;
-window.detectarCitasNuevas = function(citasNuevas) {
-  _detectarCitasNuevasOriginal(citasNuevas);
-};
+/* ══ Limpia el badge cuando el usuario entra a la pestaña de Citas
+   (ya la vio, no tiene sentido seguir mostrando el número) ══ */
+if (typeof window.goTabByName === 'function' && !window._goTabBadgeEnganchado) {
+  window._goTabBadgeEnganchado = true;
+  const _goTabOriginal = window.goTabByName;
+  window.goTabByName = function(id) {
+    _goTabOriginal(id);
+    if (id === 't-citas') actualizarBadgeApp(0);
+  };
+}
 
-/* Parcheamos el onclick de la notificación nativa para limpiar el badge también */
-document.addEventListener('DOMContentLoaded', () => {
-  // no-op de seguridad; el patch real de onclick está dentro de detectarCitasNuevas original,
-  // que ya llama goTabByName('t-citas') — eso además dispara actualizarBadges() en el próximo refresh.
+/* ══ Vuelve a poner el badge correcto al regresar de segundo plano ══
+   (por si el navegador pausó el JS un rato y el número quedó viejo) */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && typeof todasCitas !== 'undefined') {
+    actualizarBadgeApp(todasCitas.filter(c => c.estado === 'pendiente').length);
+  }
 });
 
-console.log('%c✅ Patch notificaciones de citas aplicado', 'color:#e9c176;font-weight:bold;');
+console.log('%c✅ Patch notificaciones + badge (sin backend) aplicado', 'color:#e9c176;font-weight:bold;');
 </script>
 
 
