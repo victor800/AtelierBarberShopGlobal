@@ -3639,5 +3639,76 @@ console.log('%c✅ Patch Colaboradores (Equipo) v2 — render instantáneo aplic
 </script>
 
 
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PATCH — Sesión siempre activa con datos actualizados
+   
+   Soluciona: "entro al panel y no muestra las citas, pero si
+   cierro sesión y entro de nuevo sí las muestra".
+
+   Causas cubiertas:
+   1) Cold start de Google Apps Script — la primera llamada al
+      backend puede tardar o fallar. Se agrega un reintento
+      automático y rápido (3s) si la primera carga llega vacía.
+   2) bfcache del navegador — al volver a la pestaña o restaurar
+      la página desde el caché de "atrás/adelante", el navegador
+      NO vuelve a ejecutar tus scripts, así que ves el estado
+      congelado de la última carga. Se fuerza una recarga total
+      de datos cada vez que la página vuelve a estar visible.
+═══════════════════════════════════════════════════════════ */
+
+/* ── 1) Reintento rápido si la primera carga de citas llega vacía ── */
+let _citasReintentoHecho = false;
+async function _reintentarCitasSiVacio() {
+  if (_citasReintentoHecho) return;
+  _citasReintentoHecho = true;
+  if (todasCitas.length === 0) {
+    await cargarCitas(true);
+  }
+}
+
+/* ── 2) Recarga total cuando la pestaña/página vuelve a estar activa ── */
+let _ultimaRecargaTotal = Date.now();
+const _MIN_MS_ENTRE_RECARGAS = 4000; // evita recargas duplicadas muy seguidas
+
+async function _recargaTotalSiCorresponde(motivo) {
+  const ahora = Date.now();
+  if (ahora - _ultimaRecargaTotal < _MIN_MS_ENTRE_RECARGAS) return;
+  _ultimaRecargaTotal = ahora;
+  console.log('[sesion-activa] recargando datos —', motivo);
+  try {
+    await Promise.all([ cargarCitas(true), recargarCortes(), recargarProductos() ]);
+    const ahoraFecha = new Date();
+    const el = document.getElementById('ultima-actualizacion');
+    if (el) el.textContent = `última vez ${String(ahoraFecha.getHours()).padStart(2,'0')}:${String(ahoraFecha.getMinutes()).padStart(2,'0')}`;
+  } catch(e) {
+    console.warn('[sesion-activa] error al recargar:', e.message);
+  }
+}
+
+/* bfcache: la página se restauró desde caché sin re-ejecutar scripts */
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) _recargaTotalSiCorresponde('bfcache restaurado');
+});
+
+/* El usuario vuelve a la pestaña/app (cambia de app y regresa, por ejemplo) */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') _recargaTotalSiCorresponde('pestaña visible de nuevo');
+});
+
+/* Reconexión de red — si el celular perdió señal y volvió */
+window.addEventListener('online', () => _recargaTotalSiCorresponde('conexión recuperada'));
+
+/* ── 3) Enganchar el reintento rápido al final del init() existente ──
+   No modifica tu función init() original — solo se ejecuta después,
+   una vez que la página cargó por primera vez. */
+window.addEventListener('load', () => {
+  setTimeout(_reintentarCitasSiVacio, 3000);
+});
+
+console.log('%c✅ Patch sesión activa + datos siempre actualizados aplicado', 'color:#e9c176;font-weight:bold;');
+</script>
+
+
 </body>
 </html>
