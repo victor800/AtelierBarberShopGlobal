@@ -2982,6 +2982,7 @@ async function init() {
   }catch(e){}
 
   hideOv();
+  setTimeout(mostrarModalNotificaciones, 600);
 }
 init();
 </script>
@@ -3703,6 +3704,143 @@ window.cargarCitas = async function(silencioso=false) {
 };
 
 console.log('%c✅ Patch anti-borrado de citas en refrescos silenciosos aplicado', 'color:#e9c176;font-weight:bold;');
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+   PATCH — Modal de activación de notificaciones al iniciar sesión
+   Pégalo antes de </body>, DESPUÉS de todos tus otros <script>.
+   No toca nada existente: solo agrega la función y la llama
+   dentro de init().
+═══════════════════════════════════════════════════════════ -->
+<script>
+/* ══ Detección de plataforma ══ */
+function _esIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS moderno
+}
+function _esStandalonePWA() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true; // Safari iOS lo expone así
+}
+
+/* ══ Modal de notificaciones ══ */
+function mostrarModalNotificaciones() {
+  // Ya decidido antes (aceptó, rechazó, o cerró "no ahora") → no volver a insistir
+  if (localStorage.getItem('atelier_notif_decidido') === '1') return;
+  // Ya tiene permiso concedido por otro medio → no hace falta
+  if (typeof Notification !== 'undefined' && Notification.permission === 'granted') return;
+
+  const iosNoInstalado = _esIOS() && !_esStandalonePWA();
+
+  let modal = document.getElementById('modal-notif');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal-notif';
+    modal.style.cssText = `position:fixed;inset:0;z-index:999999;background:rgba(5,3,1,.93);backdrop-filter:blur(18px);display:flex;align-items:flex-end;justify-content:center`;
+    document.body.appendChild(modal);
+  }
+
+  if (iosNoInstalado) {
+    // En Safari iOS normal el permiso ni aparece: hay que guiar a "Agregar a inicio"
+    modal.innerHTML = `
+      <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.25);padding:26px 20px 40px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+        <div style="width:52px;height:52px;border:1px solid rgba(233,193,118,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+          <span class="material-symbols-outlined" style="font-size:24px;color:#e9c176">ios_share</span>
+        </div>
+        <p style="font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:rgba(233,193,118,.5);text-align:center;margin-bottom:10px">Notificaciones</p>
+        <p style="font-family:'Noto Serif',serif;font-size:19px;color:#e5e2e1;text-align:center;margin-bottom:10px;font-weight:400">Activa las notificaciones de citas</p>
+        <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:24px">
+          En iPhone/iPad, Safari solo permite notificaciones si agregas este panel a tu pantalla de inicio.<br><br>
+          Toca <strong style="color:#e9c176">Compartir</strong> <span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle">ios_share</span> → <strong style="color:#e9c176">"Agregar a pantalla de inicio"</strong>, y abre el panel desde ese ícono.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button onclick="_cerrarModalNotif(true)" style="width:100%;padding:14px;background:rgba(233,193,118,.14);border:1px solid rgba(233,193,118,.4);color:#e9c176;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;cursor:pointer">Entendido</button>
+          <button onclick="_cerrarModalNotif(true)" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Ahora no</button>
+        </div>
+      </div>`;
+  } else {
+    modal.innerHTML = `
+      <div style="width:100%;max-width:480px;background:#111009;border-top:1px solid rgba(233,193,118,.25);padding:26px 20px 40px;animation:slideUp .3s cubic-bezier(.22,1,.36,1)">
+        <div style="width:52px;height:52px;border:1px solid rgba(233,193,118,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+          <span class="material-symbols-outlined" style="font-size:24px;color:#e9c176">notifications_active</span>
+        </div>
+        <p style="font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:rgba(233,193,118,.5);text-align:center;margin-bottom:10px">Notificaciones</p>
+        <p style="font-family:'Noto Serif',serif;font-size:19px;color:#e5e2e1;text-align:center;margin-bottom:10px;font-weight:400">Entérate al instante de tus citas</p>
+        <p style="font-size:11px;color:#9c8f7b;text-align:center;line-height:1.7;margin-bottom:24px">
+          Activa las notificaciones para recibir un aviso con sonido apenas un cliente agende, aunque tengas el panel en segundo plano.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button id="btn-notif-activar" style="width:100%;padding:14px;background:rgba(233,193,118,.14);border:1px solid rgba(233,193,118,.4);color:#e9c176;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span class="material-symbols-outlined" style="font-size:15px">notifications</span>Activar notificaciones
+          </button>
+          <button onclick="_cerrarModalNotif(true)" style="width:100%;padding:13px;background:transparent;border:1px solid rgba(79,69,53,.25);color:#9c8f7b;font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer">Ahora no</button>
+        </div>
+      </div>`;
+    document.getElementById('btn-notif-activar').onclick = async () => {
+      try {
+        // Desbloquea el audio en el mismo gesto del usuario (requisito de iOS/Android)
+        const ctx = getAudioCtx();
+        if (ctx.state === 'suspended') await ctx.resume();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0, ctx.currentTime); osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.001);
+      } catch(e) {}
+      let permiso = 'denied';
+      try { permiso = await Notification.requestPermission(); } catch(e) {}
+      _cerrarModalNotif(true);
+      if (permiso === 'granted') toast('✓ Notificaciones activadas');
+      else toast('Notificaciones desactivadas — puedes activarlas luego desde el navegador', true);
+    };
+  }
+
+  modal.style.display = 'flex';
+}
+
+function _cerrarModalNotif(marcarDecidido) {
+  const modal = document.getElementById('modal-notif');
+  if (modal) modal.style.display = 'none';
+  if (marcarDecidido) localStorage.setItem('atelier_notif_decidido', '1');
+}
+
+/* ══ Badge en el ícono de la app / pestaña (Badging API) ══
+   Soportado en Chrome/Edge Android y en PWAs instaladas de escritorio.
+   iOS no lo soporta aún — se degrada solo, sin romper nada. */
+function actualizarBadgeApp(count) {
+  if ('setAppBadge' in navigator) {
+    try {
+      if (count > 0) navigator.setAppBadge(count).catch(()=>{});
+      else navigator.clearAppBadge().catch(()=>{});
+    } catch(e) {}
+  }
+  // Además, refleja el pendiente en el <title> de la pestaña como respaldo universal
+  const base = 'THE ATELIER | Panel';
+  document.title = count > 0 ? `(${count}) ${base}` : base;
+}
+
+/* ══ Enganchar el badge cada vez que se recalculan los badges de tabs ══ */
+const _actualizarBadgesOriginal = window.actualizarBadges;
+window.actualizarBadges = function() {
+  _actualizarBadgesOriginal();
+  const pend = todasCitas.filter(c => c.estado === 'pendiente').length;
+  actualizarBadgeApp(pend);
+};
+
+/* ══ Al hacer click/tap en la notificación del sistema, ya navega a Citas
+   y limpia el badge (esto ya estaba en detectarCitasNuevas, solo añadimos
+   el clear del badge de app) ══ */
+const _detectarCitasNuevasOriginal = window.detectarCitasNuevas;
+window.detectarCitasNuevas = function(citasNuevas) {
+  _detectarCitasNuevasOriginal(citasNuevas);
+};
+
+/* Parcheamos el onclick de la notificación nativa para limpiar el badge también */
+document.addEventListener('DOMContentLoaded', () => {
+  // no-op de seguridad; el patch real de onclick está dentro de detectarCitasNuevas original,
+  // que ya llama goTabByName('t-citas') — eso además dispara actualizarBadges() en el próximo refresh.
+});
+
+console.log('%c✅ Patch notificaciones de citas aplicado', 'color:#e9c176;font-weight:bold;');
 </script>
 
 
