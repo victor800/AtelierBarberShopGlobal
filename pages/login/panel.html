@@ -3641,72 +3641,68 @@ console.log('%c✅ Patch Colaboradores (Equipo) v2 — render instantáneo aplic
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   PATCH — Sesión siempre activa con datos actualizados
+   PATCH — No borrar citas visibles si un refresco silencioso falla
    
-   Soluciona: "entro al panel y no muestra las citas, pero si
-   cierro sesión y entro de nuevo sí las muestra".
+   Bug real encontrado: cargarCitas(true) (el refresco automático
+   en segundo plano) borraba las citas ya mostradas si la llamada
+   al backend fallaba una sola vez (ej: al volver de background,
+   la primera petición de red puede fallar antes de reconectar).
+   
+   Esto es justo lo que causaba: "el perfil sigue abierto pero
+   las citas desaparecen" al volver a la app tras un rato.
 
-   Causas cubiertas:
-   1) Cold start de Google Apps Script — la primera llamada al
-      backend puede tardar o fallar. Se agrega un reintento
-      automático y rápido (3s) si la primera carga llega vacía.
-   2) bfcache del navegador — al volver a la pestaña o restaurar
-      la página desde el caché de "atrás/adelante", el navegador
-      NO vuelve a ejecutar tus scripts, así que ves el estado
-      congelado de la última carga. Se fuerza una recarga total
-      de datos cada vez que la página vuelve a estar visible.
+   Fix: en refrescos silenciosos, si falla, se mantiene la última
+   lista buena de citas en pantalla — solo se reintenta, nunca
+   se vacía la vista sin motivo visible para el usuario.
 ═══════════════════════════════════════════════════════════ */
 
-/* ── 1) Reintento rápido si la primera carga de citas llega vacía ── */
-let _citasReintentoHecho = false;
-async function _reintentarCitasSiVacio() {
-  if (_citasReintentoHecho) return;
-  _citasReintentoHecho = true;
-  if (todasCitas.length === 0) {
-    await cargarCitas(true);
-  }
-}
-
-/* ── 2) Recarga total cuando la pestaña/página vuelve a estar activa ── */
-let _ultimaRecargaTotal = Date.now();
-const _MIN_MS_ENTRE_RECARGAS = 4000; // evita recargas duplicadas muy seguidas
-
-async function _recargaTotalSiCorresponde(motivo) {
-  const ahora = Date.now();
-  if (ahora - _ultimaRecargaTotal < _MIN_MS_ENTRE_RECARGAS) return;
-  _ultimaRecargaTotal = ahora;
-  console.log('[sesion-activa] recargando datos —', motivo);
+window.cargarCitas = async function(silencioso=false) {
+  const ico=document.getElementById('refresh-ico');
+  const btn=document.getElementById('btn-refresh');
+  if(!silencioso){ if(ico) ico.style.animation='rot 1s linear infinite'; if(btn) btn.style.opacity='.5'; }
   try {
-    await Promise.all([ cargarCitas(true), recargarCortes(), recargarProductos() ]);
-    const ahoraFecha = new Date();
-    const el = document.getElementById('ultima-actualizacion');
-    if (el) el.textContent = `última vez ${String(ahoraFecha.getHours()).padStart(2,'0')}:${String(ahoraFecha.getMinutes()).padStart(2,'0')}`;
+    const json=await gasGet({ accion:'leerCitas', barberia_id:BAR_ID });
+    const raw=json.citas||json.data||(Array.isArray(json)?json:[]);
+    todasCitas = raw.map(c=>({
+      cita_id    : String(c.cita_id    || c.reserva_id || ''),
+      barberia_id: String(c.barberia_id|| BAR_ID),
+      nombre     : String(c.nombre     || c.cliente    || c.cliente_id || 'Cliente'),
+      telefono   : String(c.telefono   || c.tel        || ''),
+      barbero_id : String(c.barbero_id || c.barbero    || BAR_ID2),
+      servicio   : String(c.Tipo_Corte || c.servicio_nombre || c.servicio || 'Corte'),
+      fecha      : c.fecha  || '',
+      hora       : c.hora   || '',
+      duracion   : c.duracion_min || c.duracion || '',
+      estado     : String(c.estado || 'pendiente'),
+      precio     : c.precio || c.servicio_precio || 0,
+      notas      : String(c.notas || ''),
+    }));
+    detectarCitasNuevas(todasCitas);
+    if (_calFiltroFecha) {
+      calSeleccionarFecha(_calFiltroFecha);
+    } else {
+      renderCitas(filtroActivo==='todas'?todasCitas:todasCitas.filter(c=>c.estado===filtroActivo));
+    }
+    if (_calAbierto) renderCal();
+    const ahora=new Date();
+    const el=document.getElementById('ultima-actualizacion');
+    if(el) el.textContent=`última vez ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    if(!silencioso) toast('✓ '+todasCitas.length+' citas cargadas');
   } catch(e) {
-    console.warn('[sesion-activa] error al recargar:', e.message);
+    // ── FIX: en refrescos silenciosos NO se borra la lista ya visible ──
+    if(!silencioso) {
+      toast('Error cargando citas: '+e.message,true);
+      renderCitas([]);
+    } else {
+      console.warn('[cargarCitas silencioso] falló, se conserva la última lista buena:', e.message);
+    }
+  } finally {
+    if(ico) ico.style.animation='';
+    if(btn) btn.style.opacity='1';
   }
-}
+};
 
-/* bfcache: la página se restauró desde caché sin re-ejecutar scripts */
-window.addEventListener('pageshow', (e) => {
-  if (e.persisted) _recargaTotalSiCorresponde('bfcache restaurado');
-});
-
-/* El usuario vuelve a la pestaña/app (cambia de app y regresa, por ejemplo) */
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') _recargaTotalSiCorresponde('pestaña visible de nuevo');
-});
-
-/* Reconexión de red — si el celular perdió señal y volvió */
-window.addEventListener('online', () => _recargaTotalSiCorresponde('conexión recuperada'));
-
-/* ── 3) Enganchar el reintento rápido al final del init() existente ──
-   No modifica tu función init() original — solo se ejecuta después,
-   una vez que la página cargó por primera vez. */
-window.addEventListener('load', () => {
-  setTimeout(_reintentarCitasSiVacio, 3000);
-});
-
-console.log('%c✅ Patch sesión activa + datos siempre actualizados aplicado', 'color:#e9c176;font-weight:bold;');
+console.log('%c✅ Patch anti-borrado de citas en refrescos silenciosos aplicado', 'color:#e9c176;font-weight:bold;');
 </script>
 
 
