@@ -635,7 +635,13 @@ async function cargarDesdeSheet() {
     .map(c => ({ ...c, imagen_url: normDriveUrl(c.imagen_url || '') }));
 
   hEspeciales = (rHesp.horariosEspeciales || rHesp.data || [])
-    .filter(h => (!h.barberia_id || h.barberia_id === BAR_ID) && isTruthy(h.activo !== undefined ? h.activo : true));
+    .filter(h => (!h.barberia_id || h.barberia_id === BAR_ID) && isTruthy(h.activo !== undefined ? h.activo : true))
+    .map(h => ({
+      ...h,
+      fecha: normFechaGAS(h.fecha),
+      hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : h.hora_inicio,
+      hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : h.hora_fin,
+    }));
 
   productos = (rTienda.productos || rTienda.data || [])
     .filter(p => (!p.barberia_id || p.barberia_id === BAR_ID) && isTruthy(p.activo !== undefined ? p.activo : true))

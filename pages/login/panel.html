@@ -1589,10 +1589,12 @@ function renderHorariosEspeciales() {
 };
   [...horariosEspeciales].sort((a,b) => a.fecha.localeCompare(b.fecha)).forEach(h => {
     const m  = meta[h.tipo] || meta.tarde;
-    const [Y,M,D] = h.fecha.split('-');
-    const fd = `${D}/${M}/${Y}`;
-    const horas = h.tipo !== 'cierre' && h.hora_inicio
-      ? `<span style="font-size:10px;color:#9c8f7b;margin-top:3px;display:block">${h.hora_inicio} – ${h.hora_fin}</span>` : '';
+    const fechaLimpia = normFechaGAS(h.fecha);
+const [Y,M,D] = fechaLimpia.split('-');
+const fd = (Y&&M&&D) ? `${D}/${M}/${Y}` : fechaLimpia;
+const hi = normHoraGAS(h.hora_inicio), hf = normHoraGAS(h.hora_fin);
+const horas = h.tipo !== 'cierre' && hi
+  ? `<span style="font-size:10px;color:#9c8f7b;margin-top:3px;display:block">${hi} – ${hf}</span>` : '';
     const card = document.createElement('div');
     card.className = 'hesp-card';
     card.innerHTML = `
@@ -2983,7 +2985,47 @@ async function init() {
   try{
     const jhe=await gasGet({accion:'leerHorariosEspeciales',barberia_id:BAR_ID});
     if(jhe.horariosEspeciales?.length){
-      horariosEspeciales=jhe.horariosEspeciales.map(h=>({id:h.hesp_id,fecha:h.fecha,tipo:h.tipo,hora_inicio:h.hora_inicio,hora_fin:h.hora_fin,nota:h.nota}));
+     /* ══ FIX bug histórico Sheets/Bogotá (offset BMT -4:56:16 en fechas 1899) ══ */
+function normHoraGAS(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) {
+    if (s.startsWith('1899-12-29') || s.startsWith('1899-12-30')) {
+      const d = new Date(s);
+      let seg = d.getUTCHours()*3600 + d.getUTCMinutes()*60 + d.getUTCSeconds();
+      seg -= (4*3600 + 56*60 + 16); // revertir offset BMT histórico de Bogotá
+      if (seg < 0) seg += 24*3600;
+      const hh = Math.floor(seg/3600), mm = Math.floor((seg%3600)/60);
+      return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+    }
+    try {
+      const d = new Date(s);
+      return String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1]||'').slice(0,5); }
+  }
+  if (/^\d{1,2}:\d{2}/.test(s)) { const p = s.slice(0,5); return p.length===4?'0'+p:p; }
+  return s;
+}
+function normFechaGAS(raw) {
+  let s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) s = s.split('T')[0];
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+    const [d,m,y] = s.split('/');
+    s = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+  }
+  return s;
+}
+
+/* ══ Carga desde backend — ahora normaliza fecha/horas ══ */
+horariosEspeciales = jhe.horariosEspeciales.map(h => ({
+  id: h.hesp_id,
+  fecha: normFechaGAS(h.fecha),
+  tipo: h.tipo,
+  hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : '',
+  hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : '',
+  nota: h.nota,
+}));
       renderHorariosEspeciales();
     }
   }catch(e){}
