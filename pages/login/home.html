@@ -1100,27 +1100,42 @@ function renderSlots(h, hesp, fecha, fechaStr) {
 }
 let hiStr = extractHHMM(h && h.hora_inicio) || '08:00';
 let hfStr = extractHHMM(h && h.hora_fin)    || '20:00';
-  if (hesp && hesp.tipo !== 'cierre' && hesp.hora_inicio && hesp.hora_fin) {
-    hiStr = hesp.hora_inicio.toString().slice(0,5);
-    hfStr = hesp.hora_fin.toString().slice(0,5);
-  }
 
-  const inv  = parseInt((h && h.intervalo_min) || 30);
-  let cur    = toMin(hiStr);
-  const end  = toMin(hfStr);
-  const bloq = horasBloqueadas(fechaStr || (fecha.toISOString().slice(0,10)), inv);
+// ★ FIX: solo "tarde" (apertura tarde/cierre temprano) y "especial"
+// reemplazan el rango del día completo. "almuerzo" NO debe reemplazarlo:
+// solo bloquea ese tramo dentro del horario normal.
+if (hesp && (hesp.tipo === 'tarde' || hesp.tipo === 'especial') && hesp.hora_inicio && hesp.hora_fin) {
+  hiStr = hesp.hora_inicio.toString().slice(0,5);
+  hfStr = hesp.hora_fin.toString().slice(0,5);
+}
 
-  const man = [], tar = [], noc = [];
+const inv  = parseInt((h && h.intervalo_min) || 30);
+let cur    = toMin(hiStr);
+const end  = toMin(hfStr);
+const bloq = horasBloqueadas(fechaStr || (fecha.toISOString().slice(0,10)), inv);
 
-  while (cur < end) {
-    const s  = minStr(cur);
-    const hr = Math.floor(cur / 60);
+// ★ FIX: rango de almuerzo a excluir, si la excepción del día es tipo "almuerzo"
+let almIni = null, almFin = null;
+if (hesp && hesp.tipo === 'almuerzo' && hesp.hora_inicio && hesp.hora_fin) {
+  almIni = toMin(hesp.hora_inicio.toString().slice(0,5));
+  almFin = toMin(hesp.hora_fin.toString().slice(0,5));
+}
+
+const man = [], tar = [], noc = [];
+
+while (cur < end) {
+  const s  = minStr(cur);
+  const hr = Math.floor(cur / 60);
+  // ★ FIX: saltar los slots que caen dentro del rango de almuerzo
+  const enAlmuerzo = almIni !== null && cur >= almIni && cur < almFin;
+  if (!enAlmuerzo) {
     const entry = { hora: s, ocupada: bloq.has(s) };
     if (hr < 12) man.push(entry);
     else if (hr < 17) tar.push(entry);
     else noc.push(entry);
-    cur += inv;
   }
+  cur += inv;
+}
 
   if (!man.length && !tar.length && !noc.length) {
     document.getElementById('sg-empty').style.display = 'block'; return;
@@ -1213,6 +1228,26 @@ function abrirModal() {
 }
 function cerrarModal(e) {
   if (e.target.id === 'modal-bg') document.getElementById('modal-bg').classList.remove('on');
+}
+
+// Al generar los slots del día seleccionado:
+function filtrarSlotsPorExcepciones(slots, fechaSeleccionada, horariosEspeciales) {
+  const excepcionesDelDia = horariosEspeciales.filter(h => h.fecha === fechaSeleccionada);
+
+  // Si hay un cierre total ese día
+  if (excepcionesDelDia.some(h => h.tipo === 'cierre')) return [];
+
+  // Bloquear solo el rango de almuerzo (u otros rangos con tipo 'almuerzo' o 'tarde')
+  const bloqueos = excepcionesDelDia.filter(h => h.tipo === 'almuerzo' || h.tipo === 'tarde');
+
+  return slots.filter(slotHora => {
+    return !bloqueos.some(b => {
+      const slotMin = toMin(slotHora);
+      const iniMin  = toMin(b.hora_inicio);
+      const finMin  = toMin(b.hora_fin);
+      return slotMin >= iniMin && slotMin < finMin; // dentro del rango bloqueado
+    });
+  });
 }
 
 /* ══════════════════════════════════════════════════════

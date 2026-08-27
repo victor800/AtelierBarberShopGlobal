@@ -603,10 +603,11 @@ input[type=date],input[type=time]{font-size:14px!important}
       <div><label for="hesp-fecha" class="lbl">Fecha *</label><input type="date" id="hesp-fecha" class="inp" style="color:#e9c176"/></div>
       <div><label for="hesp-tipo" class="lbl">Tipo *</label>
         <select id="hesp-tipo" class="inp" onchange="toggleHespHoras()">
-          <option value="cierre">🔴 Día cerrado — no disponible</option>
-          <option value="tarde">🟡 Apertura tarde / cierre temprano</option>
-          <option value="especial">🟢 Horario especial / evento</option>
-        </select>
+  <option value="cierre">🔴 Día cerrado — no disponible</option>
+  <option value="almuerzo">🍽️ Almuerzo — bloquear solo ese rango</option>
+  <option value="tarde">🟡 Apertura tarde / cierre temprano</option>
+  <option value="especial">🟢 Horario especial / evento</option>
+</select>
       </div>
       <div id="hesp-horas-wrap" style="display:none;grid-template-columns:1fr 1fr;gap:10px">
         <div><label for="hesp-hi" class="lbl">Hora inicio</label><input type="time" id="hesp-hi" class="inp" value="10:00" style="color:#e9c176"/></div>
@@ -1545,7 +1546,12 @@ function toggleHespHoras() {
   const t = document.getElementById('hesp-tipo').value;
   const w = document.getElementById('hesp-horas-wrap');
   w.style.display = t === 'cierre' ? 'none' : 'grid';
+  if (t === 'almuerzo') {
+    document.getElementById('hesp-hi').value = '13:00';
+    document.getElementById('hesp-hf').value = '14:00';
+  }
 }
+
 function agregarHorarioEspecial() {
   const fecha = document.getElementById('hesp-fecha').value;
   const tipo  = document.getElementById('hesp-tipo').value;
@@ -1575,11 +1581,12 @@ function renderHorariosEspeciales() {
   lista.innerHTML = '';
   if (!horariosEspeciales.length) { empty.style.display='flex'; return; }
   empty.style.display = 'none';
-  const meta = {
-    cierre:  { cls:'ht-cierre',   ico:'event_busy', lbl:'Cerrado'          },
-    tarde:   { cls:'ht-tarde',    ico:'schedule',   lbl:'Horario especial' },
-    especial:{ cls:'ht-especial', ico:'stars',      lbl:'Evento especial'  },
-  };
+ const meta = {
+  cierre:  { cls:'ht-cierre',   ico:'event_busy', lbl:'Cerrado'          },
+  almuerzo:{ cls:'ht-tarde',    ico:'restaurant',  lbl:'Almuerzo'         },
+  tarde:   { cls:'ht-tarde',    ico:'schedule',   lbl:'Horario especial' },
+  especial:{ cls:'ht-especial', ico:'stars',      lbl:'Evento especial'  },
+};
   [...horariosEspeciales].sort((a,b) => a.fecha.localeCompare(b.fecha)).forEach(h => {
     const m  = meta[h.tipo] || meta.tarde;
     const [Y,M,D] = h.fecha.split('-');
