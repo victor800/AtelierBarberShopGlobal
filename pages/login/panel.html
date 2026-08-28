@@ -4078,6 +4078,57 @@ document.addEventListener('visibilitychange', () => {
 console.log('%c✅ Patch notificaciones + badge (sin backend) aplicado', 'color:#e9c176;font-weight:bold;');
 </script>
 
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PATCH — Clientes siempre visibles al abrir el panel
+   Antes: initClientesEnDashboard() nunca se llamaba, así que
+   la tabla de clientes solo aparecía si el usuario le daba
+   clic manual a "Actualizar". Ahora se carga automáticamente
+   al iniciar el panel y se refresca junto con las citas.
+═══════════════════════════════════════════════════════════ */
+
+// 1) Cargar clientes apenas arranca el panel (en paralelo con lo demás)
+(function _autoInitClientes() {
+  const _initOriginal = window.init;
+  if (typeof _initOriginal === 'function' && !window._clientesAutoInitPatched) {
+    window._clientesAutoInitPatched = true;
+    window.init = async function() {
+      await _initOriginal();
+      try {
+        await cargarClientes(true);   // silencioso, sin toast
+        _clientesReady = true;
+      } catch(e) {
+        console.warn('No se pudieron precargar los clientes:', e.message);
+      }
+    };
+  }
+})();
+
+// 2) Mantenerlos frescos junto con el auto-refresh de citas (cada 10s)
+if (typeof window.iniciarAutoRefresh === 'function' && !window._clientesAutoRefreshPatched) {
+  window._clientesAutoRefreshPatched = true;
+  const _autoRefreshOriginal = window.iniciarAutoRefresh;
+  window.iniciarAutoRefresh = function() {
+    if (window._refreshInterval) clearInterval(window._refreshInterval);
+    window._refreshInterval = setInterval(async () => {
+      await cargarCitas(true);
+      await cargarClientes(true);        // ★ refresca también clientes
+      const enCortes = document.getElementById('t-cortes')?.classList.contains('on');
+      const enTienda = document.getElementById('t-tienda')?.classList.contains('on');
+      if (enCortes) recargarCortes();
+      if (enTienda) recargarProductos();
+      actualizarBadges();
+    }, 10 * 1000);
+  };
+}
+
+// 3) Por si el init ya corrió antes de que este patch se cargue,
+//    forzamos una carga inmediata igual (no hace daño duplicarla).
+cargarClientes(true).then(() => { _clientesReady = true; }).catch(()=>{});
+
+console.log('%c✅ Patch clientes siempre visibles aplicado', 'color:#e9c176;font-weight:bold;');
+</script>
+
 
 </body>
 </html>
