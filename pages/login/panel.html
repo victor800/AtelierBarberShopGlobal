@@ -1552,7 +1552,7 @@ function toggleHespHoras() {
   }
 }
 
-function agregarHorarioEspecial() {
+async function agregarHorarioEspecial() {
   const fecha = document.getElementById('hesp-fecha').value;
   const tipo  = document.getElementById('hesp-tipo').value;
   const nota  = document.getElementById('hesp-nota').value.trim();
@@ -1566,9 +1566,19 @@ function agregarHorarioEspecial() {
   document.getElementById('hesp-nota').value  = '';
   document.getElementById('hesp-tipo').value  = 'cierre';
   toggleHespHoras();
-  gasPost({ accion:'agregarHorarioEspecial', barberia_id:BAR_ID, ...item }).catch(() => {});
-  toast('✓ Excepción guardada');
+
+  try {
+    const res = await gasPost({ accion:'agregarHorarioEspecial', barberia_id:BAR_ID, ...item });
+    if (!res || res.error) throw new Error(res?.error || 'Sin respuesta del servidor');
+    toast('✓ Excepción guardada');
+  } catch(e) {
+    // ★ si falla de verdad, se revierte de la lista local — ya no miente el toast
+    horariosEspeciales = horariosEspeciales.filter(h => h.id !== item.id);
+    renderHorariosEspeciales();
+    toast('Error guardando excepción: ' + e.message, true);
+  }
 }
+
 function eliminarHorarioEspecial(id) {
   horariosEspeciales = horariosEspeciales.filter(h => h.id !== id);
   renderHorariosEspeciales();

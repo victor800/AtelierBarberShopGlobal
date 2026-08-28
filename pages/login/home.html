@@ -605,6 +605,38 @@ async function gasGet(accion, extra) {
   try { return JSON.parse(txt); } catch(e) { return {}; }
 }
 
+
+function normFechaGAS(raw) {
+  let s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) s = s.split('T')[0];
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+    const [d,m,y] = s.split('/');
+    s = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+  }
+  return s;
+}
+function normHoraGAS(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) {
+    if (s.startsWith('1899-12-29') || s.startsWith('1899-12-30')) {
+      const d = new Date(s);
+      let seg = d.getUTCHours()*3600 + d.getUTCMinutes()*60 + d.getUTCSeconds();
+      seg -= (4*3600 + 56*60 + 16);
+      if (seg < 0) seg += 24*3600;
+      const hh = Math.floor(seg/3600), mm = Math.floor((seg%3600)/60);
+      return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+    }
+    try {
+      const d = new Date(s);
+      return String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1]||'').slice(0,5); }
+  }
+  if (/^\d{1,2}:\d{2}/.test(s)) { const p = s.slice(0,5); return p.length===4?'0'+p:p; }
+  return s;
+}
+
 async function cargarDesdeSheet() {
   const estEl = document.getElementById('horarios-estado');
   const estTx = document.getElementById('horarios-estado-txt');
@@ -1121,10 +1153,22 @@ const end  = toMin(hfStr);
 const bloq = horasBloqueadas(fechaStr || (fecha.toISOString().slice(0,10)), inv);
 
 // ★ FIX: rango de almuerzo a excluir, si la excepción del día es tipo "almuerzo"
-let almIni = null, almFin = null;
+// ★ FIX: soporta DOS fuentes de almuerzo — recurrente semanal (h.almuerzo_*)
+// Y excepción puntual (hesp tipo 'almuerzo') — ambas pueden coexistir.
+const bloqueosAlmuerzo = [];
+
+const almActivoSemanal = h && (h.almuerzo_activo === true || String(h.almuerzo_activo).toLowerCase() === 'true');
+if (almActivoSemanal && h.almuerzo_inicio && h.almuerzo_fin) {
+  const almHiW = extractHHMM(h.almuerzo_inicio) || String(h.almuerzo_inicio).slice(0,5);
+  const almHfW = extractHHMM(h.almuerzo_fin)    || String(h.almuerzo_fin).slice(0,5);
+  bloqueosAlmuerzo.push({ ini: toMin(almHiW), fin: toMin(almHfW) });
+}
+
 if (hesp && hesp.tipo === 'almuerzo' && hesp.hora_inicio && hesp.hora_fin) {
-  almIni = toMin(hesp.hora_inicio.toString().slice(0,5));
-  almFin = toMin(hesp.hora_fin.toString().slice(0,5));
+  bloqueosAlmuerzo.push({
+    ini: toMin(hesp.hora_inicio.toString().slice(0,5)),
+    fin: toMin(hesp.hora_fin.toString().slice(0,5)),
+  });
 }
 
 const man = [], tar = [], noc = [];
@@ -1133,13 +1177,13 @@ while (cur < end) {
   const s  = minStr(cur);
   const hr = Math.floor(cur / 60);
   // ★ FIX: saltar los slots que caen dentro del rango de almuerzo
-  const enAlmuerzo = almIni !== null && cur >= almIni && cur < almFin;
-  if (!enAlmuerzo) {
-    const entry = { hora: s, ocupada: bloq.has(s) };
-    if (hr < 12) man.push(entry);
-    else if (hr < 17) tar.push(entry);
-    else noc.push(entry);
-  }
+  const enAlmuerzo = bloqueosAlmuerzo.some(b => cur >= b.ini && cur < b.fin);
+if (!enAlmuerzo) {
+  const entry = { hora: s, ocupada: bloq.has(s) };
+  if (hr < 12) man.push(entry);
+  else if (hr < 17) tar.push(entry);
+  else noc.push(entry);
+}
   cur += inv;
 }
 
