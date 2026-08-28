@@ -4130,5 +4130,64 @@ console.log('%c✅ Patch clientes siempre visibles aplicado', 'color:#e9c176;fon
 </script>
 
 
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PATCH — Horarios especiales: carga robusta + diagnóstico
+   Soluciona que una excepción guardada no aparezca al recargar.
+═══════════════════════════════════════════════════════════ */
+
+async function cargarHorariosEspeciales(silencioso = true) {
+  try {
+    const jhe = await gasGet({ accion: 'leerHorariosEspeciales', barberia_id: BAR_ID });
+
+    // ★ Diagnóstico: muestra en consola exactamente qué devolvió el backend
+    console.log('[horariosEspeciales] respuesta cruda del backend:', jhe);
+
+    // ★ Tolera distintos nombres de clave que el backend pudiera usar
+    const raw = jhe.horariosEspeciales || jhe.horarios_especiales || jhe.especiales || jhe.data || [];
+
+    if (!Array.isArray(raw) || !raw.length) {
+      horariosEspeciales = [];
+      renderHorariosEspeciales();
+      if (!silencioso) toast('Sin excepciones guardadas en el servidor', true);
+      return;
+    }
+
+    horariosEspeciales = raw.map(h => ({
+      // ★ Tolera hesp_id, id, o cualquier variante
+      id: h.hesp_id || h.id || ('HE-' + Math.random().toString(36).slice(2, 8)),
+      fecha: normFechaGAS(h.fecha),
+      tipo: h.tipo || 'cierre',
+      hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : '',
+      hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : '',
+      nota: h.nota || '',
+    }));
+
+    renderHorariosEspeciales();
+    if (!silencioso) toast('✓ ' + horariosEspeciales.length + ' excepciones cargadas');
+  } catch (e) {
+    console.error('[horariosEspeciales] error cargando:', e);
+    if (!silencioso) toast('Error cargando excepciones: ' + e.message, true);
+  }
+}
+
+// ★ Tras guardar una excepción nueva, vuelve a leer del backend
+//   en vez de confiar solo en el estado local — así confirmamos
+//   que realmente quedó persistida y con el id real del servidor.
+if (typeof window.agregarHorarioEspecial === 'function' && !window._hespPatched) {
+  window._hespPatched = true;
+  const _agregarOriginal = window.agregarHorarioEspecial;
+  window.agregarHorarioEspecial = async function() {
+    await _agregarOriginal();
+    await cargarHorariosEspeciales(true); // ★ recarga real desde el servidor
+  };
+}
+
+// ★ Carga inicial robusta (por si init() no la encontró bien)
+cargarHorariosEspeciales(true);
+
+console.log('%c✅ Patch horarios especiales — carga robusta aplicado', 'color:#e9c176;font-weight:bold;');
+</script>
+
 </body>
 </html>
