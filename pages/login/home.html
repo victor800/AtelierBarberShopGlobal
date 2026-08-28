@@ -530,6 +530,10 @@ const BAR_ID = (function() {
 
 if (BAR_ID !== 'BAR-DEMO') localStorage.setItem('atelier_bar_id', BAR_ID);
 
+/* ★ Intervalo de polling — ajusta según tu volumen de tráfico.
+   30-60s es razonable para no saturar Google Apps Script. */
+const POLL_INTERVAL_MS = 45000;
+
 let perfil      = {};
 let horarios    = [];
 let hEspeciales = [];
@@ -637,71 +641,9 @@ function normHoraGAS(raw) {
   return s;
 }
 
-async function cargarDesdeSheet() {
-  const estEl = document.getElementById('horarios-estado');
-  const estTx = document.getElementById('horarios-estado-txt');
-  estEl.style.display = 'flex';
-  estTx.textContent = 'Conectando...';
-
-  const fetch1 = (accion) =>
-    gasGet(accion).catch(e => { console.warn('[Atelier] ' + accion + ' falló:', e.message); return {}; });
-
-  const [rPerfil, rHorarios, rCortes, rHesp, rTienda, rCitas] = await Promise.all([
-    fetch1('leerPerfil'),
-    fetch1('leerHorarios'),
-    fetch1('leerCortes'),
-    fetch1('leerHorariosEspeciales'),
-    fetch1('leerProductos'),
-    fetch1('leerCitas'),
-  ]);
-  console.log('[DEBUG RAW CITAS]', JSON.stringify(rCitas).slice(0, 2000));
-
-  perfil = rPerfil.perfil || (Array.isArray(rPerfil.data) && rPerfil.data.find(r => r.barberia_id === BAR_ID)) || {};
-  if (perfil.nombre_barberia) localStorage.setItem('atelier_nombre_' + BAR_ID, perfil.nombre_barberia);
-
-  horarios = (rHorarios.horarios || rHorarios.data || [])
-    .filter(h => !h.barberia_id || h.barberia_id === BAR_ID);
-
-  cortes = (rCortes.cortes || rCortes.data || [])
-    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && isTruthy(c.activo !== undefined ? c.activo : true))
-    .map(c => ({ ...c, imagen_url: normDriveUrl(c.imagen_url || '') }));
-
-  hEspeciales = (rHesp.horariosEspeciales || rHesp.data || [])
-    .filter(h => (!h.barberia_id || h.barberia_id === BAR_ID) && isTruthy(h.activo !== undefined ? h.activo : true))
-    .map(h => ({
-      ...h,
-      fecha: normFechaGAS(h.fecha),
-      hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : h.hora_inicio,
-      hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : h.hora_fin,
-    }));
-
-  productos = (rTienda.productos || rTienda.data || [])
-    .filter(p => (!p.barberia_id || p.barberia_id === BAR_ID) && isTruthy(p.activo !== undefined ? p.activo : true))
-    .map(p => ({ ...p, imagen_url: normDriveUrl(p.imagen_url || '') }));
-
-  citas = (rCitas.citas || rCitas.data || [])
-    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && c.estado !== 'cancelada')
-    .map(c => {
-      let rawFecha = String(c.fecha || '').trim();
-      if (rawFecha.includes('T')) {
-        try {
-          const d = new Date(rawFecha);
-          const offset = d.getTimezoneOffset();
-          const local  = new Date(d.getTime() - offset * 60000);
-          rawFecha = local.toISOString().split('T')[0];
-        } catch(e) {
-          rawFecha = rawFecha.split('T')[0];
-        }
-      } else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(rawFecha)) {
-        const [d, m, y] = rawFecha.split('/');
-        rawFecha = y + '-' + m.padStart(2,'0') + '-' + d.padStart(2,'0');
-      } else if (/^\d{5}$/.test(rawFecha)) {
-        const epoch = new Date(1899, 11, 30);
-        epoch.setDate(epoch.getDate() + parseInt(rawFecha));
-        rawFecha = epoch.toISOString().split('T')[0];
-      }
-
-      let rawHora = (function parseHora(raw) {
+/* ★ EXTRAÍDO — normalización de una cita cruda del sheet a formato interno.
+   Se usa tanto en la carga inicial como en el polling, para no duplicar lógica. */
+function parseHoraCita(raw) {
   const s = String(raw || '').trim();
   if (!s) return '';
 
@@ -715,7 +657,7 @@ async function cargarDesdeSheet() {
   }
 
   // Caso 2: decimal Excel (0.4166... = 10:00)
-   const num = parseFloat(s);
+  const num = parseFloat(s);
   if (!isNaN(num) && num > 0 && num < 1) {
     const totalMinBruto = Math.round(num * 24 * 60);
     const offsetMin = new Date().getTimezoneOffset(); // +300 en Colombia
@@ -734,12 +676,103 @@ async function cargarDesdeSheet() {
   }
 
   return s.slice(0,5);
-})(c.hora);
+}
 
-console.log('[HORA RAW]', JSON.stringify(c.hora), '→', rawHora, '| fecha:', rawFecha);
+function normalizarCita(c) {
+  let rawFecha = String(c.fecha || '').trim();
+  if (rawFecha.includes('T')) {
+    try {
+      const d = new Date(rawFecha);
+      const offset = d.getTimezoneOffset();
+      const local  = new Date(d.getTime() - offset * 60000);
+      rawFecha = local.toISOString().split('T')[0];
+    } catch(e) {
+      rawFecha = rawFecha.split('T')[0];
+    }
+  } else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(rawFecha)) {
+    const [d, m, y] = rawFecha.split('/');
+    rawFecha = y + '-' + m.padStart(2,'0') + '-' + d.padStart(2,'0');
+  } else if (/^\d{5}$/.test(rawFecha)) {
+    const epoch = new Date(1899, 11, 30);
+    epoch.setDate(epoch.getDate() + parseInt(rawFecha));
+    rawFecha = epoch.toISOString().split('T')[0];
+  }
 
-      return { ...c, _fecha: rawFecha, _hora: rawHora };
-    });
+  const rawHora = parseHoraCita(c.hora);
+
+  return { ...c, _fecha: rawFecha, _hora: rawHora };
+}
+
+async function fetchCortes() {
+  const r = await gasGet('leerCortes').catch(e => { console.warn('[Atelier] leerCortes falló:', e.message); return {}; });
+  return (r.cortes || r.data || [])
+    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && isTruthy(c.activo !== undefined ? c.activo : true))
+    .map(c => ({ ...c, imagen_url: normDriveUrl(c.imagen_url || '') }));
+}
+
+async function fetchHorariosEspeciales() {
+  const r = await gasGet('leerHorariosEspeciales').catch(e => { console.warn('[Atelier] leerHorariosEspeciales falló:', e.message); return {}; });
+  return (r.horariosEspeciales || r.data || [])
+    .filter(h => (!h.barberia_id || h.barberia_id === BAR_ID) && isTruthy(h.activo !== undefined ? h.activo : true))
+    .map(h => ({
+      ...h,
+      fecha: normFechaGAS(h.fecha),
+      hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : h.hora_inicio,
+      hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : h.hora_fin,
+    }));
+}
+
+async function fetchCitas() {
+  const r = await gasGet('leerCitas').catch(e => { console.warn('[Atelier] leerCitas falló:', e.message); return {}; });
+  return (r.citas || r.data || [])
+    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && c.estado !== 'cancelada')
+    .map(normalizarCita);
+}
+
+async function cargarDesdeSheet() {
+  const estEl = document.getElementById('horarios-estado');
+  const estTx = document.getElementById('horarios-estado-txt');
+  estEl.style.display = 'flex';
+  estTx.textContent = 'Conectando...';
+
+  const fetch1 = (accion) =>
+    gasGet(accion).catch(e => { console.warn('[Atelier] ' + accion + ' falló:', e.message); return {}; });
+
+  const [rPerfil, rHorarios, rCortesRaw, rHespRaw, rTienda, rCitasRaw] = await Promise.all([
+    fetch1('leerPerfil'),
+    fetch1('leerHorarios'),
+    fetch1('leerCortes'),
+    fetch1('leerHorariosEspeciales'),
+    fetch1('leerProductos'),
+    fetch1('leerCitas'),
+  ]);
+
+  perfil = rPerfil.perfil || (Array.isArray(rPerfil.data) && rPerfil.data.find(r => r.barberia_id === BAR_ID)) || {};
+  if (perfil.nombre_barberia) localStorage.setItem('atelier_nombre_' + BAR_ID, perfil.nombre_barberia);
+
+  horarios = (rHorarios.horarios || rHorarios.data || [])
+    .filter(h => !h.barberia_id || h.barberia_id === BAR_ID);
+
+  cortes = (rCortesRaw.cortes || rCortesRaw.data || [])
+    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && isTruthy(c.activo !== undefined ? c.activo : true))
+    .map(c => ({ ...c, imagen_url: normDriveUrl(c.imagen_url || '') }));
+
+  hEspeciales = (rHespRaw.horariosEspeciales || rHespRaw.data || [])
+    .filter(h => (!h.barberia_id || h.barberia_id === BAR_ID) && isTruthy(h.activo !== undefined ? h.activo : true))
+    .map(h => ({
+      ...h,
+      fecha: normFechaGAS(h.fecha),
+      hora_inicio: h.tipo !== 'cierre' ? normHoraGAS(h.hora_inicio) : h.hora_inicio,
+      hora_fin: h.tipo !== 'cierre' ? normHoraGAS(h.hora_fin) : h.hora_fin,
+    }));
+
+  productos = (rTienda.productos || rTienda.data || [])
+    .filter(p => (!p.barberia_id || p.barberia_id === BAR_ID) && isTruthy(p.activo !== undefined ? p.activo : true))
+    .map(p => ({ ...p, imagen_url: normDriveUrl(p.imagen_url || '') }));
+
+  citas = (rCitasRaw.citas || rCitasRaw.data || [])
+    .filter(c => (!c.barberia_id || c.barberia_id === BAR_ID) && c.estado !== 'cancelada')
+    .map(normalizarCita);
 
   estTx.textContent = horarios.length + ' horario(s) · ' + cortes.length + ' servicio(s) · ' + citas.length + ' reserva(s)';
   setTimeout(() => { estEl.style.display = 'none'; }, 2500);
@@ -752,6 +785,89 @@ console.log('[HORA RAW]', JSON.stringify(c.hora), '→', rawHora, '| fecha:', ra
   renderTienda();
   initCodigo();
   document.getElementById('loader').classList.add('hide');
+
+  /* ★ Arranca el polling solo después de la primera carga exitosa */
+  iniciarPolling();
+}
+
+/* ══════════════════════════════════════════════════════
+   ★ POLLING — refresca cortes, horarios especiales y citas
+   periódicamente para que la agenda se actualice en vivo
+   sin necesitar recarga manual de la página.
+══════════════════════════════════════════════════════ */
+let pollTimer = null;
+let pollEnCurso = false;
+
+function iniciarPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(pollActualizarDatos, POLL_INTERVAL_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) pollActualizarDatos();
+  });
+}
+
+async function pollActualizarDatos() {
+  // No interrumpir si la pestaña está oculta, si ya hay un poll en curso,
+  // o si el modal de confirmación está abierto (evita pisar el formulario del usuario)
+  if (document.hidden) return;
+  if (pollEnCurso) return;
+  if (document.getElementById('modal-bg').classList.contains('on')) return;
+
+  pollEnCurso = true;
+  try {
+    const [nuevosCortes, nuevosHesp, nuevasCitas] = await Promise.all([
+      fetchCortes(),
+      fetchHorariosEspeciales(),
+      fetchCitas(),
+    ]);
+
+    const cortesCambio = JSON.stringify(nuevosCortes.map(c => c.corte_id + '|' + c.activo + '|' + c.precio))
+                       !== JSON.stringify(cortes.map(c => c.corte_id + '|' + c.activo + '|' + c.precio));
+
+    const hespCambio = JSON.stringify(nuevosHesp.map(h => h.fecha + h.tipo + h.hora_inicio + h.hora_fin))
+                     !== JSON.stringify(hEspeciales.map(h => h.fecha + h.tipo + h.hora_inicio + h.hora_fin));
+
+    const citasCambio = JSON.stringify(nuevasCitas.map(c => c._fecha + c._hora + c.estado))
+                       !== JSON.stringify(citas.map(c => c._fecha + c._hora + c.estado));
+
+    if (!cortesCambio && !hespCambio && !citasCambio) return;
+
+    cortes      = nuevosCortes;
+    hEspeciales = nuevosHesp;
+    citas       = nuevasCitas;
+
+    // Recordar selección actual del dropdown de servicio para no perderla
+    const servActivoId = servicioActivo ? (servicioActivo.corte_id || 'generico') : null;
+
+    if (cortesCambio) {
+      renderServicioSelector();
+      renderCarrusel();
+      // reintenta re-seleccionar el mismo servicio si sigue existiendo
+      if (servActivoId) {
+        const sel = document.getElementById('serv-select');
+        const opt = [...sel.options].find(o => o.dataset.id === servActivoId);
+        if (opt) { sel.value = opt.value; selServicioDropdown(sel); }
+      }
+    }
+
+    // Repinta el calendario del mes visible (respeta calAno/calMes actuales y fechaSel)
+    if (hespCambio || citasCambio) {
+      renderCalGrid();
+    }
+
+    // Si el usuario está viendo los horarios de un día y aún no eligió hora,
+    // refresca esa lista para reflejar bloqueos nuevos (especial o cita de otro cliente)
+    if ((hespCambio || citasCambio) && diaActivo && fechaSel && !slotActivo) {
+      renderSlots(diaActivo.horario, diaActivo.hesp, fechaSel, diaActivo.fechaStr);
+    }
+
+    if (hespCambio) toast('Horarios actualizados');
+    if (citasCambio && !hespCambio) toast('Agenda actualizada');
+  } catch (e) {
+    console.warn('[Atelier] Polling falló:', e.message);
+  } finally {
+    pollEnCurso = false;
+  }
 }
 
 /* ══ RENDER PERFIL ══ */
@@ -990,6 +1106,7 @@ function calNav(d) {
 }
 
 function renderCalGrid() {
+  buildHorarioMap(); // ★ por si horarios recurrentes cambiaron también
   document.getElementById('cal-mes-label').textContent = MESES[calMes] + ' ' + calAno;
   const grid    = document.getElementById('cal-grid');
   const hoy     = new Date();
