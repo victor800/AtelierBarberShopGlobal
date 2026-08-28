@@ -3517,6 +3517,7 @@ function _cliAplicaFiltro(c) {
 }
 
 /* ── Render de la tabla ── */
+/* ══ Render de la tabla — v2: rojo visible para vencidos ══ */
 function renderClientes() {
   const cont  = document.getElementById('clientes-tabla');
   const empty = document.getElementById('clientes-empty');
@@ -3540,31 +3541,48 @@ function renderClientes() {
 
     let dotClass = 'cli-estado-ok';
     let etiqueta = '';
+    let esVencido = false;
     if (dias !== null) {
-      if (dias < 0)      { dotClass = 'cli-estado-vencido'; etiqueta = `${Math.abs(dias)}d atrás`; }
-      else if (dias <= 7){ dotClass = 'cli-estado-proximo'; etiqueta = dias===0?'Hoy':`en ${dias}d`; }
-      else               { dotClass = 'cli-estado-ok';      etiqueta = `en ${dias}d`; }
+      if (dias < 0) {
+        dotClass = 'cli-estado-vencido';
+        etiqueta = `${Math.abs(dias)}d atrás`;
+        esVencido = true;
+      } else if (dias <= 7) {
+        dotClass = 'cli-estado-proximo';
+        etiqueta = dias===0 ? 'Hoy' : `en ${dias}d`;
+      } else {
+        dotClass = 'cli-estado-ok';
+        etiqueta = `en ${dias}d`;
+      }
     }
 
     const row = document.createElement('div');
     row.className = 'cli-row';
+    // ★ Resalta toda la fila si está vencido (más de 15 días desde su corte)
+    if (esVencido) {
+      row.style.background = 'rgba(233,118,118,.06)';
+      row.style.borderLeft = '3px solid #e97676';
+    }
     row.onclick = () => abrirModalRecordatorio(c.cliente_key);
     row.innerHTML = `
-      <div class="cli-avatar">${_cliIniciales(c.nombre)}</div>
+      <div class="cli-avatar" style="${esVencido?'border-color:rgba(233,118,118,.4);color:#e97676':''}">${_cliIniciales(c.nombre)}</div>
       <div style="flex:1;min-width:0">
-        <p style="font-size:12px;color:#e5e2e1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</p>
+        <div style="display:flex;align-items:center;gap:6px">
+          <p style="font-size:12px;color:${esVencido?'#e97676':'#e5e2e1'};font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.nombre}</p>
+          ${esVencido ? `<span style="flex-shrink:0;font-size:7px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 6px;background:rgba(233,118,118,.14);border:1px solid rgba(233,118,118,.4);color:#e97676">Agendar</span>` : ''}
+        </div>
         <p style="font-size:9px;color:#6b5f52;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px">${c.ultimo_servicio||'—'} · ${c.visitas_totales} visita${c.visitas_totales!==1?'s':''}</p>
       </div>
       <div class="cli-fecha-badge">
         <span class="d">${ultima.d}</span><span class="l">${ultima.l}</span>
       </div>
       <div class="cli-fecha-badge">
-        <span class="d" style="display:flex;align-items:center;justify-content:center;gap:4px">
+        <span class="d" style="display:flex;align-items:center;justify-content:center;gap:4px;color:${esVencido?'#e97676':'#e5e2e1'};font-weight:${esVencido?700:600}">
           <span class="cli-estado-dot ${dotClass}"></span>${proxima.d}
         </span>
-        <span class="l">${etiqueta}</span>
+        <span class="l" style="color:${esVencido?'#e97676':'#6b5f52'}">${etiqueta}</span>
       </div>
-      <span class="material-symbols-outlined" style="font-size:16px;color:#25d366;flex-shrink:0">chat</span>`;
+      <span class="material-symbols-outlined" style="font-size:16px;color:${esVencido?'#e97676':'#25d366'};flex-shrink:0">${esVencido?'priority_high':'chat'}</span>`;
     cont.appendChild(row);
   });
 }
