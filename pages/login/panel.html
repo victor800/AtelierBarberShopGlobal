@@ -1131,6 +1131,39 @@ const BAR_ID     = _urlBar || _storedSes.barberia_id || "BAR-DEMO";
 const BAR_ID2    = _storedSes.barbero_id || "barbero-1";
 const sesion     = { barberia_id: BAR_ID, barbero_id: BAR_ID2, ..._storedSes };
 
+
+/* ══ Normalizadores globales de fecha/hora (fix bug histórico Sheets/Bogotá) ══ */
+function normHoraGAS(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) {
+    if (s.startsWith('1899-12-29') || s.startsWith('1899-12-30')) {
+      const d = new Date(s);
+      let seg = d.getUTCHours()*3600 + d.getUTCMinutes()*60 + d.getUTCSeconds();
+      seg -= (4*3600 + 56*60 + 16);
+      if (seg < 0) seg += 24*3600;
+      const hh = Math.floor(seg/3600), mm = Math.floor((seg%3600)/60);
+      return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+    }
+    try {
+      const d = new Date(s);
+      return String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
+    } catch(e) { return (s.split('T')[1]||'').slice(0,5); }
+  }
+  if (/^\d{1,2}:\d{2}/.test(s)) { const p = s.slice(0,5); return p.length===4?'0'+p:p; }
+  return s;
+}
+function normFechaGAS(raw) {
+  let s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.includes('T')) s = s.split('T')[0];
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+    const [d,m,y] = s.split('/');
+    s = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+  }
+  return s;
+}
+
 let horariosEspeciales = [];
 const imgs = {
   avatar_url:'', avatar_file:null,
