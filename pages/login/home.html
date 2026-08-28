@@ -80,13 +80,17 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 .carousel-card:hover{border-color:rgba(233,193,118,.35)}
 .tienda-card{flex:0 0 150px;background:#1c1b1b;border:1px solid rgba(79,69,53,.2);overflow:hidden;cursor:pointer;transition:border-color .2s}
 .tienda-card:hover{border-color:rgba(233,193,118,.35)}
-.car-arrow{position:absolute;top:50%;transform:translateY(-60%);width:28px;height:28px;background:rgba(8,6,4,.82);border:1px solid rgba(233,193,118,.22);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:opacity .2s;padding:0}
-.car-arrow:disabled{opacity:.18;cursor:default}
+.car-arrow{position:absolute;top:50%;transform:translateY(-60%);width:32px;height:32px;background:rgba(8,6,4,.85);border:1px solid rgba(233,193,118,.35);color:#e9c176;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:all .22s cubic-bezier(.4,0,.2,1);padding:0;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.car-arrow:hover:not(:disabled){background:rgba(233,193,118,.16);border-color:#e9c176;transform:translateY(-60%) scale(1.14);box-shadow:0 2px 16px rgba(233,193,118,.28)}
+.car-arrow:active:not(:disabled){transform:translateY(-60%) scale(0.92)}
+.car-arrow:disabled{opacity:.15;cursor:default}
 .car-arrow.prev{left:2px}
 .car-arrow.next{right:2px}
+.car-arrow.next:not(:disabled){animation:arrowPulse 2.6s ease-in-out infinite}
+@keyframes arrowPulse{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 0 rgba(233,193,118,.28)}50%{box-shadow:0 2px 10px rgba(0,0,0,.35),0 0 0 6px rgba(233,193,118,0)}}
 .car-dots{display:flex;justify-content:center;gap:5px;margin:8px 0 14px}
-.car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.35);cursor:pointer;transition:background .2s;border:none;padding:0}
-.car-dot.on{background:#e9c176}
+.car-dot{width:5px;height:5px;border-radius:50%;background:rgba(79,69,53,.35);cursor:pointer;transition:background .2s,width .2s;border:none;padding:0}
+.car-dot.on{background:#e9c176;width:14px;border-radius:3px}
 #modal-bg{position:fixed;inset:0;background:rgba(5,3,1,.86);z-index:80;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 #modal-bg.on{opacity:1;pointer-events:all}
 #modal-sheet{background:#0e0c08;border:1px solid rgba(79,69,53,.28);border-bottom:none;width:100%;max-width:480px;padding:22px 18px 36px;transform:translateY(40px);transition:transform .3s;max-height:90dvh;overflow-y:auto}
@@ -107,12 +111,21 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
 .leg-nowork{background:#1e1c18;border:1px solid rgba(79,69,53,.3)}
 .data-estado{padding:8px 18px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(233,193,118,.35);display:flex;align-items:center;gap:6px}
 .serv-wrap{padding:0 18px 4px}
-/* ★ Dropdown selector de corte */
-.serv-select-wrap{position:relative;width:100%}
-.serv-select{width:100%;background:#131210;border:1px solid rgba(79,69,53,.36);color:#e5e2e1;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:12px 40px 12px 14px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s}
-.serv-select:focus{border-color:rgba(233,193,118,.5)}
-.serv-select option{background:#131210;color:#e5e2e1;font-weight:500}
-.serv-select-arrow{position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;color:#9c8f7b;font-size:18px}
+/* ★ Cards de servicio (reemplaza el select) */
+.serv-cards-wrap{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.serv-cards-wrap::-webkit-scrollbar{height:4px}
+.serv-card{position:relative;flex:0 0 128px;background:#131210;border:1px solid rgba(79,69,53,.28);cursor:pointer;overflow:hidden;transition:all .18s;scroll-snap-align:start}
+.serv-card:hover{border-color:rgba(233,193,118,.4)}
+.serv-card.sel{border-color:#e9c176;box-shadow:0 0 0 1px #e9c176}
+.serv-card-imgwrap{position:relative;width:100%;aspect-ratio:1/1;background:#1c1b1b}
+.serv-card-img{width:100%;height:100%;object-fit:cover;display:block}
+.serv-card-noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.serv-card-check{position:absolute;top:6px;right:6px;width:18px;height:18px;background:#e9c176;border-radius:50%;display:none;align-items:center;justify-content:center;z-index:2}
+.serv-card.sel .serv-card-check{display:flex}
+.serv-card-body{padding:9px 10px}
+.serv-card-nombre{font-size:11px;color:#e5e2e1;font-weight:600;line-height:1.25;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.serv-card-estilo{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#9c8f7b;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.serv-card-precio{font-family:'Noto Serif',serif;font-size:13px;color:#e9c176;font-weight:700}
 /* ★ Precio badge que aparece al seleccionar */
 .serv-precio-badge{display:none;margin-top:8px;background:rgba(233,193,118,.07);border:1px solid rgba(233,193,118,.22);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
 .serv-precio-badge.visible{display:flex}
@@ -356,12 +369,7 @@ html,body{min-height:100dvh;background:#080604;font-family:'Manrope',sans-serif;
     <p style="font-size:10px;color:#3d3730;letter-spacing:.1em">Sin servicios configurados aún.</p>
   </div>
   <div class="serv-wrap" id="serv-wrap">
-    <div class="serv-select-wrap">
-      <select class="serv-select" id="serv-select" onchange="selServicioDropdown(this)">
-        <option value="">— Selecciona un servicio —</option>
-      </select>
-      <span class="material-symbols-outlined serv-select-arrow">expand_more</span>
-    </div>
+    <div class="serv-cards-wrap" id="serv-cards"></div>
     <!-- ★ Badge de precio que aparece al seleccionar -->
     <div class="serv-precio-badge" id="serv-precio-badge">
       <div>
@@ -844,9 +852,9 @@ async function pollActualizarDatos() {
       renderCarrusel();
       // reintenta re-seleccionar el mismo servicio si sigue existiendo
       if (servActivoId) {
-        const sel = document.getElementById('serv-select');
-        const opt = [...sel.options].find(o => o.dataset.id === servActivoId);
-        if (opt) { sel.value = opt.value; selServicioDropdown(sel); }
+        const cardEl = [...document.querySelectorAll('#serv-cards .serv-card')].find(el => el.dataset.id === servActivoId);
+        const match  = cortes.find(c => (c.corte_id || 'generico') === servActivoId);
+        if (cardEl && match) selServicioCard(match, cardEl);
       }
     }
 
@@ -980,15 +988,13 @@ function renderMapa() {
  
 
 /* ══════════════════════════════════════════════════════
-   SELECTOR DE SERVICIO
+   ★ SELECTOR DE SERVICIO — cards con foto del corte
 ══════════════════════════════════════════════════════ */
 function renderServicioSelector() {
-  const select = document.getElementById('serv-select');
-  const wrap   = document.getElementById('serv-wrap');
-  const empty  = document.getElementById('serv-empty');
+  const wrap  = document.getElementById('serv-cards');
+  const empty = document.getElementById('serv-empty');
 
-  // Limpiar opciones previas excepto el placeholder
-  while (select.options.length > 1) select.remove(1);
+  wrap.innerHTML = '';
 
   // Si no hay cortes cargados del sheet, usar uno genérico
   const lista = cortes.length
@@ -996,59 +1002,48 @@ function renderServicioSelector() {
     : [{ corte_id: 'generico', nombre: 'Corte The Atelier', estilo: 'Clásico', precio: '' }];
 
   empty.style.display = 'none';
-  wrap.style.display  = 'block';
 
   lista.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.corte_id || 'generico';
-
     const precio = fmtPrecio(c.precio);
-    let label = c.nombre || 'Corte';
-    if (c.estilo) label += ' — ' + c.estilo;
-    if (precio)   label += '  ·  ' + precio;
-    opt.textContent = label;
+    const id  = c.corte_id || 'generico';
+    const img = c.imagen_url ? normDriveUrl(c.imagen_url) : '';
 
-    opt.dataset.nombre = c.nombre  || 'Corte';
-    opt.dataset.precio = c.precio  || '';
-    opt.dataset.estilo = c.estilo  || '';
-    opt.dataset.id     = c.corte_id || 'generico';
-    opt.dataset.json   = JSON.stringify(c);
+    const card = document.createElement('div');
+    card.className = 'serv-card';
+    card.dataset.id = id;
+    card.innerHTML =
+      '<div class="serv-card-imgwrap">' +
+        (img
+          ? '<img class="serv-card-img" src="' + img + '" alt="' + (c.nombre || '') + '" loading="lazy" onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<div class=&quot;serv-card-noimg&quot;><span class=&quot;material-symbols-outlined&quot; style=&quot;font-size:22px;color:rgba(233,193,118,.2)&quot;>content_cut</span></div>\')">'
+          : '<div class="serv-card-noimg"><span class="material-symbols-outlined" style="font-size:22px;color:rgba(233,193,118,.2)">content_cut</span></div>') +
+        '<div class="serv-card-check"><span class="material-symbols-outlined" style="font-size:12px;color:#412d00">check</span></div>' +
+      '</div>' +
+      '<div class="serv-card-body">' +
+        '<p class="serv-card-nombre">' + (c.nombre || 'Corte') + '</p>' +
+        (c.estilo ? '<p class="serv-card-estilo">' + c.estilo + '</p>' : '') +
+        '<p class="serv-card-precio">' + (precio || 'En consulta') + '</p>' +
+      '</div>';
 
-    select.appendChild(opt);
+    card.addEventListener('click', () => selServicioCard(c, card));
+    wrap.appendChild(card);
   });
 
-  if (lista.length === 1) {
-    select.selectedIndex = 1;
-    selServicioDropdown(select);
-  }
+  if (lista.length === 1) selServicioCard(lista[0], wrap.children[0]);
 }
 
-function selServicioDropdown(sel) {
-  const opt = sel.options[sel.selectedIndex];
+function selServicioCard(c, cardEl) {
+  servicioActivo = c;
+  document.querySelectorAll('.serv-card.sel').forEach(el => el.classList.remove('sel'));
+  if (cardEl) cardEl.classList.add('sel');
+
+  const precio = fmtPrecio(c.precio);
   const badge = document.getElementById('serv-precio-badge');
-
-  if (!opt.value) {
-    servicioActivo = null;
-    badge.classList.remove('visible');
-    return;
-  }
-
-  try { servicioActivo = JSON.parse(opt.dataset.json); } catch(e) { servicioActivo = null; }
-
-  // Mostrar badge con nombre y precio
-  const precio = fmtPrecio(opt.dataset.precio);
-  document.getElementById('serv-badge-nombre').textContent = opt.dataset.nombre || '—';
+  document.getElementById('serv-badge-nombre').textContent = c.nombre || '—';
   document.getElementById('serv-badge-precio').textContent = precio || 'En consulta';
   badge.classList.add('visible');
 
-  toast('✓ ' + (opt.dataset.nombre || 'Servicio') + (precio ? ' · ' + precio : '') + ' seleccionado');
+  toast('✓ ' + (c.nombre || 'Servicio') + (precio ? ' · ' + precio : '') + ' seleccionado');
 
-  if (fechaSel && slotActivo) actualizarResumen();
-}
-
-function selServicio(c, card) {
-  // Alias para compatibilidad — ya no se usa con cards pero se mantiene
-  servicioActivo = c;
   if (fechaSel && slotActivo) actualizarResumen();
 }
 
@@ -1591,11 +1586,15 @@ async function confirmarCita() {
   document.getElementById('mr-telefono').textContent = '—';
 }
 
-/* ══ MOTOR DE CARRUSEL GENÉRICO ══ */
+/* ══════════════════════════════════════════════════════
+   MOTOR DE CARRUSEL GENÉRICO
+   ★ soporta autoplay lento + pausa al interactuar/hover
+══════════════════════════════════════════════════════ */
 const carState = {};
+const carAutoTimers = {};
 
-function carInit(id, items, cardW) {
-  carState[id] = { idx: 0, items, cardW };
+function carInit(id, items, cardW, autoMs) {
+  carState[id] = { idx: 0, items, cardW, auto: !!autoMs, autoMs: autoMs || null };
   const track = document.getElementById(id + '-track');
   const dots  = document.getElementById(id + '-dots');
   track.innerHTML = '';
@@ -1603,12 +1602,48 @@ function carInit(id, items, cardW) {
   items.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'car-dot' + (i === 0 ? ' on' : '');
-    dot.addEventListener('click', () => carGoTo(id, i));
+    dot.addEventListener('click', () => { carGoTo(id, i); carPauseAutoTemp(id); });
     dots.appendChild(dot);
   });
   document.getElementById(id + '-prev').disabled = true;
   document.getElementById(id + '-next').disabled = items.length <= visibles(id);
+
+  // ★ pausa el autoplay al pasar el mouse o tocar, y lo reanuda al salir
+  const wrapEl = track.parentElement;
+  if (!wrapEl.dataset.autoBound) {
+    wrapEl.dataset.autoBound = '1';
+    wrapEl.addEventListener('mouseenter', () => carStopAuto(id));
+    wrapEl.addEventListener('mouseleave', () => {
+      const st = carState[id];
+      if (st && st.auto) carStartAuto(id, st.autoMs);
+    });
+    wrapEl.addEventListener('touchstart', () => carPauseAutoTemp(id), { passive: true });
+  }
+
+  if (autoMs && items.length > visibles(id)) carStartAuto(id, autoMs);
 }
+
+function carStartAuto(id, intervalMs) {
+  carStopAuto(id);
+  carAutoTimers[id] = setInterval(() => {
+    const st = carState[id]; if (!st) return;
+    const vis = visibles(id);
+    const max = Math.max(0, st.items.length - vis);
+    st.idx = (st.idx >= max) ? 0 : st.idx + 1;
+    carApply(id);
+  }, intervalMs);
+}
+function carStopAuto(id) {
+  if (carAutoTimers[id]) { clearInterval(carAutoTimers[id]); carAutoTimers[id] = null; }
+}
+function carPauseAutoTemp(id, resumeDelayMs) {
+  const st = carState[id];
+  if (!st || !st.auto) return;
+  carStopAuto(id);
+  clearTimeout(carAutoTimers[id + '_resume']);
+  carAutoTimers[id + '_resume'] = setTimeout(() => carStartAuto(id, st.autoMs), resumeDelayMs || 5000);
+}
+
 function visibles(id) {
   const track = document.getElementById(id + '-track');
   const wrap  = track.parentElement;
@@ -1621,6 +1656,7 @@ function carNav(id, dir) {
   const max = Math.max(0, st.items.length - vis);
   st.idx = Math.min(max, Math.max(0, st.idx + dir));
   carApply(id);
+  carPauseAutoTemp(id);
 }
 function carGoTo(id, i) {
   const st = carState[id]; if (!st) return;
@@ -1643,12 +1679,15 @@ function carApply(id) {
   document.getElementById(id + '-next').disabled = st.idx >= max;
 }
 
-/* ══ CARRUSEL CORTES ══ */
+/* ══ CARRUSEL CORTES — ★ autoplay lento (3.8s) con pausa interactiva ══ */
 function renderCarrusel() {
   const outer = document.getElementById('corte-outer');
   const empty = document.getElementById('carousel-empty');
   const track = document.getElementById('corte-track');
   const dots  = document.getElementById('corte-dots');
+
+  carStopAuto('corte');
+  clearTimeout(carAutoTimers['corte_resume']);
 
   if (!cortes.length) {
     outer.style.display = 'none';
@@ -1661,7 +1700,7 @@ function renderCarrusel() {
   dots.style.display  = 'flex';
 
   const ordenados = [...cortes].sort((a, b) => isTruthy(b.destacado) - isTruthy(a.destacado));
-  carInit('corte', ordenados, 138);
+  carInit('corte', ordenados, 138, 3800);
 
   ordenados.forEach(c => {
     const card = document.createElement('div');
@@ -1680,7 +1719,7 @@ function renderCarrusel() {
         '</div>' +
       '</div>' +
       (c.descripcion ? '<p style="font-size:9px;color:#9c8f7b;padding:7px 8px;line-height:1.4;border-top:1px solid rgba(79,69,53,.14)">' + c.descripcion + '</p>' : '');
-    card.addEventListener('click', abrirModal);
+    card.addEventListener('click', () => { abrirModal(); carPauseAutoTemp('corte'); });
     track.appendChild(card);
   });
 }
